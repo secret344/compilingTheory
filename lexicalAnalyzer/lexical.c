@@ -20,6 +20,7 @@ void insert_trie_entity(Trie *root, char *str, int loc)
     {
         char c = *str++;
         int id = c - 'a';
+
         if (root->next[id] == NULL)
         {
             root->next[id] = create_trie();
