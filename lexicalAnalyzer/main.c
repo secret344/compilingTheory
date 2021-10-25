@@ -1,6 +1,9 @@
 #include <stdio.h>
+#include "trie.h"
 #include "lexical.h"
-
+#include <malloc.h>
+#include <string.h>
+#include "stack.h"
 int main()
 {
     // Trie *root = create_trie();
@@ -21,8 +24,26 @@ int main()
                    "extern", "return", "union", "const", "float", "short",
                    "unsigned", "continue", "for", "signed", "void", "default",
                    "goto", "sizeof", "volatile", "do", "if", "while", "static"};
-    insert_trie(root, str, (sizeof str / sizeof str[0]));
-    BOOL b = search_word(root, "signed");
-    printf("%d", b);
+    // insert_trie(root, str, (sizeof str / sizeof str[0]));
+    // BOOL b = search_word(root, "signed");
+    // printf("%d", b);
+
+    // int f = initParse("./reg-test.txt");
+    // printf("结束%d", f);
+
+    PStack stack;
+    new_stack(stack);
+    push(stack, "1111");
+    push(stack, "7q");
+    push(stack, "8d");
+
+    StackNodeSymbol s = "def";
+    pop(stack, s);
+    printf("出栈: %s\n", s);
+    pop(stack, s);
+    printf("出栈: %s\n", s);
+    pop(stack, s);
+    printf("出栈: %s\n", s);
+
     return 0;
 }
