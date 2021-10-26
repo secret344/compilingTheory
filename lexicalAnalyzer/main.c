@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-#include "stack.h"
-#include "trie.h"
 #include "lexical.h"
 
 int main()
@@ -28,22 +26,17 @@ int main()
     // insert_trie(root, str, (sizeof str / sizeof str[0]));
     // BOOL b = search_word(root, "signed");
     // printf("%d", b);
-    // Stack *stack = new_stack();
-    // spush(stack, "1111231");
-    // spush(stack, "711q");
-    // spush(stack, "81d1");
-    // straversal(stack);
-    // char *s;
-    // s = spop(stack);
-    // printf("出栈: %s\n", s);
-    // s = spop(stack);
-    // printf("出栈: %s\n", s);
-    // s = spop(stack);
-    // printf("出栈: %s\n", s);
-    // free(s);
-
+    // STNS = new_stack();
+    // OPTR = new_stack();
+    // STNS = new_stack();
+    // OPTR = new_stack();
+    // printf(" %p %p ", STNS, OPTR);
+    // spush(STNS, "123");
+    // spush(STNS, "123");
+    // sdestory(STNS);
+    // straversal(OPTR);
     int f = initParse("./reg-test.txt");
     printf("结束%d", f);
 
-    return 0;
+    return 1;
 }

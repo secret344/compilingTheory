@@ -7,17 +7,18 @@ typedef struct StackNode
 {
     char *data;
     struct StackNode *PStackNext;
-} StackNode, *PStackNext;
+} StackNode;
 
 typedef struct Stack
 {
-    PStackNext top;
-    PStackNext base;
-} Stack, *PStack;
+    StackNode *top;
+    StackNode *base;
+} Stack;
 
-PStack new_stack();
+Stack *new_stack();
 
-void spush(PStack PStack, char *val);
-char *spop(PStack PStack);
-void straversal(PStack PStack);
+void spush(Stack *PStack, char *val);
+char *spop(Stack *PStack);
+void straversal(Stack *PStack);
+void sdestory(Stack *PStack);
 #endif

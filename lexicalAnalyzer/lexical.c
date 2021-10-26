@@ -3,26 +3,34 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bool.h"
-#include "stack.h"
 
 void initRegParse(char *str);
 void switchOption(char str);
+
+Stack *OPTR = NULL; //运算符栈
+Stack *STNS = NULL; //语法树节点栈
 
 int row = 1;
 int col = 0;
 
 int initParse(char *path)
 {
+    STNS = new_stack();
+    OPTR = new_stack();
+    
     FILE *fp = NULL;
     char buff[255];
     fp = fopen(path, "r");
+
     if (!fp)
         return EXIT_FAILURE;
+
     while (fgets(buff, 255, (FILE *)fp))
     {
 
         initRegParse(buff);
     }
+
     fclose(fp);
     return EXIT_SUCCESS;
 }
@@ -52,6 +60,25 @@ void switchOption(char str)
     // [ ]  ( ) : *
     // 1 - 9  a - z  A - Z . _
     // + = |
-
-    // printf("initRegParse: %c行: %d 列: %d\n", str, row, col);
+    switch (str)
+    {
+    case ':':
+        /* code */
+        break;
+    case '[':
+        /* code */
+        break;
+    case ']':
+        /* code */
+        break;
+    case '(':
+        /* code */
+        break;
+    case ')':
+        /* code */
+        break;
+    default:
+        break;
+    }
+    printf("initRegParse: %c行: %d 列: %d\n", str, row, col);
 }

@@ -80,8 +80,9 @@ void traversal(Trie *root, char *str)
     {
         char *new_str_result = malloc(len + 2);
         strcpy(new_str_result, new_str);
-        printf("traversal找到的字符串 %s\n", new_str);
+        printf("traversal找到的字符串 %s\n", new_str_result);
         free(new_str_result);
+        new_str_result = NULL;
     }
 
     for (int i = 0; i < SUB_NODE_COUNT; i++)
@@ -90,6 +91,7 @@ void traversal(Trie *root, char *str)
         traversal(root->next[i], new_str);
     }
     free(new_str);
+    new_str = NULL;
 }
 
 void traversal_trie(Trie *root)
