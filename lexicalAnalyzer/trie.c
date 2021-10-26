@@ -75,13 +75,11 @@ void traversal(Trie *root, char *str)
     int len = strlen(str);
     char *new_str = malloc(len + 1);
     strcpy(new_str, str);
-    new_str[len + 1] = '\0';
 
     if (root->isEnd)
     {
         char *new_str_result = malloc(len + 2);
         strcpy(new_str_result, new_str);
-        new_str_result[len + 1] = '\0';
         printf("traversal找到的字符串 %s\n", new_str);
         free(new_str_result);
     }

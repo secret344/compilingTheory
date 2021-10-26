@@ -3,11 +3,9 @@
 #ifndef _SYMBOL_STACK_
 #define _SYMBOL_STACK_
 
-typedef char StackNodeSymbol[5];
-
 typedef struct StackNode
 {
-    StackNodeSymbol data;
+    char *data;
     struct StackNode *PStackNext;
 } StackNode, *PStackNext;
 
@@ -17,8 +15,9 @@ typedef struct Stack
     PStackNext base;
 } Stack, *PStack;
 
-void new_stack();
+PStack new_stack();
 
-void push(PStack PStack, StackNodeSymbol val);
-BOOL pop(PStack PStack, StackNodeSymbol _Destination);
+void spush(PStack PStack, char *val);
+char *spop(PStack PStack);
+void straversal(PStack PStack);
 #endif

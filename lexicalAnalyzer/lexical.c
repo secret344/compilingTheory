@@ -3,8 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bool.h"
+#include "stack.h"
 
 void initRegParse(char *str);
+void switchOption(char str);
+
 int row = 1;
 int col = 0;
 
@@ -35,10 +38,20 @@ void initRegParse(char *str)
             col = 0;
             continue;
         }
-        printf("initRegParse: %c行: %d 列: %d\n", str[i], row, col);
+        int d = str[i];
+        if (d < 0 || d > 255)
+        {
+            printf("行:%d,列:%d 字符%d不符合规则.请使用英文字符.\n", row, col, str[i]);
+        }
+        switchOption(str[i]);
     }
 }
 
-void printOutput()
+void switchOption(char str)
 {
+    // [ ]  ( ) : *
+    // 1 - 9  a - z  A - Z . _
+    // + = |
+
+    // printf("initRegParse: %c行: %d 列: %d\n", str, row, col);
 }
