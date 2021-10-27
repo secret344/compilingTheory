@@ -36,7 +36,9 @@ int main()
     // sdestory(STNS);
     // straversal(OPTR);
     int f = initParse("./reg-test.txt");
-    printf("结束%d", f);
-
-    return 1;
+    printf("\n");
+    printf("结束%d\n", f);
+    straversal(STNS);
+    straversal(OPTR);
+    return f;
 }

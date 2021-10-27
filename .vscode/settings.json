@@ -12,7 +12,8 @@
         "trie.h": "c",
         "stdbool.h": "c",
         "bool.h": "c",
-        "stack.h": "c"
+        "stack.h": "c",
+        "utils.h": "c"
     },
     "code-runner.executorMap": {
         "javascript": "node",

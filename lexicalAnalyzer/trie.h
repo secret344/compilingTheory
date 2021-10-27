@@ -7,9 +7,9 @@
 
 typedef struct Trie
 {
-    struct Trie *next[SUB_NODE_COUNT]; // 字典树子节点
     BOOL isEnd;                        // 字符串是否是结尾
-    int loc;                           // 字符串位置(关键字表位置)
+    int loc;                           // 字符串位置(关键字表位置) 
+    struct Trie *next[SUB_NODE_COUNT]; // 字典树子节点
 } Trie;
 
 extern Trie *create_trie();

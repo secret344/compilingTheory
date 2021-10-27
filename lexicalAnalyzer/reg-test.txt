@@ -1,7 +1,2 @@
-ab : a|b
-example : (a|b)*a|bcd 
+(a|b)*a|bcd 
 
-
-number: [1-9]
-string: \"(.)*\"
-keyword: [a-zA-Z][a-zA-Z_]*
