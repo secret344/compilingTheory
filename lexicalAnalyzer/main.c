@@ -38,7 +38,5 @@ int main()
     int f = initParse("./reg-test.txt");
     printf("\n");
     printf("结束%d\n", f);
-    straversal(STNS);
-    straversal(OPTR);
     return f;
 }

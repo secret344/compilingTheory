@@ -2,10 +2,15 @@
 
 #ifndef _SYMBOL_STACK_
 #define _SYMBOL_STACK_
+typedef union StackData
+{
+    int n;
+    char *s;
+} StackData;
 
 typedef struct StackNode
 {
-    char *data;
+    StackData data;
     struct StackNode *PStackNext;
 } StackNode;
 
@@ -21,4 +26,5 @@ void spush(Stack *PStack, char *val);
 char *spop(Stack *PStack);
 void straversal(Stack *PStack);
 void sdestory(Stack *PStack);
+int stacksize(Stack *PStack);
 #endif

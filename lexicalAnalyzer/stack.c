@@ -9,19 +9,21 @@ Stack *new_stack()
 {
     Stack *PStack = (Stack *)malloc(sizeof(Stack));
     PStack->base = (StackNode *)malloc(sizeof(StackNode));
+
     PStack->top = PStack->base;
     PStack->base->PStackNext = NULL;
-    PStack->base->data = NULL;
+    PStack->base->data.n = 0;
     return PStack;
 }
 
 void spush(Stack *PStack, char *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-    p->data = (char *)malloc(strlen(val) + 1);
-    strcpy(p->data, val);
+    p->data.s = (char *)malloc(strlen(val) + 1);
+    strcpy(p->data.s, val);
     p->PStackNext = PStack->top;
     PStack->top = p;
+    PStack->base->data.n = PStack->base->data.n + 1;
 }
 
 char *spop(Stack *PStack)
@@ -33,13 +35,14 @@ char *spop(Stack *PStack)
     };
 
     StackNode *p = PStack->top;
-    char *_Destination = (char *)malloc(strlen(p->data) + 1);
-    strcpy(_Destination, p->data);
+    char *_Destination = (char *)malloc(strlen(p->data.s) + 1);
+    strcpy(_Destination, p->data.s);
     PStack->top = p->PStackNext;
-    free(p->data);
-    p->data = NULL;
+    free(p->data.s);
+    p->data.s = NULL;
     free(p);
     p = NULL;
+    PStack->base->data.n = PStack->base->data.n - 1;
     return _Destination;
 }
 
@@ -80,4 +83,9 @@ void sdestory(Stack *PStack)
     free(PStack);
     PStack = NULL;
     printf("释放完成\n");
+}
+
+int stacksize(Stack *PStack)
+{
+    return PStack->base->data.n;
 }
