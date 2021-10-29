@@ -36,7 +36,13 @@ int main()
     // sdestory(STNS);
     // straversal(OPTR);
     int f = initParse("./reg-test.txt");
-    printf("\n");
-    printf("结束%d\n", f);
+    printf("结束字符 %s", nfapaif->startNode->inputset);
     return f;
+    // if (setpaif->startNode->anchor == 1)
+    // {
+    //     char *temp = norepe;
+    //     norepe = setComplement(temp);
+    //     free(temp);
+    //     temp = NULL;
+    // }
 }
