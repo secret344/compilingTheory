@@ -1,5 +1,5 @@
 #include "lexical.h"
-#include "setutils.h"
+#include "set_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,13 +8,21 @@
 static void checkSetStack();
 static Stack *setStack = NULL;
 static BOOL isInit = FALSE;
+static NfaPair *setpaif = NULL;
+
 void setInitfun()
 {
-    wholeStatus->state = PSWset;
-    nfapaif->startNode->edge = -2;
-    nfapaif->startNode->visited = FALSE;
-    nfapaif->startNode->inputset = NULL;
     setStack = new_stack();
+    wholeStatus->state = PSWset;
+
+    setpaif = (NfaPair *)malloc(sizeof(NfaPair));
+
+    nfapaif->startNode = setpaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
+    nfapaif->endNode = nfapaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+
+    setpaif->startNode->edge = -2;
+    setpaif->startNode->visited = FALSE;
+    setpaif->startNode->inputset = NULL;
 }
 
 void setNOTfun()
@@ -27,8 +35,7 @@ void setNOTfun()
     }
     else
     {
-
-        nfapaif->startNode->anchor = 1;
+        setpaif->startNode->anchor = 1;
     }
 }
 
@@ -62,16 +69,16 @@ void setMainfun(char *s)
             }
             else
             {
-                if (!nfapaif->startNode->inputset)
+                if (!setpaif->startNode->inputset)
                 {
-                    nfapaif->startNode->inputset = inputset;
+                    setpaif->startNode->inputset = inputset;
                 }
                 else
                 {
                     // 合并
-                    char *str = concatstr(nfapaif->startNode->inputset, inputset);
-                    free(nfapaif->startNode->inputset);
-                    nfapaif->startNode->inputset = str;
+                    char *str = concatstr(setpaif->startNode->inputset, inputset);
+                    free(setpaif->startNode->inputset);
+                    setpaif->startNode->inputset = str;
                 }
             }
         }
@@ -84,10 +91,23 @@ void setMainfun(char *s)
         break;
     }
 }
-
+void setEndCheck()
+{
+    char *s = setpaif->startNode->inputset;
+    if (setpaif->startNode->anchor == 1)
+    {
+        s = setComplement(setpaif->startNode->inputset);
+        free(setpaif->startNode->inputset);
+    }
+    char *result = noStrRepetition(s);
+    free(s);
+    s = NULL;
+    setpaif->startNode->inputset = result;
+}
 void setEndfun()
 {
     int len = stacksize(setStack);
+
     if (len)
     {
         checkSetStack();
@@ -97,41 +117,36 @@ void setEndfun()
     setStack = NULL;
     wholeStatus->state = PSWdef;
     isInit = FALSE;
-    // 此时需要检查是否含有 ^
-    printf("结束打印%s", nfapaif->startNode->inputset);
+    setEndCheck();
 }
 void checkSetStack()
 {
     int len = stacksize(setStack);
-    int len1 = strlen(nfapaif->startNode->inputset);
+    int len1 = 0;
+    if (setpaif->startNode->inputset)
+    {
+        len1 = strlen(setpaif->startNode->inputset);
+    }
     char *str = malloc(len + len1 + 1);
-    strcpy(str, nfapaif->startNode->inputset);
-
+    // 去除重复的字符串
+    if (len1)
+    {
+        strcpy(str, setpaif->startNode->inputset);
+        free(setpaif->startNode->inputset);
+    }
     int count = 0;
     // 结束检查集合栈内字符
     while (setStack->base != setStack->top)
     {
         char *s = spop(setStack);
         BOOL is = findChar(*s, str);
-        if (!is)
-        {
-            str[len1 + count] = *s;
-            count++;
-        }
+        str[len1 + count] = *s;
+        count++;
         free(s);
         s = NULL;
     }
     str[len1 + count] = '\0';
-    // 去除重复的字符串
-    char *result = malloc(strlen(str) + 1);
-    strcpy(result, str);
-    free(str);
-    str = NULL;
-    if (len1)
-    {
-        free(nfapaif->startNode->inputset);
-    }
-    nfapaif->startNode->inputset = result;
+    setpaif->startNode->inputset = str;
 }
 // TODO 转义字符
 void setESCfun()

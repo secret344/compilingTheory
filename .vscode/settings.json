@@ -14,7 +14,7 @@
         "bool.h": "c",
         "stack.h": "c",
         "utils.h": "c",
-        "setutils.h": "c",
+        "set_utils.h": "c",
         "stdlib.h": "c"
     },
     "code-runner.executorMap": {

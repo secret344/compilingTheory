@@ -4,7 +4,8 @@
 #include <string.h>
 #include "bool.h"
 #include "utils.h"
-#include "setutils.h"
+#include "set_utils.h"
+#include "stns_utils.h"
 
 static void initRegParse(char *str);
 static void switchOption(char str);
@@ -15,7 +16,7 @@ static void setOptions(char *s);
 
 Stack *OPTR = NULL;      //运算符栈
 Stack *STNS = NULL;      //语法树节点栈
-NfaNode *rootNfa = NULL; // nfa根节点
+NfaPair *rootNfa = NULL; // nfa根节点
 NfaPair *nfapaif = NULL;
 WholeState *wholeStatus = NULL;
 
@@ -27,10 +28,9 @@ int initParse(char *path)
     STNS = new_stack();
     OPTR = new_stack();
 
+    rootNfa = (NfaPair *)malloc(sizeof(NfaPair));
     nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
-    nfapaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    nfapaif->endNode = (NfaNode *)malloc(sizeof(NfaNode));
-    rootNfa = nfapaif->startNode;
+
     wholeStatus = (WholeState *)malloc(sizeof(WholeState));
     wholeStatus->state = PSWdef;
 
@@ -82,15 +82,16 @@ void switchOption(char str)
     char *s = (char *)malloc(len + 1);
     strcpy(s, &str);
     s[len] = '\0';
-    if (1 <= wholeStatus->state <= 3)
+    if (1 <= wholeStatus->state && wholeStatus->state <= 3)
     {
         a = b = 0;
         isSet = TRUE;
         setOptions(s);
     }
 
-    if (a)
+    if (a || wholeStatus->state == PSWESC)
     {
+        b = 0;
         spush(STNS, s);
         stnsOptions();
     }
@@ -117,7 +118,7 @@ void otherOptions()
     printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
-        printf("请勿使用转义字符，暂时不实现");
+        wholeStatus->state = PSWESC;
     }
     free(s);
     s = NULL;
@@ -125,9 +126,17 @@ void otherOptions()
 
 void stnsOptions()
 {
-    wholeStatus->state = PSWsinglechar;
     char *s = spop(STNS);
-    printf("STNS:%s\n", s);
+    stnsInitfun(*s);
+    switch (*s)
+    {
+    case '.':
+        stnsDotfun();
+        break;
+    default:
+        stnsDeffun(*s);
+        break;
+    }
     free(s);
     s = NULL;
 }
@@ -136,9 +145,19 @@ void optrOptions()
 {
     wholeStatus->state = PSWoptr;
     char *s = spop(OPTR);
-    if (*s == '[')
+    switch (*s)
     {
+    case '[':
         setOptions(s);
+        break;
+    case '*':
+    case '+':
+    case '?':
+        // 创建闭包
+        
+        break;
+    default:
+        break;
     }
     printf("OPTR:%s\n", s);
     free(s);
