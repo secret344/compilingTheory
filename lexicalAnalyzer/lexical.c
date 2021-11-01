@@ -14,9 +14,9 @@ static void stnsOptions();
 static void optrOptions();
 static void setOptions(char *s);
 
-Stack *OPTR = NULL;      //运算符栈
-Stack *STNS = NULL;      //语法树节点栈
-NfaPair *rootNfa = NULL; // nfa根节点
+Stack *OPTR = NULL;     //运算符栈
+Stack *STNS = NULL;     //语法树节点栈
+NfaPair *curNfa = NULL; // nfa根节点
 NfaPair *nfapaif = NULL;
 WholeState *wholeStatus = NULL;
 
@@ -27,9 +27,6 @@ int initParse(char *path)
 {
     STNS = new_stack();
     OPTR = new_stack();
-
-    rootNfa = (NfaPair *)malloc(sizeof(NfaPair));
-    nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
 
     wholeStatus = (WholeState *)malloc(sizeof(WholeState));
     wholeStatus->state = PSWdef;

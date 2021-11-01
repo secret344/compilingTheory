@@ -12,11 +12,12 @@ void stnsInitfun(char str)
     }
     stnspaif = (NfaPair *)malloc(sizeof(NfaPair));
 
-    nfapaif->startNode = stnspaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    nfapaif->endNode = nfapaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+    stnspaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
+    stnspaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
 
     stnspaif->startNode->visited = FALSE;
     stnspaif->startNode->inputset = NULL;
+    curNfa = stnspaif;
 }
 // . 代表除去回车换行符
 void stnsDotfun()

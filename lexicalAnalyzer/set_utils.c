@@ -17,12 +17,14 @@ void setInitfun()
 
     setpaif = (NfaPair *)malloc(sizeof(NfaPair));
 
-    nfapaif->startNode = setpaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    nfapaif->endNode = nfapaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+    setpaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
+    setpaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
 
     setpaif->startNode->edge = -2;
     setpaif->startNode->visited = FALSE;
     setpaif->startNode->inputset = NULL;
+    
+    curNfa = setpaif;
 }
 
 void setNOTfun()

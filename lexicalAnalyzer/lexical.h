@@ -41,7 +41,7 @@ typedef struct NfaPair
 extern Stack *OPTR;
 extern Stack *STNS;
 extern WholeState *wholeStatus;
-extern NfaPair *rootNfa;
+extern NfaPair *curNfa;
 extern NfaPair *nfapaif;
 extern int row;
 extern int col;

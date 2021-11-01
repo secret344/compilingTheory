@@ -15,7 +15,8 @@
         "stack.h": "c",
         "utils.h": "c",
         "set_utils.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "optr_utils.h": "c"
     },
     "code-runner.executorMap": {
         "javascript": "node",
