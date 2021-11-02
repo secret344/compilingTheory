@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "utils.h"
 static int StateNum = 0;
-
+// 初始化nfa节点
 void setInitPair(NfaPair *n)
 {
     n->startNode = (NfaNode *)malloc(sizeof(NfaNode));
@@ -157,7 +157,9 @@ void printfNfaNode(NfaNode *n)
     {
         return;
     }
+    n->visited = TRUE;
     printf("\n");
+    printf("当前节点接受visited %d \n", n->visited);
     printf("当前节点编号stateNum  %d \n", n->stateNum);
     printf("当前节点接受edge %d \n", n->edge);
     if (n->inputset)
@@ -173,7 +175,6 @@ void printfNfaNode(NfaNode *n)
     {
         printfNfaNode(b);
     }
-    n->visited = TRUE;
 }
 
 void printfNfa(NfaPair *n)

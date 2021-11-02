@@ -18,7 +18,6 @@ void setInitfun()
     setpaif = (NfaPair *)malloc(sizeof(NfaPair));
     setInitPair(setpaif);
     setpaif->startNode->edge = -2;
-    curNfa = setpaif;
 }
 
 void setNOTfun()
@@ -99,6 +98,7 @@ void setEndCheck()
     free(s);
     s = NULL;
     setpaif->startNode->inputset = result;
+    curNfa = setpaif;
 }
 void setEndfun()
 {

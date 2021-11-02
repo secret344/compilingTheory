@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "set_utils.h"
 #include "stns_utils.h"
+#include "optr_utils.h"
 
 static void initRegParse(char *str);
 static void switchOption(char str);
@@ -145,7 +146,6 @@ void stnsOptions()
 
 void optrOptions()
 {
-    wholeStatus->state = PSWoptr;
     char *s = spop(OPTR);
     switch (*s)
     {
@@ -156,7 +156,12 @@ void optrOptions()
     case '+':
     case '?':
         // 创建闭包
-
+        switchOptr(s);
+        break;
+    case '(':
+    case ')':
+    case '|':
+        switchOptr(s);
         break;
     default:
         break;
@@ -207,6 +212,7 @@ void checkUnion(char s)
     case '*':
     case '+':
     case '?':
+    case '|':
         // 如果是闭包 不做链接操作
         // 括号优先级另说
         break;

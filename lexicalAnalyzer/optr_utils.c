@@ -61,23 +61,51 @@ void OptionsClosure(char s)
     curNfa->startNode = optrpaif->startNode;
     curNfa->endNode = optrpaif->endNode;
 }
+
+void orDispose(char *s)
+{
+    optrpaif = curNfa; // 保存当前nfa节点，等待下次节点执行或运算
+    curNfa = NULL;
+    spush(OPTR, s);
+}
+
+void bracketDispose(char *s)
+{
+    if (*s == '(')
+    {
+        optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
+        setInitPair(optrpaif);
+        nfapaif = optrpaif; // 括号生成新的树 碰到) 组合
+
+        spush(OPTR, s);
+        return;
+    }
+}
+
 void switchOptr(char *s)
 {
-    wholeStatus->state = PSWoptr;
-    optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
+
     switch (*s)
     {
     case '*':
     case '+':
     case '?':
-        optrpaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-        optrpaif->endNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+        wholeStatus->state = PSWoptr;
+        optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
+        setInitPair(optrpaif);
         StarClosure(*s);
         PlusClosure(*s);
         OptionsClosure(*s);
+        wholeStatus->state = PSWdef;
+        break;
+    case '|':
+        orDispose(s);
+        break;
+    case '(':
+    case ')':
+        bracketDispose(s);
         break;
     default:
         break;
     }
-    wholeStatus->state = PSWdef;
 }
