@@ -13,6 +13,7 @@ static void otherOptions();
 static void stnsOptions();
 static void optrOptions();
 static void setOptions(char *s);
+static void checkUnion(char s);
 
 Stack *OPTR = NULL;     //运算符栈
 Stack *STNS = NULL;     //语法树节点栈
@@ -45,6 +46,7 @@ int initParse(char *path)
     }
 
     fclose(fp);
+    checkUnion('0');
     return EXIT_SUCCESS;
 }
 
@@ -74,13 +76,14 @@ void switchOption(char str)
 
     int a = isSTNS(str);
     int b = isOPTR(str);
-
+    checkUnion(str);
     int len = sizeof(str);
     char *s = (char *)malloc(len + 1);
     strcpy(s, &str);
     s[len] = '\0';
     if (1 <= wholeStatus->state && wholeStatus->state <= 3)
     {
+        // 当前状态为 生成集合
         a = b = 0;
         isSet = TRUE;
         setOptions(s);
@@ -88,6 +91,7 @@ void switchOption(char str)
 
     if (a || wholeStatus->state == PSWESC)
     {
+        // 转意字符之后符号作为字符解析
         b = 0;
         spush(STNS, s);
         stnsOptions();
@@ -115,6 +119,7 @@ void otherOptions()
     printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
+        // 转义字符
         wholeStatus->state = PSWESC;
     }
     free(s);
@@ -156,7 +161,6 @@ void optrOptions()
     default:
         break;
     }
-    printf("OPTR:%s\n", s);
     free(s);
     s = NULL;
 }
@@ -186,6 +190,33 @@ void setOptions(char *s)
         break;
     default:
         setMainfun(s);
+        break;
+    }
+}
+
+void checkUnion(char s)
+{
+    if (!nfapaif)
+    {
+        nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
+        setInitPair(nfapaif);
+    }
+
+    switch (s)
+    {
+    case '*':
+    case '+':
+    case '?':
+        // 如果是闭包 不做链接操作
+        // 括号优先级另说
+        break;
+    default:
+        if (curNfa)
+        {
+            nfapaif->endNode->next = curNfa->startNode;
+            nfapaif->endNode = curNfa->endNode;
+            curNfa = NULL;
+        }
         break;
     }
 }

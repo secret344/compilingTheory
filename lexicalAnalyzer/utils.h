@@ -9,4 +9,6 @@ extern char *getSetLetter(char a, char b);
 extern char *concatstr(char *target, char *source);
 extern char *noStrRepetition(char *str);
 extern char *setComplement(char *str);
+extern void printfNfa(NfaPair *n);
+extern void setInitPair(NfaPair *n);
 #endif

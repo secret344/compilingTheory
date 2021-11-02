@@ -1,1 +1,1 @@
-[a-cA-Z]
+ac[a-cA-Z]*[^a-cA-Z]+[a-cA-Z]?ba.

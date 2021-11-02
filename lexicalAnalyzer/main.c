@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include <string.h>
 #include "lexical.h"
-
+#include "utils.h"
 int main()
 {
     // Trie *root = create_trie();
@@ -37,6 +37,7 @@ int main()
     // straversal(OPTR);
     int f = initParse("./reg-test.txt");
     // printf("结束字符 %s", nfapaif->startNode->inputset);
+    printfNfa(nfapaif);
     return f;
     // if (setpaif->startNode->anchor == 1)
     // {

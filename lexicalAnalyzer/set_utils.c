@@ -16,14 +16,8 @@ void setInitfun()
     wholeStatus->state = PSWset;
 
     setpaif = (NfaPair *)malloc(sizeof(NfaPair));
-
-    setpaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    setpaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
-
+    setInitPair(setpaif);
     setpaif->startNode->edge = -2;
-    setpaif->startNode->visited = FALSE;
-    setpaif->startNode->inputset = NULL;
-    
     curNfa = setpaif;
 }
 

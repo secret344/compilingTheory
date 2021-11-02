@@ -2,7 +2,34 @@
 #include <string.h>
 #include "lexical.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include "utils.h"
+static int StateNum = 0;
+
+void setInitPair(NfaPair *n)
+{
+    n->startNode = (NfaNode *)malloc(sizeof(NfaNode));
+    n->endNode = n->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+
+    n->startNode->inputset = NULL;
+    n->endNode->inputset = NULL;
+
+    n->startNode->visited = FALSE;
+    n->endNode->visited = FALSE;
+
+    n->startNode->stateNum = StateNum++;
+    n->endNode->stateNum = StateNum++;
+
+    n->startNode->anchor = 0;
+    n->endNode->anchor = 0;
+
+    n->startNode->edge = -1;
+    n->endNode->edge = -1;
+
+    n->startNode->next2 = NULL;
+    n->endNode->next = NULL;
+    n->endNode->next2 = NULL;
+}
 
 //语法树节点栈 "abcdzAZ19_. ";
 BOOL isSTNS(char str)
@@ -120,4 +147,38 @@ char *setComplement(char *str)
     char *result = (char *)malloc(strlen(s) + 1);
     strcpy(result, s);
     return result;
+}
+
+void printfNfaNode(NfaNode *n)
+{
+    NfaNode *a = n->next;
+    NfaNode *b = n->next2;
+    if (n->visited)
+    {
+        return;
+    }
+    printf("\n");
+    printf("当前节点编号stateNum  %d \n", n->stateNum);
+    printf("当前节点接受edge %d \n", n->edge);
+    if (n->inputset)
+    {
+        printf("当前节点接受inputset %s %d\n", n->inputset, strlen(n->inputset));
+    }
+    printf("\n");
+    if (a)
+    {
+        printfNfaNode(a);
+    }
+    if (b)
+    {
+        printfNfaNode(b);
+    }
+    n->visited = TRUE;
+}
+
+void printfNfa(NfaPair *n)
+{
+    NfaNode *a = n->startNode;
+    printf("打印开始\n");
+    printfNfaNode(a);
 }

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utils.h"
 
 static NfaPair *stnspaif = NULL;
 void stnsInitfun(char str)
@@ -11,12 +12,7 @@ void stnsInitfun(char str)
         wholeStatus->state = PSWsinglechar;
     }
     stnspaif = (NfaPair *)malloc(sizeof(NfaPair));
-
-    stnspaif->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    stnspaif->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
-
-    stnspaif->startNode->visited = FALSE;
-    stnspaif->startNode->inputset = NULL;
+    setInitPair(stnspaif);
     curNfa = stnspaif;
 }
 // . 代表除去回车换行符
@@ -28,6 +24,10 @@ void stnsDotfun()
         return;
     }
     stnspaif->startNode->inputset = "\n\r";
+    stnspaif->startNode->anchor = 1;
+    char *s = setComplement(stnspaif->startNode->inputset);
+    free(stnspaif->startNode->inputset);
+    stnspaif->startNode->inputset = s;
     stnsDeffun(-2);
 }
 
