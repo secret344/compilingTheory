@@ -162,6 +162,15 @@ void printfNfaNode(NfaNode *n)
     printf("当前节点接受visited %d \n", n->visited);
     printf("当前节点编号stateNum  %d \n", n->stateNum);
     printf("当前节点接受edge %d \n", n->edge);
+    if (a)
+    {
+        printf("当前节点next %d  \n", a->stateNum);
+    }
+    if (b)
+    {
+        printf("当前节点next1 %d  \n", b->stateNum);
+    }
+
     if (n->inputset)
     {
         printf("当前节点接受inputset %s %d\n", n->inputset, strlen(n->inputset));

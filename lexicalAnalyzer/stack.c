@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "bool.h"
 #include "stack.h"
+#include "nfa_Interface.h"
 
 Stack *new_stack()
 {
@@ -26,6 +27,15 @@ void spush(Stack *PStack, char *val)
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
+void sOptrPush(Stack *PStack, NfaPair *val)
+{
+    StackNode *p = (StackNode *)malloc(sizeof(StackNode));
+    p->data.nfa = val;
+    p->PStackNext = PStack->top;
+    PStack->top = p;
+    PStack->base->data.n = PStack->base->data.n + 1;
+}
+
 char *spop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
@@ -40,6 +50,23 @@ char *spop(Stack *PStack)
     PStack->top = p->PStackNext;
     free(p->data.s);
     p->data.s = NULL;
+    free(p);
+    p = NULL;
+    PStack->base->data.n = PStack->base->data.n - 1;
+    return _Destination;
+}
+
+NfaPair *sOptrPop(Stack *PStack)
+{
+    if (PStack->top == PStack->base)
+    {
+        printf("栈为空\n");
+        return NULL;
+    };
+
+    StackNode *p = PStack->top;
+    NfaPair *_Destination = p->data.nfa;
+    PStack->top = p->PStackNext;
     free(p);
     p = NULL;
     PStack->base->data.n = PStack->base->data.n - 1;

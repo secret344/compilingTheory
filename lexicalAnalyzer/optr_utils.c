@@ -3,8 +3,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
+#include "nfa_Interface.h"
 
 static NfaPair *optrpaif = NULL;
+static Stack *optrStack = NULL;
+void optrInitStack()
+{
+    if (!optrStack)
+    {
+        optrStack = new_stack();
+    }
+}
 
 void StarClosure(char s)
 {
@@ -67,6 +76,8 @@ void orDispose(char *s)
     optrpaif = curNfa; // 保存当前nfa节点，等待下次节点执行或运算
     curNfa = NULL;
     spush(OPTR, s);
+    // // 保存上一次节点，等待下次生成节点进行合并
+    sOptrPush(optrStack, optrpaif);
 }
 
 void bracketDispose(char *s)
@@ -99,13 +110,56 @@ void switchOptr(char *s)
         wholeStatus->state = PSWdef;
         break;
     case '|':
+        optrInitStack();
         orDispose(s);
         break;
     case '(':
     case ')':
+        optrInitStack();
         bracketDispose(s);
         break;
     default:
         break;
     }
+}
+
+void OptrDispose(char s)
+{   // 闭包运算优先级最高
+    if (s == '*' || s == '?' || s == '+')
+    {
+        return;
+    }
+    // s 当前节点之后的字符串
+    char *str = spop(OPTR); // 取出当前运算符栈运算符
+    switch (*str)
+    {
+    case '|':
+        printf("");
+        // 取出当前运算符栈需要的节点 单步处理的节点不需保存到栈
+        NfaPair *n = sOptrPop(optrStack); // 或运算符 next
+        NfaPair *b = curNfa;              // 或运算符 next2
+        // 进行或链接 合并成curNfa 暂不链接，等待下一个字符处理程序处理
+        optrpaif = (NfaPair *)malloc(sizeof(NfaPair)); // 生成两端节点
+        setInitPair(optrpaif);
+        //  a | b
+
+        //   1 - 2
+        // 0       5
+        //   3 - 4
+        optrpaif->startNode->next = n->startNode;
+        optrpaif->startNode->next2 = b->startNode;
+
+        n->endNode->next = optrpaif->endNode;
+        b->endNode->next = optrpaif->endNode;
+
+        curNfa = optrpaif;
+        break;
+    case '(': //括号运算符需要等待字符 ) 取出
+    default:
+        // 未处理的运算符 放回去交给相应处理函数处理
+        spush(OPTR, str);
+        break;
+    }
+    free(str);
+    str = NULL;
 }
