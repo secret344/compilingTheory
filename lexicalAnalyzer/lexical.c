@@ -155,9 +155,6 @@ void optrOptions()
     case '*':
     case '+':
     case '?':
-        // 创建闭包
-        switchOptr(s);
-        break;
     case '(':
     case ')':
     case '|':
@@ -206,13 +203,20 @@ void checkUnion(char s)
         nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
         setInitPair(nfapaif);
     }
+    // 检查运算符栈
+    int num = stacksize(OPTR);
+    if (num > 0 && curNfa)
+    {
+        // 运算符栈存在未处理运算符，进行运算符处理方法
+        OptrDispose(s);
+    }
 
     switch (s)
     {
+    case '|':
     case '*':
     case '+':
     case '?':
-    case '|':
         // 如果是闭包 不做链接操作
         // 括号优先级另说
         break;

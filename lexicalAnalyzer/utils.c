@@ -34,7 +34,7 @@ void setInitPair(NfaPair *n)
 //语法树节点栈 "abcdzAZ19_. ";
 BOOL isSTNS(char str)
 {
-    char s[] = "abcdzAZ19_. ";
+    char s[] = "@#$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_. ";
     return findChar(str, s);
 }
 
@@ -159,9 +159,17 @@ void printfNfaNode(NfaNode *n)
     }
     n->visited = TRUE;
     printf("\n");
-    printf("当前节点接受visited %d \n", n->visited);
     printf("当前节点编号stateNum  %d \n", n->stateNum);
     printf("当前节点接受edge %d \n", n->edge);
+    if (a)
+    {
+        printf("当前节点next %d  \n", a->stateNum);
+    }
+    if (b)
+    {
+        printf("当前节点next1 %d  \n", b->stateNum);
+    }
+
     if (n->inputset)
     {
         printf("当前节点接受inputset %s %d\n", n->inputset, strlen(n->inputset));

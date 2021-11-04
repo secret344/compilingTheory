@@ -98,7 +98,6 @@ void setEndCheck()
     free(s);
     s = NULL;
     setpaif->startNode->inputset = result;
-    curNfa = setpaif;
 }
 void setEndfun()
 {
@@ -114,6 +113,7 @@ void setEndfun()
     wholeStatus->state = PSWdef;
     isInit = FALSE;
     setEndCheck();
+    curNfa = setpaif;
 }
 void checkSetStack()
 {
