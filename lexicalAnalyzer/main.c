@@ -35,6 +35,7 @@ int main()
     // spush(STNS, "123");
     // sdestory(STNS);
     // straversal(OPTR);
+    // (ac[a-cA-Z]*[^a-cA-Z]+[a-cA-Z]?ba.a|b*)
     int f = initParse("./reg-test.txt");
     // printf("结束字符 %s", nfapaif->startNode->inputset);
     printfNfa(nfapaif);

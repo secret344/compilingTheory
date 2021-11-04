@@ -155,9 +155,6 @@ void optrOptions()
     case '*':
     case '+':
     case '?':
-        // 创建闭包
-        switchOptr(s);
-        break;
     case '(':
     case ')':
     case '|':

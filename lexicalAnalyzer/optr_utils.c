@@ -84,13 +84,30 @@ void bracketDispose(char *s)
 {
     if (*s == '(')
     {
+        if (nfapaif)
+        {
+            sOptrPush(optrStack, nfapaif);
+        }
+        // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
         optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
         setInitPair(optrpaif);
         nfapaif = optrpaif; // 括号生成新的树 碰到) 组合
-
         spush(OPTR, s);
         return;
     }
+    // )
+    // 括号结束 取出栈内左括号。curNfa赋值为括号生成的节点
+    // 等待后续合并到主节点树中
+    int n = stacksize(OPTR);
+    char *str = spop(OPTR);
+    if (n <= 0 || *str != '(')
+    {
+        printf(") 必须含有相对应的 (,位置 行：%d 列：%d \n", row, col);
+    }
+    curNfa = nfapaif;
+    nfapaif = sOptrPop(optrStack);
+    free(str);
+    str = NULL;
 }
 
 void switchOptr(char *s)
@@ -124,7 +141,7 @@ void switchOptr(char *s)
 }
 
 void OptrDispose(char s)
-{   // 闭包运算优先级最高
+{ // 闭包运算优先级最高
     if (s == '*' || s == '?' || s == '+')
     {
         return;
