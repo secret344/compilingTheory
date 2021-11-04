@@ -18,11 +18,6 @@ void stnsInitfun(char str)
 // . 代表除去回车换行符
 void stnsDotfun()
 {
-    if (wholeStatus->state == PSWESC)
-    {
-        stnsDeffun('.');
-        return;
-    }
     stnspaif->startNode->inputset = "\n\r";
     stnspaif->startNode->anchor = 1;
     char *s = setComplement(stnspaif->startNode->inputset);
@@ -34,5 +29,5 @@ void stnsDotfun()
 void stnsDeffun(char str)
 {
     stnspaif->startNode->edge = str;
-    wholeStatus->state == PSWdef;
+    wholeStatus->state = PSWdef;
 }

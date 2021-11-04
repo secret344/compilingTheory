@@ -50,7 +50,7 @@ int main()
     int f = initParse("./reg-test.txt");
     // printf("结束字符 %s", nfapaif->startNode->inputset);
     printfNfa(nfapaif);
-    wait(60);
+    // wait(60);
     return f;
     // if (setpaif->startNode->anchor == 1)
     // {

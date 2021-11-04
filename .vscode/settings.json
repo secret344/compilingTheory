@@ -24,8 +24,8 @@
     "code-runner.executorMap": {
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
-        "c": "cd $dir && gcc -fexec-charset=GBK -o $fileNameWithoutExt *.c && $dir$fileNameWithoutExt",
-        "cpp": "cd $dir && g++ -fexec-charset=GBK $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc -fexec-charset=utf-8 -o $fileNameWithoutExt *.c && $dir$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ -fexec-charset=utf-8 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",
         "python": "python -u",

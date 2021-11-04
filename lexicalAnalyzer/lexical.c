@@ -73,7 +73,7 @@ void initRegParse(char *str)
 
 void switchOption(char str)
 {
-    BOOL isSet = FALSE;
+    BOOL isOther = FALSE;
 
     int a = isSTNS(str);
     int b = isOPTR(str);
@@ -86,7 +86,7 @@ void switchOption(char str)
     {
         // 当前状态为 生成集合
         a = b = 0;
-        isSet = TRUE;
+        isOther = TRUE;
         setOptions(s);
     }
 
@@ -94,6 +94,7 @@ void switchOption(char str)
     {
         // 转意字符之后符号作为字符解析
         b = 0;
+        isOther = TRUE;
         spush(STNS, s);
         stnsOptions();
     }
@@ -104,7 +105,7 @@ void switchOption(char str)
         optrOptions();
     }
 
-    if (!a && !b && !isSet)
+    if (!a && !b && !isOther)
     {
         spush(OPTR, s);
         otherOptions();
@@ -122,6 +123,7 @@ void otherOptions()
     {
         // 转义字符
         wholeStatus->state = PSWESC;
+        printf("转义字符\n");
     }
     free(s);
     s = NULL;
@@ -131,6 +133,14 @@ void stnsOptions()
 {
     char *s = spop(STNS);
     stnsInitfun(*s);
+    if (wholeStatus->state == PSWESC)
+    {
+        stnsDeffun(*s);
+        free(s);
+        s = NULL;
+        return;
+    }
+
     switch (*s)
     {
     case '.':
