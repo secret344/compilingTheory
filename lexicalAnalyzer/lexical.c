@@ -16,14 +16,14 @@ static void optrOptions();
 static void setOptions(char *s);
 static void checkUnion(char s);
 
-Stack *OPTR = NULL;     //运算符栈
-Stack *STNS = NULL;     //语法树节点栈
-NfaPair *curNfa = NULL; // nfa根节点
-NfaPair *nfapaif = NULL;
-WholeState *wholeStatus = NULL;
+Stack *OPTR = NULL;             //运算符栈
+Stack *STNS = NULL;             //语法树节点栈
+NfaPair *curNfa = NULL;         // 当前正在处理的节点
+NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
+WholeState *wholeStatus = NULL; // 当前程序状态
 
-int row = 1;
-int col = 0;
+int row = 1; //行
+int col = 0; //列
 
 int initParse(char *path)
 {
@@ -73,7 +73,7 @@ void initRegParse(char *str)
 
 void switchOption(char str)
 {
-    BOOL isSet = FALSE;
+    BOOL isOther = FALSE;
 
     int a = isSTNS(str);
     int b = isOPTR(str);
@@ -86,7 +86,7 @@ void switchOption(char str)
     {
         // 当前状态为 生成集合
         a = b = 0;
-        isSet = TRUE;
+        isOther = TRUE;
         setOptions(s);
     }
 
@@ -94,6 +94,7 @@ void switchOption(char str)
     {
         // 转意字符之后符号作为字符解析
         b = 0;
+        isOther = TRUE;
         spush(STNS, s);
         stnsOptions();
     }
@@ -104,7 +105,7 @@ void switchOption(char str)
         optrOptions();
     }
 
-    if (!a && !b && !isSet)
+    if (!a && !b && !isOther)
     {
         spush(OPTR, s);
         otherOptions();
@@ -122,6 +123,7 @@ void otherOptions()
     {
         // 转义字符
         wholeStatus->state = PSWESC;
+        printf("转义字符\n");
     }
     free(s);
     s = NULL;
@@ -131,6 +133,14 @@ void stnsOptions()
 {
     char *s = spop(STNS);
     stnsInitfun(*s);
+    if (wholeStatus->state == PSWESC)
+    {
+        stnsDeffun(*s);
+        free(s);
+        s = NULL;
+        return;
+    }
+
     switch (*s)
     {
     case '.':
@@ -198,11 +208,6 @@ void setOptions(char *s)
 
 void checkUnion(char s)
 {
-    if (!nfapaif)
-    {
-        nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
-        setInitPair(nfapaif);
-    }
     // 检查运算符栈
     int num = stacksize(OPTR);
     if (num > 0 && curNfa)
@@ -223,9 +228,16 @@ void checkUnion(char s)
     default:
         if (curNfa)
         {
-            nfapaif->endNode->next = curNfa->startNode;
-            nfapaif->endNode = curNfa->endNode;
-            curNfa = NULL;
+            if (!nfapaif)
+            {
+                nfapaif = curNfa;
+            }
+            else
+            {
+                nfapaif->endNode->next = curNfa->startNode;
+                nfapaif->endNode = curNfa->endNode;
+                curNfa = NULL;
+            }
         }
         break;
     }

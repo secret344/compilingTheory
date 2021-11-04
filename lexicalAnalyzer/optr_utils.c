@@ -83,15 +83,12 @@ void orDispose(char *s)
 void bracketDispose(char *s)
 {
     if (*s == '(')
-    {
+    { 
+        // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
         if (nfapaif)
         {
             sOptrPush(optrStack, nfapaif);
         }
-        // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
-        optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
-        setInitPair(optrpaif);
-        nfapaif = optrpaif; // 括号生成新的树 碰到) 组合
         spush(OPTR, s);
         return;
     }

@@ -3,6 +3,17 @@
 #include <string.h>
 #include "lexical.h"
 #include "utils.h"
+#include <time.h>
+
+void wait(int seconds)
+{
+    clock_t endwait;
+    endwait = clock() + seconds * CLK_TCK;
+    while (clock() < endwait)
+    {
+    }
+}
+
 int main()
 {
     // Trie *root = create_trie();
@@ -39,6 +50,7 @@ int main()
     int f = initParse("./reg-test.txt");
     // printf("结束字符 %s", nfapaif->startNode->inputset);
     printfNfa(nfapaif);
+    // wait(60);
     return f;
     // if (setpaif->startNode->anchor == 1)
     // {
@@ -49,6 +61,6 @@ int main()
     // }
 }
 //  a | b*
-//   1 - 2 
+//   1 - 2
 // 0       5
 //   3 - 4

@@ -172,7 +172,7 @@ void printfNfaNode(NfaNode *n)
 
     if (n->inputset)
     {
-        printf("当前节点接受inputset %s %d\n", n->inputset, strlen(n->inputset));
+        printf("当前节点接受inputset %s ;inputset length： %d\n", n->inputset, strlen(n->inputset));
     }
     printf("\n");
     if (a)
