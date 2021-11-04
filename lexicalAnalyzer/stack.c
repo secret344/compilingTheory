@@ -60,7 +60,7 @@ NfaPair *sOptrPop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
-        printf("栈为空\n");
+        printf("Stack栈为空\n");
         return NULL;
     };
 

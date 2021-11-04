@@ -16,14 +16,14 @@ static void optrOptions();
 static void setOptions(char *s);
 static void checkUnion(char s);
 
-Stack *OPTR = NULL;     //运算符栈
-Stack *STNS = NULL;     //语法树节点栈
-NfaPair *curNfa = NULL; // nfa根节点
-NfaPair *nfapaif = NULL;
-WholeState *wholeStatus = NULL;
+Stack *OPTR = NULL;             //运算符栈
+Stack *STNS = NULL;             //语法树节点栈
+NfaPair *curNfa = NULL;         // 当前正在处理的节点
+NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
+WholeState *wholeStatus = NULL; // 当前程序状态
 
-int row = 1;
-int col = 0;
+int row = 1; //行
+int col = 0; //列
 
 int initParse(char *path)
 {
@@ -198,11 +198,6 @@ void setOptions(char *s)
 
 void checkUnion(char s)
 {
-    if (!nfapaif)
-    {
-        nfapaif = (NfaPair *)malloc(sizeof(NfaPair));
-        setInitPair(nfapaif);
-    }
     // 检查运算符栈
     int num = stacksize(OPTR);
     if (num > 0 && curNfa)
@@ -223,9 +218,16 @@ void checkUnion(char s)
     default:
         if (curNfa)
         {
-            nfapaif->endNode->next = curNfa->startNode;
-            nfapaif->endNode = curNfa->endNode;
-            curNfa = NULL;
+            if (!nfapaif)
+            {
+                nfapaif = curNfa;
+            }
+            else
+            {
+                nfapaif->endNode->next = curNfa->startNode;
+                nfapaif->endNode = curNfa->endNode;
+                curNfa = NULL;
+            }
         }
         break;
     }

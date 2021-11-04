@@ -17,13 +17,15 @@
         "set_utils.h": "c",
         "stdlib.h": "c",
         "optr_utils.h": "c",
-        "stns_utils.h": "c"
+        "stns_utils.h": "c",
+        "windows.h": "c",
+        "time.h": "c"
     },
     "code-runner.executorMap": {
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
-        "c": "cd $dir && gcc -o $fileNameWithoutExt *.c && $dir$fileNameWithoutExt",
-        "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc -fexec-charset=GBK -o $fileNameWithoutExt *.c && $dir$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ -fexec-charset=GBK $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",
         "python": "python -u",
