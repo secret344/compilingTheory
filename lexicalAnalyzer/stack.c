@@ -27,7 +27,7 @@ void spush(Stack *PStack, char *val)
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
-void sOptrPush(Stack *PStack, NfaPair *val)
+void sOptrPush(Stack *PStack, void *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
     p->data.nfa = val;
@@ -56,7 +56,7 @@ char *spop(Stack *PStack)
     return _Destination;
 }
 
-NfaPair *sOptrPop(Stack *PStack)
+void *sOptrPop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
@@ -65,7 +65,7 @@ NfaPair *sOptrPop(Stack *PStack)
     };
 
     StackNode *p = PStack->top;
-    NfaPair *_Destination = p->data.nfa;
+    void *_Destination = p->data.nfa;
     PStack->top = p->PStackNext;
     free(p);
     p = NULL;
