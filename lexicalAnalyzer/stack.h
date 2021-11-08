@@ -31,4 +31,5 @@ extern void *sOptrPop(Stack *PStack);
 extern void straversal(Stack *PStack);
 extern void sdestory(Stack *PStack);
 extern int stacksize(Stack *PStack);
+extern BOOL stackInclude(Stack *PStack, void *val);
 #endif
