@@ -40,7 +40,6 @@ char *spop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
-        printf("栈为空\n");
         return NULL;
     };
 
@@ -60,7 +59,6 @@ void *sOptrPop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
-        printf("Stack栈为空\n");
         return NULL;
     };
 
@@ -109,10 +107,33 @@ void sdestory(Stack *PStack)
     PStack->base = NULL;
     free(PStack);
     PStack = NULL;
-    printf("释放完成\n");
 }
 
 int stacksize(Stack *PStack)
 {
     return PStack->base->data.n;
+}
+
+BOOL stackInclude(Stack *PStack, void *val)
+{
+    BOOL bool = FALSE;
+    if (PStack->top == PStack->base)
+    {
+        return FALSE;
+    }
+    else
+    {
+        StackNode *temp = PStack->top;
+        while (PStack->top != PStack->base)
+        {
+            StackNode *p = PStack->top;
+            if (p->data.nfa == val)
+            {
+                bool = TRUE;
+            }
+            PStack->top = p->PStackNext;
+        }
+        PStack->top = temp;
+    }
+    return bool;
 }

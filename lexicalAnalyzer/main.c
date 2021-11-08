@@ -4,6 +4,7 @@
 #include "lexical.h"
 #include "utils.h"
 #include <time.h>
+#include "nfa_Intepretor.h"
 
 void wait(int seconds)
 {
@@ -50,6 +51,9 @@ int main()
     int f = initParse("./reg-test.txt");
     // printf("结束字符 %s", nfapaif->startNode->inputset);
     printfNfa(nfapaif);
+    initpretNfa(nfapaif->startNode, "0.1xq");
+    initpretNfa(nfapaif->startNode, "9.865241");
+    initpretNfa(nfapaif->startNode, "123.656");
     // wait(60);
     return f;
     // if (setpaif->startNode->anchor == 1)
