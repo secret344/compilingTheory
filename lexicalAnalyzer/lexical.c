@@ -126,7 +126,7 @@ void switchOption(char str)
 void otherOptions()
 {
     char *s = spop(OPTR);
-    printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
+    printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
         // 转义字符
@@ -245,8 +245,8 @@ void checkUnion(char s)
             {
                 nfapaif->endNode->next = curNfa->startNode;
                 nfapaif->endNode = curNfa->endNode;
-                curNfa = NULL;
             }
+            curNfa = NULL;
         }
         break;
     }

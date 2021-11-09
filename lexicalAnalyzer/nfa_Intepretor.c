@@ -20,7 +20,7 @@ void initMatchNfa(Stack *start, char *str)
         NfaPair *n = sOptrPop(start);
         sOptrPush(prev, n);
         MatchBackType mtt[2];
-        printfNfa(n);
+        // printfNfa(n);
         initpretNfa(n->startNode, str, mtt);
         if (mtt[0].lastAccepted)
         {

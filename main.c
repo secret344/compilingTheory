@@ -18,7 +18,7 @@ void wait(int seconds)
 int main()
 {
     int f = initParse("./reg-test.txt");
-    printf("大小 %d\n", stacksize(nfaSet));
-    initMatchNfa(nfaSet, "let");
+    // printf("大小 %d\n", stacksize(nfaSet));
+    initMatchNfa(nfaSet, "0.1let0a.2");
     return 1;
 }
