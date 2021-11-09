@@ -1,6 +1,6 @@
-#include "bool.h"
 #ifndef _NFA_INTERFACE_
 #define _NFA_INTERFACE_
+#include "../datastructure/bool.h"
 // 程序状态字
 enum PSW
 {
@@ -19,7 +19,8 @@ enum PSW
 
 typedef struct NfaNode
 {
-    char *inputset;        // 字符集
+    char *inputset; // 字符集
+    char *name;
     BOOL visited;          // 是否被访问过 打印
     int stateNum;          // 节点编号
     int anchor;            // 开头含有^ 结尾含有$ 或都有 0 1 2 3

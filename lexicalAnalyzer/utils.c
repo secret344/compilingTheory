@@ -1,4 +1,3 @@
-#include "bool.h"
 #include <string.h>
 #include "lexical.h"
 #include <stdlib.h>
@@ -34,7 +33,7 @@ void setInitPair(NfaPair *n)
 //语法树节点栈 "abcdzAZ19_. ";
 BOOL isSTNS(char str)
 {
-    char s[] = "@#$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_. ";
+    char s[] = "@#$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.:\"";
     return findChar(str, s);
 }
 

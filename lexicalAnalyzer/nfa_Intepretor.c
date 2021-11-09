@@ -1,43 +1,36 @@
 #include <stdio.h>
-#include "stack.h"
+#include "../datastructure/stack.h"
+#include "nfa_Interface.h"
 #include "utils.h"
+#include "nfa_Intepretor.h"
 
-Stack *e_closure(Stack *next);
-Stack *move(Stack *next, char c);
-BOOL hasAcceptState(Stack *next)
+static Stack *e_closure(Stack *next);
+static Stack *move(Stack *next, char c);
+static BOOL hasAcceptState(Stack *next);
+static int count = 0;
+
+void initMatchNfa(Stack *start, char *str)
 {
-    BOOL res = FALSE;
-    if (next == NULL || !stacksize(next))
+    while (stacksize(start))
     {
-        return FALSE;
-    }
-
-    StackNode *temp = next->top;
-    while (next->top != next->base)
-    {
-        StackNode *p = next->top;
-        NfaNode *n = p->data.nfa;
-        if (n->next == NULL && n->next2 == NULL)
+        NfaPair *n = sOptrPop(start);
+        BOOL isMatch = initpretNfa(n->startNode, str);
+        if (isMatch)
         {
-            res = TRUE;
+            printf("匹配完成，匹配正则名称为 %s;匹配结尾位置为%d\n", n->endNode->name, count);
         }
-        next->top = p->PStackNext;
     }
-    next->top = temp;
-
-    return res;
 }
 
-void initpretNfa(NfaNode *start, char *str)
+BOOL initpretNfa(NfaNode *start, char *str)
 {
-    printf("开始匹配");
+    printf("开始匹配\n");
     Stack *next = new_stack();
     sOptrPush(next, start);
     // 查找closure
     next = e_closure(next);
     BOOL lastAccepted = FALSE;
     char s[100];
-    int count = 0;
     while (*str != '\0')
     {
         char c = *str++;
@@ -60,8 +53,8 @@ void initpretNfa(NfaNode *start, char *str)
     if (lastAccepted)
     {
         s[count] = '\0';
-        printf("匹配完成，匹配字符串为 %s\n", s);
     }
+    return lastAccepted;
 }
 
 Stack *e_closure(Stack *next)
@@ -119,4 +112,28 @@ Stack *move(Stack *next, char c)
     }
     sdestory(next);
     return result;
+}
+
+BOOL hasAcceptState(Stack *next)
+{
+    BOOL res = FALSE;
+    if (next == NULL || !stacksize(next))
+    {
+        return FALSE;
+    }
+
+    StackNode *temp = next->top;
+    while (next->top != next->base)
+    {
+        StackNode *p = next->top;
+        NfaNode *n = p->data.nfa;
+        if (n->next == NULL && n->next2 == NULL)
+        {
+            res = TRUE;
+        }
+        next->top = p->PStackNext;
+    }
+    next->top = temp;
+
+    return res;
 }

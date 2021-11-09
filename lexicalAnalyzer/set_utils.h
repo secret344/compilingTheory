@@ -1,7 +1,6 @@
-#include "lexical.h"
-
 #ifndef _SET_UTILS_
 #define _SET_UTILS_
+
 void setInitfun();        // 初始化字符集函数
 void setESCfun();         // 转义函数
 void setNOTfun();         // 取反函数

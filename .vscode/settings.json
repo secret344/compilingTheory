@@ -19,12 +19,15 @@
         "optr_utils.h": "c",
         "stns_utils.h": "c",
         "windows.h": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "nfa_intepretor.h": "c",
+        "read_file.h": "c",
+        "nfa_interface.h": "c"
     },
     "code-runner.executorMap": {
         "javascript": "node",
         "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
-        "c": "cd $dir && gcc -fexec-charset=utf-8 -o $fileNameWithoutExt *.c && $dir$fileNameWithoutExt",
+        "c": "cd $dir && gcc -fexec-charset=utf-8 main.c -o $fileNameWithoutExt lexicalAnalyzer/**.c readfile/**.c datastructure/**.c && $dir$fileNameWithoutExt",
         "cpp": "cd $dir && g++ -fexec-charset=utf-8 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
         "php": "php",

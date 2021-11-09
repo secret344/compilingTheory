@@ -2,9 +2,8 @@
 #include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
-#include "bool.h"
 #include "stack.h"
-#include "nfa_Interface.h"
+#include "../lexicalAnalyzer/nfa_Interface.h"
 
 Stack *new_stack()
 {
