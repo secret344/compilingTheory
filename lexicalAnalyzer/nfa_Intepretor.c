@@ -3,6 +3,7 @@
 #include "nfa_Interface.h"
 #include "utils.h"
 #include "nfa_Intepretor.h"
+#include <string.h>
 
 static Stack *e_closure(Stack *next);
 static Stack *move(Stack *next, char c);
@@ -11,18 +12,46 @@ static int count = 0;
 
 void initMatchNfa(Stack *start, char *str)
 {
-    while (stacksize(start))
+    Stack *prev = new_stack();
+    MatchBackType ResultMt[2] = {FALSE, 0};
+    while (count < strlen(str))
     {
+
         NfaPair *n = sOptrPop(start);
-        BOOL isMatch = initpretNfa(n->startNode, str);
-        if (isMatch)
+        sOptrPush(prev, n);
+        MatchBackType mtt[2];
+        printfNfa(n);
+        initpretNfa(n->startNode, str, mtt);
+        if (mtt[0].lastAccepted)
         {
-            printf("匹配完成，匹配正则名称为 %s;匹配结尾位置为%d\n", n->endNode->name, count);
+            ResultMt[0].lastAccepted = TRUE;
+            ResultMt[1].num = mtt[1].num;
+            printf("匹配完成，匹配正则名称为 %s;匹配结尾位置为%d\n", n->endNode->name, mtt[1].num);
+        }
+
+        if (!stacksize(start))
+        {
+            printf("一轮匹配结束\n");
+            sdestory(start);
+            start = prev;
+            prev = new_stack();
+            printf("%d %d \n", stacksize(start), stacksize(prev));
+            if (!ResultMt[0].lastAccepted)
+            {
+                printf("匹配失败,发现未知字符，尝试跳过一位。\n");
+                count++;
+            }
+            else
+            {
+                printf("匹配成功,继续进行后续匹配。%d\n", ResultMt[1].num);
+                count = ResultMt[1].num;
+                ResultMt[0].lastAccepted = FALSE;
+            }
         }
     }
 }
 
-BOOL initpretNfa(NfaNode *start, char *str)
+void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
 {
     printf("开始匹配\n");
     Stack *next = new_stack();
@@ -30,10 +59,10 @@ BOOL initpretNfa(NfaNode *start, char *str)
     // 查找closure
     next = e_closure(next);
     BOOL lastAccepted = FALSE;
-    char s[100];
-    while (*str != '\0')
+    size_t i;
+    for (i = count; i < strlen(str); i++)
     {
-        char c = *str++;
+        char c = str[i];
         next = move(next, c);
         next = e_closure(next);
         if (stacksize(next))
@@ -47,14 +76,10 @@ BOOL initpretNfa(NfaNode *start, char *str)
         {
             break;
         }
-        s[count++] = c;
+        printf("打印%c \n", c);
     }
-
-    if (lastAccepted)
-    {
-        s[count] = '\0';
-    }
-    return lastAccepted;
+    mt[0].lastAccepted = lastAccepted;
+    mt[1].num = i;
 }
 
 Stack *e_closure(Stack *next)

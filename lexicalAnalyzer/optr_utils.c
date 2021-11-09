@@ -84,13 +84,14 @@ void orDispose(char *s)
 void bracketDispose(char *s)
 {
     if (*s == '(')
-    { 
+    {
         // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
         if (nfapaif)
         {
             sOptrPush(optrStack, nfapaif);
         }
         spush(OPTR, s);
+        nfapaif = NULL;
         return;
     }
     // )

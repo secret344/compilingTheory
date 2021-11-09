@@ -22,6 +22,7 @@ int initReadFile(char *path, fun_t cb)
     }
 
     fclose(fp);
+    cb(EOF); //结束
     return EXIT_SUCCESS;
 }
 

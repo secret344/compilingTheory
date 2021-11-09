@@ -112,11 +112,11 @@ char *noStrRepetition(char *str)
     for (size_t i = 0; i < len; i++)
     {
         char s = str[i];
+        repe[count] = '\0';
         BOOL is = findChar(s, repe);
         if (!is)
         {
-            repe[count] = s;
-            count++;
+            repe[count++] = s;
         }
     }
     repe[count] = '\0';
