@@ -44,13 +44,13 @@ void judgeBlock(char str)
     static BOOL isJudge = FALSE;
     static char name[255];
     static int count = 0;
-    if (str == '\n' || str == EOF)
+    if (str == '\r' || str == '\n' || str == EOF)
     {
         checkUnion('0');
         isJudge = FALSE;
         if (nfapaif == NULL)
         {
-            printf("错误的格式，请检查行%d 列%d.", row, col);
+            printf("错误的格式，请检查行%d 列%d. 回车换行请忽略此提示.", row, col);
             return;
         }
         nfapaif->endNode->name = malloc(strlen(name) + 1);
@@ -126,12 +126,14 @@ void switchOption(char str)
 void otherOptions()
 {
     char *s = spop(OPTR);
-    printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
         // 转义字符
         wholeStatus->state = PSWESC;
-        printf("转义字符\n");
+    }
+    else
+    {
+        printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
     }
     free(s);
     s = NULL;

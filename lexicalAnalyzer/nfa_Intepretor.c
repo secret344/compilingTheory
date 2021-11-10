@@ -25,8 +25,9 @@ void initMatchNfa(Stack *start, char *str)
         if (mtt[0].lastAccepted)
         {
             ResultMt[0].lastAccepted = TRUE;
-            ResultMt[1].num = mtt[1].num;
-            printf("匹配完成，匹配正则名称为 %s;匹配结尾位置为%d\n", n->endNode->name, mtt[1].num);
+            // 贪婪匹配
+            ResultMt[1].num = MAX(mtt[1].num, ResultMt[1].num);
+            printf("匹配完成，匹配正则名称为 %s;匹配开始位置: %d;匹配结尾位置为%d\n", n->endNode->name, count, mtt[1].num);
         }
 
         if (!stacksize(start))
@@ -35,7 +36,6 @@ void initMatchNfa(Stack *start, char *str)
             sdestory(start);
             start = prev;
             prev = new_stack();
-            printf("%d %d \n", stacksize(start), stacksize(prev));
             if (!ResultMt[0].lastAccepted)
             {
                 printf("匹配失败,发现未知字符，尝试跳过一位。\n");
@@ -53,7 +53,6 @@ void initMatchNfa(Stack *start, char *str)
 
 void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
 {
-    printf("开始匹配\n");
     Stack *next = new_stack();
     sOptrPush(next, start);
     // 查找closure
@@ -76,7 +75,7 @@ void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
         {
             break;
         }
-        printf("打印%c \n", c);
+        printf("正在匹配字符为：%c \n", c);
     }
     mt[0].lastAccepted = lastAccepted;
     mt[1].num = i;
