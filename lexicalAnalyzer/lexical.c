@@ -126,12 +126,14 @@ void switchOption(char str)
 void otherOptions()
 {
     char *s = spop(OPTR);
-    printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
         // 转义字符
         wholeStatus->state = PSWESC;
-        printf("转义字符\n");
+    }
+    else
+    {
+        printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
     }
     free(s);
     s = NULL;
