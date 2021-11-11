@@ -1,5 +1,4 @@
-
-#ifndef _TRIE_
+﻿#ifndef _TRIE_
 #define _TRIE_
 #include "bool.h"
 

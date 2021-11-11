@@ -1,12 +1,11 @@
 #include <stdio.h>
-#include <malloc.h>
 #include <string.h>
 #include <stdlib.h>
 #include "stack.h"
 #include "../lexicalAnalyzer/nfa_Interface.h"
 
 Stack *new_stack()
-{
+{	
     Stack *PStack = (Stack *)malloc(sizeof(Stack));
     PStack->base = (StackNode *)malloc(sizeof(StackNode));
 
@@ -19,8 +18,9 @@ Stack *new_stack()
 void spush(Stack *PStack, char *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-    p->data.s = (char *)malloc(strlen(val) + 1);
-    strcpy(p->data.s, val);
+	char *str = (char *)malloc(strlen(val) + 1);
+    strcpy(str, val);
+	p->data.s = str;
     p->PStackNext = PStack->top;
     PStack->top = p;
     PStack->base->data.n = PStack->base->data.n + 1;
@@ -85,7 +85,7 @@ void straversal(Stack *PStack)
     while (PStack->top != PStack->base)
     {
         StackNode *p = PStack->top;
-        printf("%s ", p->data);
+        printf("%s ", p->data.s);
         PStack->top = p->PStackNext;
     }
     printf("\n");

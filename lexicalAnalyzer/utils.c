@@ -1,4 +1,4 @@
-#include <string.h>
+﻿#include <string.h>
 #include "lexical.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -74,6 +74,7 @@ char *ESCmatch(char s)
     default:
         break;
     }
+    return result;
 }
 
 char *getSetLetter(char a, char b)
@@ -109,7 +110,7 @@ char *noStrRepetition(char *str)
     int len = strlen(str);
     char *repe = (char *)malloc(len + 1);
     int count = 0;
-    for (size_t i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         char s = str[i];
         repe[count] = '\0';

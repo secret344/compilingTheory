@@ -1,4 +1,4 @@
-#ifndef _SET_UTILS_
+﻿#ifndef _SET_UTILS_
 #define _SET_UTILS_
 
 void setInitfun();        // 初始化字符集函数

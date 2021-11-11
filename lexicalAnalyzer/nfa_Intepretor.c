@@ -1,4 +1,4 @@
-#include <stdio.h>
+﻿#include <stdio.h>
 #include "../datastructure/stack.h"
 #include "nfa_Interface.h"
 #include "utils.h"
@@ -27,7 +27,7 @@ void initMatchNfa(Stack *start, char *str)
             ResultMt[0].lastAccepted = TRUE;
             // 贪婪匹配
             ResultMt[1].num = MAX(mtt[1].num, ResultMt[1].num);
-            printf("匹配完成，匹配正则名称为 %s;匹配开始位置: %d;匹配结尾位置为%d\n", n->endNode->name, count, mtt[1].num);
+            printf("匹配完成，匹配正则名称为:%s;匹配开始位置:%d;匹配结尾位置为%d\n", n->endNode->name, count, mtt[1].num);
         }
 
         if (!stacksize(start))
@@ -43,7 +43,7 @@ void initMatchNfa(Stack *start, char *str)
             }
             else
             {
-                printf("匹配成功,继续进行后续匹配。%d\n", ResultMt[1].num);
+                printf("匹配成功,继续进行后续匹配,%d\n", ResultMt[1].num);
                 count = ResultMt[1].num;
                 ResultMt[0].lastAccepted = FALSE;
             }

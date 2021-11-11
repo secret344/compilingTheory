@@ -1,4 +1,4 @@
-#include "lexical.h"
+﻿#include "lexical.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,7 +50,7 @@ void judgeBlock(char str)
         isJudge = FALSE;
         if (nfapaif == NULL)
         {
-            printf("错误的格式，请检查行%d 列%d. 回车换行请忽略此提示.", row, col);
+            printf("错误的格式，请检查行%d;列%d. 回车换行请忽略此提示.", row, col);
             return;
         }
         nfapaif->endNode->name = malloc(strlen(name) + 1);
@@ -88,8 +88,8 @@ void switchOption(char str)
     checkUnion(str);
     int len = sizeof(str);
     char *s = (char *)malloc(len + 1);
-    strcpy(s, &str);
-    s[len] = '\0';
+	s[0] = str;
+    s[1] = '\0';
     if (1 <= wholeStatus->state && wholeStatus->state <= 3)
     {
         // 当前状态为 生成集合

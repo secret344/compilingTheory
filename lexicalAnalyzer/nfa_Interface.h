@@ -1,4 +1,4 @@
-#ifndef _NFA_INTERFACE_
+﻿#ifndef _NFA_INTERFACE_
 #define _NFA_INTERFACE_
 #include "../datastructure/bool.h"
 // 程序状态字
