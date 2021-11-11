@@ -15,7 +15,7 @@ void wait(int seconds)
 }
 int main()
 {
-    int f = initParse("D:/work-files/webassembly-example/build/Debug/reg-test.txt");
+    int f = initParse("./reg-test.txt");
     if (!f)
     {
         initMatchNfa(nfaSet, "0.1le t0a 2.2 () == += -- -=,;'123'");
@@ -23,6 +23,6 @@ int main()
 	else {
 		printf("未找到文件");
 	}
-    wait(6000);
+    // wait(6000);
     return f;
 }
