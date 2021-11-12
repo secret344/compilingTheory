@@ -4,7 +4,7 @@
 #include "utils.h"
 #include "nfa_Intepretor.h"
 #include <string.h>
-#include "lexical.h"
+#include "nfa_parse.h"
 
 static Stack *e_closure(Stack *next);
 static Stack *move(Stack *next, char c);
@@ -20,8 +20,8 @@ void initMatchNfa(char *str)
     while (count < len)
     {
 
-        NfaPair *n = sOptrPop(nfaSet);
-        sOptrPush(prev, n);
+        NfaPair *n = sPointPop(nfaSet);
+        sPointPush(prev, n);
         MatchBackType mtt[2];
         // printfNfa(n);
         initpretNfa(n->startNode, str, mtt);
@@ -57,7 +57,7 @@ void initMatchNfa(char *str)
 void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
 {
     Stack *next = new_stack();
-    sOptrPush(next, start);
+    sPointPush(next, start);
     // 查找closure
     next = e_closure(next);
     BOOL lastAccepted = FALSE;
@@ -92,22 +92,22 @@ Stack *e_closure(Stack *next)
     Stack *nfaStack = new_stack();
     while (stacksize(next))
     {
-        NfaNode *node = sOptrPop(next);
-        sOptrPush(nextStack, node);
-        sOptrPush(nfaStack, node);
+        NfaNode *node = sPointPop(next);
+        sPointPush(nextStack, node);
+        sPointPush(nfaStack, node);
     }
     sdestory(next);
     while (stacksize(nfaStack))
     {
-        NfaNode *node = sOptrPop(nfaStack);
+        NfaNode *node = sPointPop(nfaStack);
         // 检查节点 next next2
         // 需要去重
         if (node->next && node->edge == -1)
         {
             if (stackInclude(nextStack, node->next) == FALSE)
             {
-                sOptrPush(nextStack, node->next);
-                sOptrPush(nfaStack, node->next);
+                sPointPush(nextStack, node->next);
+                sPointPush(nfaStack, node->next);
             }
         }
 
@@ -115,8 +115,8 @@ Stack *e_closure(Stack *next)
         {
             if (stackInclude(nextStack, node->next2) == FALSE)
             {
-                sOptrPush(nextStack, node->next2);
-                sOptrPush(nfaStack, node->next2);
+                sPointPush(nextStack, node->next2);
+                sPointPush(nfaStack, node->next2);
             }
         }
     }
@@ -129,13 +129,13 @@ Stack *move(Stack *next, char c)
     Stack *result = new_stack();
     while (stacksize(next))
     {
-        NfaNode *n = sOptrPop(next);
+        NfaNode *n = sPointPop(next);
         char *s = n->inputset;
         int edge = n->edge;
 
         if (edge == c || (edge == -2 && findChar(c, s)))
         {
-            sOptrPush(result, n->next);
+            sPointPush(result, n->next);
         }
     }
     sdestory(next);

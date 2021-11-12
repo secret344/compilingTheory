@@ -1,5 +1,5 @@
 ﻿#include <string.h>
-#include "lexical.h"
+#include "nfa_parse.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "utils.h"

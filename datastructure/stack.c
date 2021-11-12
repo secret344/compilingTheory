@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "stack.h"
-#include "../lexicalAnalyzer/nfa_Interface.h"
+#include "../nfaAnalyzer/nfa_Interface.h"
 
 Stack *new_stack()
 {	
@@ -26,7 +26,7 @@ void spush(Stack *PStack, char *val)
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
-void sOptrPush(Stack *PStack, void *val)
+void sPointPush(Stack *PStack, void *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
     p->data.nfa = val;
@@ -54,7 +54,7 @@ char *spop(Stack *PStack)
     return _Destination;
 }
 
-void *sOptrPop(Stack *PStack)
+void *sPointPop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {

@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include <string.h>
 #include <time.h>
-#include "lexical.h"
+#include "nfa_parse.h"
 #include "nfa_Intepretor.h"
 #include "read_file.h"
 #include <emscripten.h>
