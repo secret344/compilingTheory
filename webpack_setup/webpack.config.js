@@ -1,6 +1,8 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const { VueLoaderPlugin } = require("vue-loader");
+const webpack = require("webpack");
 
 module.exports = {
     entry: "./web_src/main.js",
@@ -15,7 +17,27 @@ module.exports = {
         publicPath: "/",
         clean: true,
     },
-    module: {},
+    externals: {
+        vue: "Vue",
+    },
+    resolve: {
+        extensions: ["*", ".js", ".vue", ".json"],
+    },
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ["vue-style-loader", "css-loader"],
+            },
+            {
+                test: /\.vue$/,
+                loader: "vue-loader",
+                options: {
+                    extractCSS: true,
+                },
+            },
+        ],
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: "./web_src/index.html",
@@ -25,5 +47,7 @@ module.exports = {
         new CopyPlugin({
             patterns: [{ from: "wasm_folder/lexical.*" }],
         }),
+        new VueLoaderPlugin(),
+        new webpack.SourceMapDevToolPlugin({}),
     ],
 };
