@@ -1,6 +1,7 @@
-#include "bool.h"
+
 #ifndef _UTILS_
 #define _UTILS_
+#include "nfa_Interface.h"
 extern BOOL isSTNS(char str);
 extern BOOL isOPTR(char str);
 extern BOOL findChar(char s, char str[]);

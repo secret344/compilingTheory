@@ -1,8 +1,7 @@
-#include "nfa_Interface.h"
 
 #ifndef _SYMBOL_STACK_
 #define _SYMBOL_STACK_
-
+#include "bool.h"
 typedef union StackData
 {
     int n;

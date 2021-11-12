@@ -1,46 +1,71 @@
-#include <stdio.h>
-#include "stack.h"
+﻿#include <stdio.h>
+#include "../datastructure/stack.h"
+#include "nfa_Interface.h"
 #include "utils.h"
+#include "nfa_Intepretor.h"
+#include <string.h>
+#include "lexical.h"
 
-Stack *e_closure(Stack *next);
-Stack *move(Stack *next, char c);
-BOOL hasAcceptState(Stack *next)
+static Stack *e_closure(Stack *next);
+static Stack *move(Stack *next, char c);
+static BOOL hasAcceptState(Stack *next);
+static int count = 0;
+
+void initMatchNfa(char *str)
 {
-    BOOL res = FALSE;
-    if (next == NULL || !stacksize(next))
+    count = 0;
+    Stack *prev = new_stack();
+    MatchBackType ResultMt[2] = {FALSE, 0};
+    int len = strlen(str);
+    while (count < len)
     {
-        return FALSE;
-    }
 
-    StackNode *temp = next->top;
-    while (next->top != next->base)
-    {
-        StackNode *p = next->top;
-        NfaNode *n = p->data.nfa;
-        if (n->next == NULL && n->next2 == NULL)
+        NfaPair *n = sOptrPop(nfaSet);
+        sOptrPush(prev, n);
+        MatchBackType mtt[2];
+        // printfNfa(n);
+        initpretNfa(n->startNode, str, mtt);
+        if (mtt[0].lastAccepted)
         {
-            res = TRUE;
+            ResultMt[0].lastAccepted = TRUE;
+            // 贪婪匹配
+            ResultMt[1].num = MAX(mtt[1].num, ResultMt[1].num);
+            printf("匹配完成，匹配正则名称为:%s;匹配开始位置:%d;匹配结尾位置为%d\n", n->endNode->name, count, mtt[1].num);
         }
-        next->top = p->PStackNext;
-    }
-    next->top = temp;
 
-    return res;
+        if (!stacksize(nfaSet))
+        {
+            printf("一轮匹配结束\n");
+            sdestory(nfaSet);
+            nfaSet = prev;
+            prev = new_stack();
+            if (!ResultMt[0].lastAccepted)
+            {
+                printf("匹配失败,发现未知字符，尝试跳过一位。\n");
+                count++;
+            }
+            else
+            {
+                printf("匹配成功,继续进行后续匹配,%d\n", ResultMt[1].num);
+                count = ResultMt[1].num;
+                ResultMt[0].lastAccepted = FALSE;
+            }
+        }
+    }
 }
 
-void initpretNfa(NfaNode *start, char *str)
+void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
 {
-    printf("开始匹配");
     Stack *next = new_stack();
     sOptrPush(next, start);
     // 查找closure
     next = e_closure(next);
     BOOL lastAccepted = FALSE;
-    char s[100];
-    int count = 0;
-    while (*str != '\0')
+    size_t i;
+    int len = strlen(str);
+    for (i = count; i < len; i++)
     {
-        char c = *str++;
+        char c = str[i];
         next = move(next, c);
         next = e_closure(next);
         if (stacksize(next))
@@ -54,14 +79,10 @@ void initpretNfa(NfaNode *start, char *str)
         {
             break;
         }
-        s[count++] = c;
+        printf("正在匹配字符为：%c \n", c);
     }
-
-    if (lastAccepted)
-    {
-        s[count] = '\0';
-        printf("匹配完成，匹配字符串为 %s\n", s);
-    }
+    mt[0].lastAccepted = lastAccepted;
+    mt[1].num = i;
 }
 
 Stack *e_closure(Stack *next)
@@ -119,4 +140,28 @@ Stack *move(Stack *next, char c)
     }
     sdestory(next);
     return result;
+}
+
+BOOL hasAcceptState(Stack *next)
+{
+    BOOL res = FALSE;
+    if (next == NULL || !stacksize(next))
+    {
+        return FALSE;
+    }
+
+    StackNode *temp = next->top;
+    while (next->top != next->base)
+    {
+        StackNode *p = next->top;
+        NfaNode *n = p->data.nfa;
+        if (n->next == NULL && n->next2 == NULL)
+        {
+            res = TRUE;
+        }
+        next->top = p->PStackNext;
+    }
+    next->top = temp;
+
+    return res;
 }

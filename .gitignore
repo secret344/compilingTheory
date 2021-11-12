@@ -1,1 +1,5 @@
 **/*.exe
+dist
+wasm_folder
+emsdk
+node_modules

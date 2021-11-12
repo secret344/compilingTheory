@@ -1,5 +1,4 @@
-#include "bool.h"
-#include <string.h>
+﻿#include <string.h>
 #include "lexical.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -34,14 +33,14 @@ void setInitPair(NfaPair *n)
 //语法树节点栈 "abcdzAZ19_. ";
 BOOL isSTNS(char str)
 {
-    char s[] = "@#$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_. ";
+    char s[] = "<>!@&#=$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.:\"";
     return findChar(str, s);
 }
 
-//运算符栈 "+=|-[]()*?";
+//正则运算符栈 "+=|-[]()*?";
 BOOL isOPTR(char str)
 {
-    char s[] = "+=|-[]()*?";
+    char s[] = "+|-[]()*?";
     return findChar(str, s);
 }
 
@@ -75,6 +74,7 @@ char *ESCmatch(char s)
     default:
         break;
     }
+    return result;
 }
 
 char *getSetLetter(char a, char b)
@@ -110,14 +110,14 @@ char *noStrRepetition(char *str)
     int len = strlen(str);
     char *repe = (char *)malloc(len + 1);
     int count = 0;
-    for (size_t i = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         char s = str[i];
+        repe[count] = '\0';
         BOOL is = findChar(s, repe);
         if (!is)
         {
-            repe[count] = s;
-            count++;
+            repe[count++] = s;
         }
     }
     repe[count] = '\0';

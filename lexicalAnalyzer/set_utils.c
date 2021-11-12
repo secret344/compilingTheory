@@ -1,9 +1,10 @@
-#include "lexical.h"
+﻿#include "lexical.h"
 #include "set_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
+#include "../readfile/read_file.h"
 
 static void checkSetStack();
 static Stack *setStack = NULL;

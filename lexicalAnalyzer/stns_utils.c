@@ -1,8 +1,9 @@
-#include "stns_utils.h"
+﻿#include "stns_utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
+#include "lexical.h"
 
 static NfaPair *stnspaif = NULL;
 void stnsInitfun(char str)
@@ -21,7 +22,6 @@ void stnsDotfun()
     stnspaif->startNode->inputset = "\n\r";
     stnspaif->startNode->anchor = 1;
     char *s = setComplement(stnspaif->startNode->inputset);
-    free(stnspaif->startNode->inputset);
     stnspaif->startNode->inputset = s;
     stnsDeffun(-2);
 }

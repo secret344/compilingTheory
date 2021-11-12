@@ -1,4 +1,3 @@
-#include "lexical.h"
 
 #ifndef _STNS_UTILS_
 #define _STNS_UTILS_

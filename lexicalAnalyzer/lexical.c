@@ -1,12 +1,13 @@
-#include "lexical.h"
+﻿#include "lexical.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "bool.h"
 #include "utils.h"
 #include "set_utils.h"
 #include "stns_utils.h"
 #include "optr_utils.h"
+#include "../readfile/read_file.h"
+#include "nfa_Interface.h"
 
 static void initRegParse(char *str);
 static void switchOption(char str);
@@ -15,60 +16,67 @@ static void stnsOptions();
 static void optrOptions();
 static void setOptions(char *s);
 static void checkUnion(char s);
+static void judgeBlock(char str);
 
 Stack *OPTR = NULL;             //运算符栈
 Stack *STNS = NULL;             //语法树节点栈
 NfaPair *curNfa = NULL;         // 当前正在处理的节点
 NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
 WholeState *wholeStatus = NULL; // 当前程序状态
+Stack *nfaSet = NULL;
 
-int row = 1; //行
-int col = 0; //列
-
-int initParse(char *path)
+int initParse(char *path, fun_lex parseFun)
 {
     STNS = new_stack();
     OPTR = new_stack();
+    nfaSet = new_stack();
 
     wholeStatus = (WholeState *)malloc(sizeof(WholeState));
     wholeStatus->state = PSWdef;
 
-    FILE *fp = NULL;
-    char buff[255];
-    fp = fopen(path, "r");
-
-    if (!fp)
-        return EXIT_FAILURE;
-
-    while (fgets(buff, 255, (FILE *)fp))
-    {
-
-        initRegParse(buff);
-    }
-
-    fclose(fp);
-    checkUnion('0');
-    return EXIT_SUCCESS;
+    int status = parseFun(path, judgeBlock);
+    
+    return status;
 }
 
-void initRegParse(char *str)
+void judgeBlock(char str)
 {
-    for (size_t i = 0; i < strlen(str); i++)
+    static BOOL isJudge = FALSE;
+    static char name[255];
+    static int count = 0;
+    if (str == '\r' || str == '\n' || str == EOF)
     {
-        col++;
-        if (str[i] == '\n')
+        checkUnion('0');
+        isJudge = FALSE;
+        if (nfapaif == NULL)
         {
-            row++;
-            col = 0;
-            continue;
+            printf("错误的格式，请检查行%d;列%d. 回车换行请忽略此提示.", row, col);
+            return;
         }
-        int d = str[i];
-        if (d < 0 || d > 128)
-        {
-            printf("行:%d,列:%d 字符%d不符合规则.请使用ascii码表内英文字符.\n", row, col, str[i]);
-        }
-        switchOption(str[i]);
+        nfapaif->endNode->name = malloc(strlen(name) + 1);
+        strcpy(nfapaif->endNode->name, name);
+        sOptrPush(nfaSet, nfapaif);
+        name[count] = '0';
+        count = 0;
+        nfapaif = NULL;
+        return;
     }
+
+    if (!isJudge)
+    {
+        if (str == ':')
+        {
+            name[count] = '\0';
+            isJudge = TRUE;
+        }
+        else
+        {
+            name[count++] = str;
+        }
+        return;
+    }
+
+    switchOption(str);
 }
 
 void switchOption(char str)
@@ -80,8 +88,8 @@ void switchOption(char str)
     checkUnion(str);
     int len = sizeof(str);
     char *s = (char *)malloc(len + 1);
-    strcpy(s, &str);
-    s[len] = '\0';
+    s[0] = str;
+    s[1] = '\0';
     if (1 <= wholeStatus->state && wholeStatus->state <= 3)
     {
         // 当前状态为 生成集合
@@ -118,12 +126,14 @@ void switchOption(char str)
 void otherOptions()
 {
     char *s = spop(OPTR);
-    printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     if (*s == '\\')
     {
         // 转义字符
         wholeStatus->state = PSWESC;
-        printf("转义字符\n");
+    }
+    else
+    {
+        printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     }
     free(s);
     s = NULL;
@@ -188,8 +198,9 @@ void setOptions(char *s)
 
     switch (*s)
     {
-        // 忽略转义字符
+        // 忽略转义字符 空格
     case '\\':
+    case ' ':
         break;
     case '^':
         setNOTfun();
@@ -236,8 +247,8 @@ void checkUnion(char s)
             {
                 nfapaif->endNode->next = curNfa->startNode;
                 nfapaif->endNode = curNfa->endNode;
-                curNfa = NULL;
             }
+            curNfa = NULL;
         }
         break;
     }
