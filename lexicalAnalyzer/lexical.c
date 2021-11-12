@@ -25,7 +25,7 @@ NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
 WholeState *wholeStatus = NULL; // 当前程序状态
 Stack *nfaSet = NULL;
 
-int initParse(char *path)
+int initParse(char *path, fun_lex parseFun)
 {
     STNS = new_stack();
     OPTR = new_stack();
@@ -34,8 +34,8 @@ int initParse(char *path)
     wholeStatus = (WholeState *)malloc(sizeof(WholeState));
     wholeStatus->state = PSWdef;
 
-    int status = initReadFile(path, judgeBlock);
-    checkUnion('0');
+    int status = parseFun(path, judgeBlock);
+    
     return status;
 }
 
@@ -88,7 +88,7 @@ void switchOption(char str)
     checkUnion(str);
     int len = sizeof(str);
     char *s = (char *)malloc(len + 1);
-	s[0] = str;
+    s[0] = str;
     s[1] = '\0';
     if (1 <= wholeStatus->state && wholeStatus->state <= 3)
     {
@@ -133,7 +133,7 @@ void otherOptions()
     }
     else
     {
-        printf("otherOptions行:%d,列:%d 字符%c不符合规则.请使用符合规定的字符.\n", row, col, s);
+        printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     }
     free(s);
     s = NULL;

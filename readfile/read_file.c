@@ -3,9 +3,16 @@
 #include <string.h>
 #include "read_file.h"
 
-static void initParse(char *str, fun_t cb);
+static void initParseRead(char *str, fun_t cb);
 int row = 1; //行
 int col = 0; //列
+
+int initReadChar(char *content, fun_t cb)
+{
+    initParseRead(content, cb);
+    cb(EOF); //结束
+    return EXIT_SUCCESS;
+}
 
 int initReadFile(char *path, fun_t cb)
 {
@@ -18,7 +25,7 @@ int initReadFile(char *path, fun_t cb)
 
     while (fgets(buff, 255, (FILE *)fp))
     {
-        initParse(buff, cb);
+        initParseRead(buff, cb);
     }
 
     fclose(fp);
@@ -26,7 +33,7 @@ int initReadFile(char *path, fun_t cb)
     return EXIT_SUCCESS;
 }
 
-void initParse(char *str, fun_t cb)
+void initParseRead(char *str, fun_t cb)
 {
     for (size_t i = 0; i < strlen(str); i++)
     {

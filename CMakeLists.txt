@@ -10,6 +10,9 @@ add_subdirectory(lexicalAnalyzer)
 add_subdirectory(datastructure)
 add_subdirectory(readfile)
 
+set_target_properties(lexical PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr']")
+
+
 target_link_libraries(lexical
   PRIVATE
   lexicalAnalyzer

@@ -4,20 +4,22 @@
 #include "utils.h"
 #include "nfa_Intepretor.h"
 #include <string.h>
+#include "lexical.h"
 
 static Stack *e_closure(Stack *next);
 static Stack *move(Stack *next, char c);
 static BOOL hasAcceptState(Stack *next);
 static int count = 0;
 
-void initMatchNfa(Stack *start, char *str)
+void initMatchNfa(char *str)
 {
     Stack *prev = new_stack();
     MatchBackType ResultMt[2] = {FALSE, 0};
-    while (count < strlen(str))
+    int len = strlen(str);
+    while (count < len)
     {
 
-        NfaPair *n = sOptrPop(start);
+        NfaPair *n = sOptrPop(nfaSet);
         sOptrPush(prev, n);
         MatchBackType mtt[2];
         // printfNfa(n);
@@ -30,11 +32,11 @@ void initMatchNfa(Stack *start, char *str)
             printf("匹配完成，匹配正则名称为:%s;匹配开始位置:%d;匹配结尾位置为%d\n", n->endNode->name, count, mtt[1].num);
         }
 
-        if (!stacksize(start))
+        if (!stacksize(nfaSet))
         {
             printf("一轮匹配结束\n");
-            sdestory(start);
-            start = prev;
+            sdestory(nfaSet);
+            nfaSet = prev;
             prev = new_stack();
             if (!ResultMt[0].lastAccepted)
             {
@@ -59,7 +61,8 @@ void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
     next = e_closure(next);
     BOOL lastAccepted = FALSE;
     size_t i;
-    for (i = count; i < strlen(str); i++)
+    int len = strlen(str);
+    for (i = count; i < len; i++)
     {
         char c = str[i];
         next = move(next, c);

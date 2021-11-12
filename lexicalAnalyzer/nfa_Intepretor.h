@@ -11,5 +11,5 @@ typedef union
 } MatchBackType;
 
 extern void initpretNfa(NfaNode *start, char *str, MatchBackType *mt);
-extern void initMatchNfa(Stack *start, char *str);
+extern void initMatchNfa(char *str);
 #endif

@@ -4,26 +4,30 @@
 #include <time.h>
 #include "lexical.h"
 #include "nfa_Intepretor.h"
+#include "read_file.h"
+#include <emscripten.h>
 
-void wait(int seconds)
+// void wait(int seconds)
+// {
+//     clock_t endwait;
+//     endwait = clock() + seconds * CLOCKS_PER_SEC;
+//     while (clock() < endwait)
+//     {
+//     }
+// }
+int regParse(char *str)
 {
-    clock_t endwait;
-    endwait = clock() + seconds * CLOCKS_PER_SEC;
-    while (clock() < endwait)
-    {
-    }
+    int f = initParse(str, initReadChar);
+    return f;
 }
+
+int matchStr(char *str)
+{
+    initMatchNfa(str);
+}
+
 int main()
 {
-    int f = initParse("./reg-test.txt");
-    if (!f)
-    {
-        initMatchNfa(nfaSet, "0.1le t0a 2.2 () == += -- -=,;'123'");
-    }
-    else
-    {
-        printf("未找到文件");
-    }
-    // wait(6000);
-    return f;
+    printf("加载webassembly模块");
+    return 0;
 }

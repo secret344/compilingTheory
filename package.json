@@ -1,0 +1,8 @@
+{
+  "name": "compilingtheory",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/secret344/compilingTheory.git",
+  "author": "zhaozhuang <zzzhaozzzz@163.com>",
+  "license": "MIT"
+}
