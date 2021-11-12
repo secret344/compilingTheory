@@ -24,6 +24,7 @@ int regParse(char *str)
 int matchStr(char *str)
 {
     initMatchNfa(str);
+    return 0;
 }
 
 int main()

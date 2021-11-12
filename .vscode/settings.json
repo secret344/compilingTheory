@@ -1,6 +1,6 @@
 {
     "code-runner.executorMap": {
-        "c": "cd $dir && cd emsdk && emsdk activate latest && cd .. && cd build && emcmake cmake ..  && emmake make && node lexical.js"
+        "c": "cd $dir && cd emsdk && emsdk activate latest && cd .. && cd wasm_folder && emcmake cmake ..  && emmake make && node lexical.js"
     },
     "files.associations": {
         "*.cjson": "jsonc",

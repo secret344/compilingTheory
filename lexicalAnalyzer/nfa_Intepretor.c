@@ -13,6 +13,7 @@ static int count = 0;
 
 void initMatchNfa(char *str)
 {
+    count = 0;
     Stack *prev = new_stack();
     MatchBackType ResultMt[2] = {FALSE, 0};
     int len = strlen(str);
