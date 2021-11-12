@@ -24,9 +24,9 @@ typedef struct Stack
 Stack *new_stack();
 
 extern void spush(Stack *PStack, char *val);
-extern void sOptrPush(Stack *PStack, void *val);
+extern void sPointPush(Stack *PStack, void *val);
 extern char *spop(Stack *PStack);
-extern void *sOptrPop(Stack *PStack);
+extern void *sPointPop(Stack *PStack);
 extern void straversal(Stack *PStack);
 extern void sdestory(Stack *PStack);
 extern int stacksize(Stack *PStack);

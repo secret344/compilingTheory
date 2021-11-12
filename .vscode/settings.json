@@ -14,6 +14,7 @@
         "valarray": "c",
         "regex": "c",
         "sstream": "c",
-        "strstream": "c"
+        "strstream": "c",
+        "nfa_parse.h": "c"
     }
 }

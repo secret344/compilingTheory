@@ -1,4 +1,4 @@
-﻿#include "lexical.h"
+﻿#include "nfa_parse.h"
 #include "set_utils.h"
 #include <stdio.h>
 #include <stdlib.h>

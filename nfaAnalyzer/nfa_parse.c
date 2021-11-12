@@ -1,4 +1,4 @@
-﻿#include "lexical.h"
+﻿#include "nfa_parse.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,7 +55,7 @@ void judgeBlock(char str)
         }
         nfapaif->endNode->name = malloc(strlen(name) + 1);
         strcpy(nfapaif->endNode->name, name);
-        sOptrPush(nfaSet, nfapaif);
+        sPointPush(nfaSet, nfapaif);
         name[count] = '0';
         count = 0;
         nfapaif = NULL;

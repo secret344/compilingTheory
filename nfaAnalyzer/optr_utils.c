@@ -1,4 +1,4 @@
-﻿#include "lexical.h"
+﻿#include "nfa_parse.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,7 +78,7 @@ void orDispose(char *s)
     curNfa = NULL;
     spush(OPTR, s);
     // // 保存上一次节点，等待下次生成节点进行合并
-    sOptrPush(optrStack, optrpaif);
+    sPointPush(optrStack, optrpaif);
 }
 
 void bracketDispose(char *s)
@@ -86,7 +86,7 @@ void bracketDispose(char *s)
     if (*s == '(')
     {
         // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
-        sOptrPush(optrStack, nfapaif);
+        sPointPush(optrStack, nfapaif);
         spush(OPTR, s);
         nfapaif = NULL;
         return;
@@ -101,7 +101,7 @@ void bracketDispose(char *s)
         printf(") 必须含有相对应的 (,位置 行：%d 列：%d \n", row, col);
     }
     curNfa = nfapaif;
-    nfapaif = sOptrPop(optrStack);
+    nfapaif = sPointPop(optrStack);
     free(str);
     str = NULL;
 }
@@ -149,7 +149,7 @@ void OptrDispose(char s)
     case '|':
         printf("");
         // 取出当前运算符栈需要的节点 单步处理的节点不需保存到栈
-        NfaPair *n = sOptrPop(optrStack); // 或运算符 next
+        NfaPair *n = sPointPop(optrStack); // 或运算符 next
         NfaPair *b = curNfa;              // 或运算符 next2
         // 进行或链接 合并成curNfa 暂不链接，等待下一个字符处理程序处理
         optrpaif = (NfaPair *)malloc(sizeof(NfaPair)); // 生成两端节点

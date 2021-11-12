@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
-#include "lexical.h"
+#include "nfa_parse.h"
 
 static NfaPair *stnspaif = NULL;
 void stnsInitfun(char str)
