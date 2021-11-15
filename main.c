@@ -5,6 +5,7 @@
 #include "nfa_parse.h"
 #include "nfa_Intepretor.h"
 #include "read_file.h"
+#include "utils.h"
 #include <emscripten.h>
 
 // void wait(int seconds)
@@ -15,10 +16,11 @@
 //     {
 //     }
 // }
-int regParse(char *str)
+char *regParse(char *str)
 {
     int f = initParse(str, initReadChar);
-    return f;
+    char *JsonStr = getJsonNfa(&nfaSet);
+    return JsonStr;
 }
 
 int matchStr(char *str)
