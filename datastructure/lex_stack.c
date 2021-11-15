@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "stack.h"
-#include "../nfaAnalyzer/nfa_Interface.h"
+#include "lex_stack.h"
+#include "nfa_Interface.h"
 
 Stack *new_stack()
 {	

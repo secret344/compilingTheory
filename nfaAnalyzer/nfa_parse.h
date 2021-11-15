@@ -1,6 +1,6 @@
 #ifndef _LEXICAL_
 #define _LEXICAL_
-#include "../datastructure/stack.h"
+#include "lex_stack.h"
 #include "nfa_Interface.h"
 typedef void (*fun_base)(char);
 typedef int (*fun_lex)(char*, fun_base);

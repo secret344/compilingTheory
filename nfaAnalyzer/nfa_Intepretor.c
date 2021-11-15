@@ -1,5 +1,5 @@
 ﻿#include <stdio.h>
-#include "../datastructure/stack.h"
+#include "lex_stack.h"
 #include "nfa_Interface.h"
 #include "utils.h"
 #include "nfa_Intepretor.h"

@@ -15,6 +15,10 @@
         "regex": "c",
         "sstream": "c",
         "strstream": "c",
-        "nfa_parse.h": "c"
+        "nfa_parse.h": "c",
+        "emscripten.h": "c",
+        "stack.h": "c",
+        "nfa_interface.h": "c",
+        "lex_stack.h": "c"
     }
 }

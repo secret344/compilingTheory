@@ -16,6 +16,4 @@ set_target_properties(lexical PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1 -s NO_EXI
 target_link_libraries(lexical
   PRIVATE
   nfaAnalyzer
-  datastructure
-  readfile
   )

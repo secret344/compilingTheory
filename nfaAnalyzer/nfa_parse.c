@@ -6,7 +6,7 @@
 #include "set_utils.h"
 #include "stns_utils.h"
 #include "optr_utils.h"
-#include "../readfile/read_file.h"
+#include "read_file.h"
 #include "nfa_Interface.h"
 
 static void initRegParse(char *str);
