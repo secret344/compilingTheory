@@ -10,7 +10,7 @@ add_subdirectory(nfaAnalyzer)
 add_subdirectory(datastructure)
 add_subdirectory(readfile)
 
-set_target_properties(lexical PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1 -s NO_EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr'] -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stackSave']")
+set_target_properties(lexical PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1 -s NO_EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr'] -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stackSave','getValue']")
 
 
 target_link_libraries(lexical

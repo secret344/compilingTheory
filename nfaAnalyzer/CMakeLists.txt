@@ -10,6 +10,7 @@ target_sources(nfaAnalyzer
   PUBLIC
       ${CMAKE_CURRENT_LIST_DIR}/nfa_Intepretor.h
       ${CMAKE_CURRENT_LIST_DIR}/nfa_parse.h
+      ${CMAKE_CURRENT_LIST_DIR}/utils.h
   )
 
 target_link_libraries(nfaAnalyzer

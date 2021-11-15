@@ -24,6 +24,7 @@ NfaPair *curNfa = NULL;         // 当前正在处理的节点
 NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
 WholeState *wholeStatus = NULL; // 当前程序状态
 Stack *nfaSet = NULL;
+char *JsonStr = NULL;
 
 int initParse(char *path, fun_lex parseFun)
 {
@@ -35,7 +36,6 @@ int initParse(char *path, fun_lex parseFun)
     wholeStatus->state = PSWdef;
 
     int status = parseFun(path, judgeBlock);
-    
     return status;
 }
 
@@ -55,6 +55,7 @@ void judgeBlock(char str)
         }
         nfapaif->endNode->name = malloc(strlen(name) + 1);
         strcpy(nfapaif->endNode->name, name);
+        // 保存正则生成的json字符串
         sPointPush(nfaSet, nfapaif);
         name[count] = '0';
         count = 0;

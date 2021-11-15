@@ -13,6 +13,11 @@ static int count = 0;
 
 void initMatchNfa(char *str)
 {
+    if (stacksize(nfaSet) <= 0)
+    {
+        return;
+    }
+
     count = 0;
     Stack *prev = new_stack();
     MatchBackType ResultMt[2] = {FALSE, 0};
@@ -23,7 +28,6 @@ void initMatchNfa(char *str)
         NfaPair *n = sPointPop(nfaSet);
         sPointPush(prev, n);
         MatchBackType mtt[2];
-        // printfNfa(n);
         initpretNfa(n->startNode, str, mtt);
         if (mtt[0].lastAccepted)
         {

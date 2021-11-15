@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "utils.h"
+#include "cJSON.h"
+
 static int StateNum = 0;
 // 初始化nfa节点
 void setInitPair(NfaPair *n)
@@ -149,7 +151,58 @@ char *setComplement(char *str)
     return result;
 }
 
-void printfNfaNode(NfaNode *n)
+void printfNfaNode(NfaNode *n, BOOL isPrintf)
+{
+    NfaNode *a = n->next;
+    NfaNode *b = n->next2;
+    printf("\n");
+    printf("当前节点编号stateNum  %d \n", n->stateNum);
+    printf("当前节点接受edge %d \n", n->edge);
+    if (n->visited)
+    {
+        return;
+    }
+    n->visited = TRUE;
+
+    if (isPrintf)
+    {
+        printf("\n");
+        printf("当前节点编号stateNum  %d \n", n->stateNum);
+        printf("当前节点接受edge %d \n", n->edge);
+        if (a)
+        {
+            printf("当前节点next %d  \n", a->stateNum);
+        }
+        if (b)
+        {
+            printf("当前节点next1 %d  \n", b->stateNum);
+        }
+
+        if (n->inputset)
+        {
+            printf("当前节点接受inputset %s ;inputset length： %d\n", n->inputset, strlen(n->inputset));
+        }
+        printf("\n");
+    }
+
+    if (a)
+    {
+        printfNfaNode(a, isPrintf);
+    }
+    if (b)
+    {
+        printfNfaNode(b, isPrintf);
+    }
+}
+
+void printfNfa(NfaPair *n)
+{
+    NfaNode *a = n->startNode;
+    printf("打印开始\n");
+    printfNfaNode(a, TRUE);
+}
+
+void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName)
 {
     NfaNode *a = n->next;
     NfaNode *b = n->next2;
@@ -158,36 +211,44 @@ void printfNfaNode(NfaNode *n)
         return;
     }
     n->visited = TRUE;
-    printf("\n");
-    printf("当前节点编号stateNum  %d \n", n->stateNum);
-    printf("当前节点接受edge %d \n", n->edge);
-    if (a)
-    {
-        printf("当前节点next %d  \n", a->stateNum);
-    }
-    if (b)
-    {
-        printf("当前节点next1 %d  \n", b->stateNum);
-    }
 
-    if (n->inputset)
-    {
-        printf("当前节点接受inputset %s ;inputset length： %d\n", n->inputset, strlen(n->inputset));
-    }
-    printf("\n");
+    cJSON *current = cJSON_CreateObject();
+    cJSON *stateNum = cJSON_CreateNumber(n->stateNum);
+    cJSON *edge = cJSON_CreateNumber(n->edge);
+    cJSON *inputset = cJSON_CreateString(n->inputset);
+
+    cJSON_AddItemToObject(current, "stateNum", stateNum);
+    cJSON_AddItemToObject(current, "edge", edge);
+    cJSON_AddItemToObject(current, "inputset", inputset);
+
+    cJSON_AddItemToObject(parentNode, childName, current);
     if (a)
     {
-        printfNfaNode(a);
+        JsonNfaParse(a, current, "next1");
     }
     if (b)
     {
-        printfNfaNode(b);
+        JsonNfaParse(b, current, "next2");
     }
 }
 
-void printfNfa(NfaPair *n)
+char *getJsonNfa(Stack **n)
 {
-    NfaNode *a = n->startNode;
-    printf("打印开始\n");
-    printfNfaNode(a);
+    if (stacksize(*n) <= 0)
+    {
+        return "{\"reject\":\"什么都没得\"}";
+    }
+
+    cJSON *root = cJSON_CreateObject();
+    Stack *new = new_stack();
+    while (stacksize(*n) > 0)
+    {
+        NfaPair *node = sPointPop(*n);
+        JsonNfaParse(node->startNode, root, node->endNode->name);
+        sPointPush(new, node);
+    }
+    sdestory(*n);
+    *n = new;
+    char *string = cJSON_Print(root);
+    return string;
 }

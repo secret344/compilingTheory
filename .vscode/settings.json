@@ -19,6 +19,23 @@
         "emscripten.h": "c",
         "stack.h": "c",
         "nfa_interface.h": "c",
-        "lex_stack.h": "c"
+        "lex_stack.h": "c",
+        "future": "cpp",
+        "system_error": "cpp",
+        "xlocale": "cpp",
+        "typeinfo": "cpp",
+        "*.inc": "cpp",
+        "vector": "c",
+        "xstring": "c",
+        "deque": "c",
+        "locale": "c",
+        "__locale": "c",
+        "bitset": "c",
+        "set": "c",
+        "__tree": "c",
+        "algorithm": "c",
+        "read_file.h": "c",
+        "array": "c",
+        "__tuple": "c"
     }
 }
