@@ -6,7 +6,6 @@
 #include "nfa_Intepretor.h"
 #include "read_file.h"
 #include "utils.h"
-#include <emscripten.h>
 
 // void wait(int seconds)
 // {

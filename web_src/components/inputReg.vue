@@ -11,7 +11,7 @@ export default {
     };
   },
   setup(props, context) {
-    const content = reactive({ name: "正则表达式", reg: props.defValue });
+    const content = reactive({ name: "正则表达式(打开devtools查看结果)", reg: props.defValue });
 
     const onchange = (e) => {
       content.reg = e.target.value;
