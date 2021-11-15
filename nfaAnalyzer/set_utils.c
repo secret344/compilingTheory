@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
-#include "../readfile/read_file.h"
+#include "read_file.h"
 
 static void checkSetStack();
 static Stack *setStack = NULL;

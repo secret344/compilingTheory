@@ -4,7 +4,7 @@
 #include <string.h>
 #include "utils.h"
 #include "nfa_Interface.h"
-#include "../readfile/read_file.h"
+#include "read_file.h"
 
 static NfaPair *optrpaif = NULL;
 static Stack *optrStack = NULL;
