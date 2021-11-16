@@ -13,3 +13,10 @@ function initWebassembly() {
     };
 }
 export const WebAssemblyFun = initWebassembly();
+
+export const regstr ="id:[a-zA-Z]([a-zA-Z0-9_])*\n\
+float:[0-9]+\\.[0-9]+\n\
+int:[0-9]+\n\
+optr:((<|!|\\+|=|\\||\\-|\\*|&)+)|((<|!|\\+|=|\\||\\-|\\*|&)=)|(\\[|\\]|\\(|\\))\n\
+punctuation:[,;]\n\
+string:([\"](.)*[\"])|(['](.)*['])";

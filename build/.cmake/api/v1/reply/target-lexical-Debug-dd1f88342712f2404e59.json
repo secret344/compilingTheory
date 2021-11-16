@@ -1,0 +1,207 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "lexical.exe"
+		},
+		{
+			"path" : "lexical.pdb"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_libraries"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "D:/my-demo/compilingTheory/nfaAnalyzer"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/my-demo/compilingTheory/readfile"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "D:/my-demo/compilingTheory/datastructure"
+				}
+			],
+			"language" : "C",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "nfaAnalyzer::@c5b3e6ff79a338640971"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "readfile::@0e95d617262a246f53b7"
+		}
+	],
+	"id" : "lexical::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "-s EXIT_RUNTIME=1 -s NO_EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr'] -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stackSave','getValue']",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "nfaAnalyzer\\libnfaAnalyzer.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "datastructure\\libdatastructure.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "nfaAnalyzer\\libnfaAnalyzer.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "datastructure\\libdatastructure.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "readfile\\libreadfile.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+				"role" : "libraries"
+			}
+		],
+		"language" : "C"
+	},
+	"name" : "lexical",
+	"nameOnDisk" : "lexical.exe",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "main.c",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"path" : "nfaAnalyzer/nfa_Intepretor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "nfaAnalyzer/nfa_parse.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "nfaAnalyzer/utils.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "readfile/read_file.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "datastructure/trie.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "datastructure/lex_stack.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "datastructure/bool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 2,
+			"path" : "datastructure/cJSON.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

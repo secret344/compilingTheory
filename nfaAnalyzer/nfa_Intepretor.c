@@ -56,7 +56,10 @@ void initMatchNfa(char *str)
             }
         }
     }
+    sdestory(prev, NULL);
 }
+
+void destoryNull(void *x) {}
 
 void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
 {
@@ -85,6 +88,7 @@ void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
         }
         printf("正在匹配字符为：%c \n", c);
     }
+    sdestory(next, destoryNull);
     mt[0].lastAccepted = lastAccepted;
     mt[1].num = i;
 }
