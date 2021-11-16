@@ -1,11 +1,10 @@
 #include "trie.h"
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 Trie *create_trie()
 {
-    Trie *trie = malloc(sizeof(Trie));
+    Trie *trie = my_malloc(sizeof(Trie));
     trie->isEnd = FALSE;
     for (int i = 0; i < SUB_NODE_COUNT; i++)
     {
@@ -41,7 +40,7 @@ void insert_trie(Trie *root, char *str[], int len)
 
 int search_word(Trie *root, char *str)
 {
-    char *new_str = malloc(strlen(str) + 1);
+    char *new_str = my_malloc(strlen(str) + 1);
     int count = 0;
     while (*str != '\0')
     {
@@ -73,15 +72,15 @@ void traversal(Trie *root, char *str)
         return;
     }
     int len = strlen(str);
-    char *new_str = malloc(len + 1);
+    char *new_str = my_malloc(len + 1);
     strcpy(new_str, str);
 
     if (root->isEnd)
     {
-        char *new_str_result = malloc(len + 2);
+        char *new_str_result = my_malloc(len + 2);
         strcpy(new_str_result, new_str);
         printf("traversal找到的字符串 %s\n", new_str_result);
-        free(new_str_result);
+        my_free(new_str_result);
         new_str_result = NULL;
     }
 
@@ -90,7 +89,7 @@ void traversal(Trie *root, char *str)
         new_str[len] = i + 'a';
         traversal(root->next[i], new_str);
     }
-    free(new_str);
+    my_free(new_str);
     new_str = NULL;
 }
 
@@ -129,7 +128,7 @@ BOOL delete_trie(Trie *root, char *str)
             }
             else
             {
-                free(root->next[first_index]);
+                my_free(root->next[first_index]);
                 root->next[first_index] = NULL;
             }
             return TRUE;
@@ -143,7 +142,7 @@ BOOL delete_trie(Trie *root, char *str)
     // 深度优先
     if (!hasChild(root->next[first_index]) && !root->next[first_index]->isEnd)
     {
-        free(root->next[first_index]);
+        my_free(root->next[first_index]);
         root->next[first_index] = NULL;
     }
 

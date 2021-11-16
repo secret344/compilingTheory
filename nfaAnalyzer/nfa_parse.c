@@ -54,7 +54,7 @@ void judgeBlock(char str)
             printf("错误的格式，请检查行%d;列%d. 回车换行请忽略此提示.", row, col);
             return;
         }
-        nfapaif->endNode->name = malloc(strlen(name) + 1);
+        nfapaif->endNode->name = my_malloc(strlen(name) + 1);
         strcpy(nfapaif->endNode->name, name);
         // 保存正则生成的json字符串
         sPointPush(nfaSet, nfapaif);
@@ -89,7 +89,7 @@ void switchOption(char str)
     int b = isOPTR(str);
     checkUnion(str);
     int len = sizeof(str);
-    char *s = (char *)malloc(len + 1);
+    char *s = (char *)my_malloc(len + 1);
     s[0] = str;
     s[1] = '\0';
     if (1 <= wholeStatus->state && wholeStatus->state <= 3)
@@ -121,7 +121,7 @@ void switchOption(char str)
         otherOptions();
     }
 
-    free(s);
+    my_free(s);
     s = NULL;
 }
 
@@ -137,7 +137,7 @@ void otherOptions()
     {
         printf("otherOptions行:%d,列:%d 字符%s不符合规则.请使用符合规定的字符.\n", row, col, s);
     }
-    free(s);
+    my_free(s);
     s = NULL;
 }
 
@@ -148,9 +148,7 @@ void stnsOptions()
     if (wholeStatus->state == PSWESC)
     {
         stnsDeffun(*s);
-        free(s);
-        s = NULL;
-        return;
+        goto end;
     }
 
     switch (*s)
@@ -162,7 +160,8 @@ void stnsOptions()
         stnsDeffun(*s);
         break;
     }
-    free(s);
+end:
+    my_free(s);
     s = NULL;
 }
 
@@ -185,7 +184,7 @@ void optrOptions()
     default:
         break;
     }
-    free(s);
+    my_free(s);
     s = NULL;
 }
 
@@ -241,7 +240,7 @@ void checkUnion(char s)
     default:
         if (curNfa)
         {
-            if (!nfapaif)
+            if (nfapaif == NULL)
             {
                 nfapaif = curNfa;
             }
@@ -249,6 +248,7 @@ void checkUnion(char s)
             {
                 nfapaif->endNode->next = curNfa->startNode;
                 nfapaif->endNode = curNfa->endNode;
+                my_free(curNfa);
             }
             curNfa = NULL;
         }
@@ -268,7 +268,7 @@ void nfaNodeDestory(NfaNode *start, Stack *skPoint)
 
     if (start->edge == -2)
     {
-        free(start->inputset);
+        my_free(start->inputset);
         start->inputset = NULL;
     }
 
@@ -292,7 +292,6 @@ char *getJsonNfa()
     {
         return "{\"reject\":\"什么都没得\"}";
     }
-
     cJSON *root = cJSON_CreateObject();
     Stack *new = new_stack();
     while (stacksize(nfaSet) > 0)
@@ -311,31 +310,31 @@ char *getJsonNfa()
 void resetNfaSet()
 {
     StateNum = 0;
-    if (STNS || OPTR)
+    if (STNS == NULL && OPTR == NULL)
     {
-        sdestory(STNS, NULL);
-        sdestory(OPTR, NULL);
+        STNS = new_stack();
+        OPTR = new_stack();
     }
 
-    STNS = new_stack();
-    OPTR = new_stack();
-    
-    if (!wholeStatus)
+    if (wholeStatus == NULL)
     {
-        wholeStatus = (WholeState *)malloc(sizeof(WholeState));
+        wholeStatus = (WholeState *)my_malloc(sizeof(WholeState));
     }
 
     if (!nfaSet)
     {
         nfaSet = new_stack();
+        printfM();
         return;
     }
     Stack *skPoint = new_stack();
     while (stacksize(nfaSet) > 0)
     {
         NfaPair *node = spop(nfaSet);
-        free(node->endNode->name);
+        my_free(node->endNode->name);
         nfaNodeDestory(node->startNode, skPoint);
+        my_free(node);
     }
     sdestory(skPoint, NULL);
+    printfM();
 }

@@ -12,7 +12,7 @@ void stnsInitfun(char str)
     {
         wholeStatus->state = PSWsinglechar;
     }
-    stnspaif = (NfaPair *)malloc(sizeof(NfaPair));
+    stnspaif = (NfaPair *)my_malloc(sizeof(NfaPair));
     setInitPair(stnspaif);
     curNfa = stnspaif;
 }

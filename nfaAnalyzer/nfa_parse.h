@@ -2,6 +2,8 @@
 #define _LEXICAL_
 #include "lex_stack.h"
 #include "nfa_Interface.h"
+#include "memory_management.h"
+
 typedef void (*fun_base)(char);
 typedef int (*fun_lex)(char *, fun_base);
 
