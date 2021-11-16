@@ -111,7 +111,7 @@ int hasChild(Trie *root)
     return FALSE;
 }
 
-BOOL delect_trie(Trie *root, char *str)
+BOOL delete_trie(Trie *root, char *str)
 {
     int len = strlen(str);
     int first_index = str[0] - 'a';
@@ -139,7 +139,7 @@ BOOL delect_trie(Trie *root, char *str)
             return FALSE;
         }
     }
-    int flag = delect_trie(root->next[first_index], str + 1);
+    int flag = delete_trie(root->next[first_index], str + 1);
     // 深度优先
     if (!hasChild(root->next[first_index]) && !root->next[first_index]->isEnd)
     {

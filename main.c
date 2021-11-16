@@ -17,8 +17,7 @@
 // }
 char *regParse(char *str)
 {
-    int f = initParse(str, initReadChar);
-    char *JsonStr = getJsonNfa(&nfaSet);
+    char *JsonStr = initParse(str, initReadChar);
     return JsonStr;
 }
 

@@ -109,7 +109,7 @@ void setEndfun()
         checkSetStack();
     }
     // 释放集合栈
-    sdestory(setStack);
+    sdestory(setStack, NULL);
     setStack = NULL;
     wholeStatus->state = PSWdef;
     isInit = FALSE;

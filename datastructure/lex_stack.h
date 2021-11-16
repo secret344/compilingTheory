@@ -5,8 +5,7 @@
 typedef union StackData
 {
     int n;
-    char *s;
-    void *nfa;
+    void *p;
 } StackData;
 
 typedef struct StackNode
@@ -25,10 +24,9 @@ Stack *new_stack();
 
 extern void spush(Stack *PStack, char *val);
 extern void sPointPush(Stack *PStack, void *val);
-extern char *spop(Stack *PStack);
-extern void *sPointPop(Stack *PStack);
+extern void *spop(Stack *PStack);
 extern void straversal(Stack *PStack);
-extern void sdestory(Stack *PStack);
+extern void sdestory(Stack *PStack, void (*fn)(void *));
 extern int stacksize(Stack *PStack);
 extern BOOL stackInclude(Stack *PStack, void *val);
 #endif

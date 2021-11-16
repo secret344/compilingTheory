@@ -12,7 +12,7 @@ export default {
   setup() {
     const regValue = reactive({ value: "" });
     let wsFun = null;
-    
+
     onBeforeMount(async () => {
       wsFun = await WebAssemblyFun();
     });
@@ -21,7 +21,8 @@ export default {
       regValue.value = value;
     };
 
-    const onclick = async () => {
+    const onclick = () => {
+      console.log(wsFun);
       const { regParse, matchStr } = wsFun;
       let str = regParse(regValue.value);
       console.log("格式化结果", JSON.parse(str));
