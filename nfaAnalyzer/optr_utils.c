@@ -101,7 +101,7 @@ void bracketDispose(char *s)
         printf(") 必须含有相对应的 (,位置 行：%d 列：%d \n", row, col);
     }
     curNfa = nfapaif;
-    nfapaif = sPointPop(optrStack);
+    nfapaif = spop(optrStack);
     free(str);
     str = NULL;
 }
@@ -149,7 +149,7 @@ void OptrDispose(char s)
     case '|':
         printf("");
         // 取出当前运算符栈需要的节点 单步处理的节点不需保存到栈
-        NfaPair *n = sPointPop(optrStack); // 或运算符 next
+        NfaPair *n = spop(optrStack); // 或运算符 next
         NfaPair *b = curNfa;              // 或运算符 next2
         // 进行或链接 合并成curNfa 暂不链接，等待下一个字符处理程序处理
         optrpaif = (NfaPair *)malloc(sizeof(NfaPair)); // 生成两端节点

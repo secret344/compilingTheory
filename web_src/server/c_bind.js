@@ -4,13 +4,12 @@ function initWebassembly() {
         if (obj) {
             return obj;
         }
-        await Module().then((res) => {
-            const regParse = res.cwrap("regParse", "string", ["string"]);
-            const matchStr = res.cwrap("matchStr", "number", ["string"]);
-            console.log("加载webassembly模块完成", res);
-            obj = { regParse, matchStr };
-            return { regParse, matchStr };
-        });
+        let result = await Module();
+        const regParse = result.cwrap("regParse", "string", ["string"]);
+        const matchStr = result.cwrap("matchStr", "number", ["string"]);
+        console.log("加载webassembly模块完成", result);
+        obj = { regParse, matchStr };
+        return obj;
     };
 }
 export const WebAssemblyFun = initWebassembly();

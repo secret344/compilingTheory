@@ -5,7 +5,7 @@
 #include "nfa_Interface.h"
 
 Stack *new_stack()
-{	
+{
     Stack *PStack = (Stack *)malloc(sizeof(Stack));
     PStack->base = (StackNode *)malloc(sizeof(StackNode));
 
@@ -18,9 +18,9 @@ Stack *new_stack()
 void spush(Stack *PStack, char *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-	char *str = (char *)malloc(strlen(val) + 1);
+    char *str = (char *)malloc(strlen(val) + 1);
     strcpy(str, val);
-	p->data.s = str;
+    p->data.p = str;
     p->PStackNext = PStack->top;
     PStack->top = p;
     PStack->base->data.n = PStack->base->data.n + 1;
@@ -29,13 +29,13 @@ void spush(Stack *PStack, char *val)
 void sPointPush(Stack *PStack, void *val)
 {
     StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-    p->data.nfa = val;
+    p->data.p = val;
     p->PStackNext = PStack->top;
     PStack->top = p;
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
-char *spop(Stack *PStack)
+void *spop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
@@ -43,26 +43,7 @@ char *spop(Stack *PStack)
     };
 
     StackNode *p = PStack->top;
-    char *_Destination = (char *)malloc(strlen(p->data.s) + 1);
-    strcpy(_Destination, p->data.s);
-    PStack->top = p->PStackNext;
-    free(p->data.s);
-    p->data.s = NULL;
-    free(p);
-    p = NULL;
-    PStack->base->data.n = PStack->base->data.n - 1;
-    return _Destination;
-}
-
-void *sPointPop(Stack *PStack)
-{
-    if (PStack->top == PStack->base)
-    {
-        return NULL;
-    };
-
-    StackNode *p = PStack->top;
-    void *_Destination = p->data.nfa;
+    void *_Destination = p->data.p;
     PStack->top = p->PStackNext;
     free(p);
     p = NULL;
@@ -85,7 +66,7 @@ void straversal(Stack *PStack)
     while (PStack->top != PStack->base)
     {
         StackNode *p = PStack->top;
-        printf("%s ", p->data.s);
+        printf("%s ", p->data.p);
         PStack->top = p->PStackNext;
     }
     printf("\n");
@@ -93,13 +74,20 @@ void straversal(Stack *PStack)
     PStack->top = temp;
 }
 
-void sdestory(Stack *PStack)
+void sdestory(Stack *PStack, void (*fn)(void *))
 {
-    char *s;
-    while (s = spop(PStack))
+    while (stacksize(PStack))
     {
-        free(s);
-        s = NULL;
+        void *s = spop(PStack);
+        if (fn)
+        {
+            fn(s);
+        }
+        else
+        {
+            free(s);
+            s = NULL;
+        }
     }
     PStack->top = NULL;
     free(PStack->base);
@@ -126,7 +114,7 @@ BOOL stackInclude(Stack *PStack, void *val)
         while (PStack->top != PStack->base)
         {
             StackNode *p = PStack->top;
-            if (p->data.nfa == val)
+            if (p->data.p == val)
             {
                 bool = TRUE;
             }

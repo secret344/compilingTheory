@@ -15,6 +15,8 @@ extern Stack *STNS;
 extern WholeState *wholeStatus;
 extern NfaPair *curNfa;
 extern NfaPair *nfapaif;
-extern int initParse(char *path, fun_lex parseFun);
 extern Stack *nfaSet;
+extern int StateNum;
+
+extern char *initParse(char *path, fun_lex parseFun);
 #endif
