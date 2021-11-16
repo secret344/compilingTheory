@@ -11,7 +11,8 @@ target_sources(datastructure
       ${CMAKE_CURRENT_LIST_DIR}/trie.h
       ${CMAKE_CURRENT_LIST_DIR}/lex_stack.h
       ${CMAKE_CURRENT_LIST_DIR}/bool.h
-      ${CMAKE_CURRENT_LIST_DIR}/cJSON.h
+      ${CMAKE_CURRENT_LIST_DIR}/cJSON.h 
+      ${CMAKE_CURRENT_LIST_DIR}/memory_management.h
   )
   
 target_link_libraries(datastructure
