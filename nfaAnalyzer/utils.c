@@ -153,9 +153,6 @@ void printfNfaNode(NfaNode *n, BOOL isPrintf)
 {
     NfaNode *a = n->next;
     NfaNode *b = n->next2;
-    printf("\n");
-    printf("当前节点编号stateNum  %d \n", n->stateNum);
-    printf("当前节点接受edge %d \n", n->edge);
     if (n->visited)
     {
         return;
@@ -203,12 +200,6 @@ void printfNfa(NfaPair *n)
 void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName)
 {
 
-    if (n->visited)
-    {
-        return;
-    }
-    n->visited = TRUE;
-
     NfaNode *a = n->next;
     NfaNode *b = n->next2;
     cJSON *current = cJSON_CreateObject();
@@ -222,6 +213,12 @@ void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName)
     cJSON_AddItemToObject(current, "inputset", inputset);
     cJSON_AddItemToObject(parentNode, childName, current);
     
+    if (n->visited)
+    {
+        return;
+    }
+    n->visited = TRUE;
+
     if (a)
     {
         JsonNfaParse(a, current, "next1");
