@@ -1,21 +1,21 @@
 <script>
 import { ref, reactive } from "vue";
 export default {
-  name: "input_reg",
-  props: {
-    defValue: String,
-  },
+  name: "match_reg",
+  props: {},
   data() {
     return {
-      greeting: "input_reg",
+      greeting: "match_reg",
     };
   },
   setup(props, context) {
-    const content = reactive({ name: "正则表达式(打开devtools查看结果)", reg: props.defValue });
-    
+    const content = reactive({
+      name: "所要匹配的字符串(打开devtools查看结果)",
+    });
+
     const onchange = (e) => {
       content.reg = e.target.value;
-      context.emit("reg-content", e.target.value);
+      context.emit("reg-match", e.target.value);
     };
     const oninput = (e) => {};
 
@@ -32,7 +32,7 @@ export default {
   <div>
     <p>{{ content.name }}</p>
     <textarea
-      placeholder="请输入需要格式化的正则表达式:"
+      placeholder="请输入需要匹配的字符串:"
       cols="30"
       rows="10"
       v-model="content.reg"
@@ -47,4 +47,5 @@ export default {
   color: red;
   font-weight: bold;
 }
+
 </style>

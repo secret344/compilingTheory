@@ -1,0 +1,57 @@
+[
+{
+  "directory": "D:/my-demo/compilingTheory/build",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/lexical.dir/includes_C.rsp -g -o CMakeFiles\\lexical.dir\\main.c.obj -c D:\\my-demo\\compilingTheory\\main.c",
+  "file": "D:/my-demo/compilingTheory/main.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\nfa_Intepretor.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\nfa_Intepretor.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/nfa_Intepretor.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\nfa_parse.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\nfa_parse.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/nfa_parse.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\optr_utils.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\optr_utils.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/optr_utils.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\set_utils.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\set_utils.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/set_utils.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\stns_utils.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\stns_utils.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/stns_utils.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/nfaAnalyzer",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/nfaAnalyzer.dir/includes_C.rsp -g -o CMakeFiles\\nfaAnalyzer.dir\\utils.c.obj -c D:\\my-demo\\compilingTheory\\nfaAnalyzer\\utils.c",
+  "file": "D:/my-demo/compilingTheory/nfaAnalyzer/utils.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/datastructure",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/datastructure.dir/includes_C.rsp -g -o CMakeFiles\\datastructure.dir\\cJSON.c.obj -c D:\\my-demo\\compilingTheory\\datastructure\\cJSON.c",
+  "file": "D:/my-demo/compilingTheory/datastructure/cJSON.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/datastructure",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/datastructure.dir/includes_C.rsp -g -o CMakeFiles\\datastructure.dir\\lex_stack.c.obj -c D:\\my-demo\\compilingTheory\\datastructure\\lex_stack.c",
+  "file": "D:/my-demo/compilingTheory/datastructure/lex_stack.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/datastructure",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/datastructure.dir/includes_C.rsp -g -o CMakeFiles\\datastructure.dir\\trie.c.obj -c D:\\my-demo\\compilingTheory\\datastructure\\trie.c",
+  "file": "D:/my-demo/compilingTheory/datastructure/trie.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/readfile",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/readfile.dir/includes_C.rsp -g -o CMakeFiles\\readfile.dir\\read_file.c.obj -c D:\\my-demo\\compilingTheory\\readfile\\read_file.c",
+  "file": "D:/my-demo/compilingTheory/readfile/read_file.c"
+}
+]

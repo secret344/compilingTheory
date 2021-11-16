@@ -9,6 +9,8 @@ int col = 0; //列
 
 int initReadChar(char *content, fun_t cb)
 {
+    row = 1;
+    col = 0;
     initParseRead(content, cb);
     cb(EOF); //结束
     return EXIT_SUCCESS;
