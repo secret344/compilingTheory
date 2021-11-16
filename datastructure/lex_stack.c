@@ -6,8 +6,8 @@
 
 Stack *new_stack()
 {
-    Stack *PStack = (Stack *)malloc(sizeof(Stack));
-    PStack->base = (StackNode *)malloc(sizeof(StackNode));
+    Stack *PStack = (Stack *)my_malloc(sizeof(Stack));
+    PStack->base = (StackNode *)my_malloc(sizeof(StackNode));
 
     PStack->top = PStack->base;
     PStack->base->PStackNext = NULL;
@@ -17,8 +17,8 @@ Stack *new_stack()
 
 void spush(Stack *PStack, char *val)
 {
-    StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-    char *str = (char *)malloc(strlen(val) + 1);
+    StackNode *p = (StackNode *)my_malloc(sizeof(StackNode));
+    char *str = (char *)my_malloc(strlen(val) + 1);
     strcpy(str, val);
     p->data.p = str;
     p->PStackNext = PStack->top;
@@ -28,7 +28,7 @@ void spush(Stack *PStack, char *val)
 
 void sPointPush(Stack *PStack, void *val)
 {
-    StackNode *p = (StackNode *)malloc(sizeof(StackNode));
+    StackNode *p = (StackNode *)my_malloc(sizeof(StackNode));
     p->data.p = val;
     p->PStackNext = PStack->top;
     PStack->top = p;
@@ -45,8 +45,10 @@ void *spop(Stack *PStack)
     StackNode *p = PStack->top;
     void *_Destination = p->data.p;
     PStack->top = p->PStackNext;
-    free(p);
+
+    my_free(p);
     p = NULL;
+    
     PStack->base->data.n = PStack->base->data.n - 1;
     return _Destination;
 }
@@ -78,21 +80,21 @@ void sdestory(Stack *PStack, void (*fn)(void *))
 {
     while (stacksize(PStack))
     {
-        void *s = spop(PStack);
-        if (fn)
+        StackNode *s = spop(PStack);
+        if (fn != NULL)
         {
             fn(s);
         }
         else
         {
-            free(s);
+            my_free(s);
             s = NULL;
         }
     }
     PStack->top = NULL;
-    free(PStack->base);
+    my_free(PStack->base);
     PStack->base = NULL;
-    free(PStack);
+    my_free(PStack);
     PStack = NULL;
 }
 

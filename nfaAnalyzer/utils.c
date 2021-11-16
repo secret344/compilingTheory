@@ -7,8 +7,8 @@
 // 初始化nfa节点
 void setInitPair(NfaPair *n)
 {
-    n->startNode = (NfaNode *)malloc(sizeof(NfaNode));
-    n->endNode = n->startNode->next = (NfaNode *)malloc(sizeof(NfaNode));
+    n->startNode = (NfaNode *)my_malloc(sizeof(NfaNode));
+    n->endNode = n->startNode->next = (NfaNode *)my_malloc(sizeof(NfaNode));
 
     n->startNode->inputset = NULL;
     n->endNode->inputset = NULL;
@@ -30,7 +30,7 @@ void setInitPair(NfaPair *n)
     n->endNode->next2 = NULL;
 }
 
-//语法树节点栈 "abcdzAZ19_. ";
+//语法树节点栈 <>!@#=$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.:\";
 BOOL isSTNS(char str)
 {
     char s[] = "<>!@&#=$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.:\"";
@@ -84,7 +84,7 @@ char *getSetLetter(char a, char b)
     {
         return NULL;
     }
-    char *s = malloc(len + 1);
+    char *s = my_malloc(len + 1);
     for (size_t i = 0; i < len; i++)
     {
         s[i] = a++;
@@ -97,7 +97,7 @@ char *concatstr(char *target, char *source)
 {
     int len = strlen(target);
     int len1 = strlen(source);
-    char *s = malloc(len + len1 + 1);
+    char *s = my_malloc(len + len1 + 1);
     strcpy(s, target);
     strcat(s, source);
     return s;
@@ -108,7 +108,7 @@ char *concatstr(char *target, char *source)
 char *noStrRepetition(char *str)
 {
     int len = strlen(str);
-    char *repe = (char *)malloc(len + 1);
+    char *repe = (char *)my_malloc(len + 1);
     int count = 0;
     for (int i = 0; i < len; i++)
     {
@@ -122,9 +122,9 @@ char *noStrRepetition(char *str)
     }
     repe[count] = '\0';
     // 节省内存
-    char *result = (char *)malloc(strlen(repe) + 1);
+    char *result = (char *)my_malloc(strlen(repe) + 1);
     strcpy(result, repe);
-    free(repe);
+    my_free(repe);
     repe = NULL;
     return result;
 }
@@ -144,7 +144,7 @@ char *setComplement(char *str)
         }
     }
     s[count] = '\0';
-    char *result = (char *)malloc(strlen(s) + 1);
+    char *result = (char *)my_malloc(strlen(s) + 1);
     strcpy(result, s);
     return result;
 }

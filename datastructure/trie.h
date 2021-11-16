@@ -1,6 +1,7 @@
 ﻿#ifndef _TRIE_
 #define _TRIE_
 #include "bool.h"
+#include "memory_management.h"
 
 #define SUB_NODE_COUNT 26 // 26字母
 

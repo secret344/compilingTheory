@@ -10,7 +10,7 @@ static NfaPair *optrpaif = NULL;
 static Stack *optrStack = NULL;
 void optrInitStack()
 {
-    if (!optrStack)
+    if (optrStack == NULL)
     {
         optrStack = new_stack();
     }
@@ -102,7 +102,7 @@ void bracketDispose(char *s)
     }
     curNfa = nfapaif;
     nfapaif = spop(optrStack);
-    free(str);
+    my_free(str);
     str = NULL;
 }
 
@@ -115,11 +115,12 @@ void switchOptr(char *s)
     case '+':
     case '?':
         wholeStatus->state = PSWoptr;
-        optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
+        optrpaif = (NfaPair *)my_malloc(sizeof(NfaPair));
         setInitPair(optrpaif);
         StarClosure(*s);
         PlusClosure(*s);
         OptionsClosure(*s);
+        my_free(optrpaif);
         wholeStatus->state = PSWdef;
         break;
     case '|':
@@ -150,9 +151,9 @@ void OptrDispose(char s)
         printf("");
         // 取出当前运算符栈需要的节点 单步处理的节点不需保存到栈
         NfaPair *n = spop(optrStack); // 或运算符 next
-        NfaPair *b = curNfa;              // 或运算符 next2
+        NfaPair *b = curNfa;          // 或运算符 next2
         // 进行或链接 合并成curNfa 暂不链接，等待下一个字符处理程序处理
-        optrpaif = (NfaPair *)malloc(sizeof(NfaPair)); // 生成两端节点
+        optrpaif = (NfaPair *)my_malloc(sizeof(NfaPair)); // 生成两端节点
         setInitPair(optrpaif);
         //  a | b
 
@@ -165,6 +166,8 @@ void OptrDispose(char s)
         n->endNode->next = optrpaif->endNode;
         b->endNode->next = optrpaif->endNode;
 
+        my_free(n);
+        my_free(b);
         curNfa = optrpaif;
         break;
     case '(': //括号运算符需要等待字符 ) 取出
@@ -173,6 +176,6 @@ void OptrDispose(char s)
         spush(OPTR, str);
         break;
     }
-    free(str);
+    my_free(str);
     str = NULL;
 }

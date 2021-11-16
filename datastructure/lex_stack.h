@@ -2,6 +2,7 @@
 #ifndef _SYMBOL_STACK_
 #define _SYMBOL_STACK_
 #include "bool.h"
+#include "memory_management.h"
 typedef union StackData
 {
     int n;

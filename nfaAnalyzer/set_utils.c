@@ -13,10 +13,14 @@ static NfaPair *setpaif = NULL;
 
 void setInitfun()
 {
-    setStack = new_stack();
+    if (setStack == NULL)
+    {
+        setStack = new_stack();
+    }
+
     wholeStatus->state = PSWset;
 
-    setpaif = (NfaPair *)malloc(sizeof(NfaPair));
+    setpaif = (NfaPair *)my_malloc(sizeof(NfaPair));
     setInitPair(setpaif);
     setpaif->startNode->edge = -2;
 }
@@ -65,7 +69,7 @@ void setMainfun(char *s)
             }
             else
             {
-                if (!setpaif->startNode->inputset)
+                if (setpaif->startNode->inputset == NULL)
                 {
                     setpaif->startNode->inputset = inputset;
                 }
@@ -73,12 +77,13 @@ void setMainfun(char *s)
                 {
                     // 合并
                     char *str = concatstr(setpaif->startNode->inputset, inputset);
-                    free(setpaif->startNode->inputset);
+                    my_free(setpaif->startNode->inputset);
+                    my_free(inputset);
                     setpaif->startNode->inputset = str;
                 }
             }
         }
-        free(prev);
+        my_free(prev);
         prev = NULL;
         wholeStatus->state = PSWset;
         break;
@@ -93,10 +98,10 @@ void setEndCheck()
     if (setpaif->startNode->anchor == 1)
     {
         s = setComplement(setpaif->startNode->inputset);
-        free(setpaif->startNode->inputset);
+        my_free(setpaif->startNode->inputset);
     }
     char *result = noStrRepetition(s);
-    free(s);
+    my_free(s);
     s = NULL;
     setpaif->startNode->inputset = result;
 }
@@ -124,12 +129,12 @@ void checkSetStack()
     {
         len1 = strlen(setpaif->startNode->inputset);
     }
-    char *str = malloc(len + len1 + 1);
+    char *str = my_malloc(len + len1 + 1);
     // 去除重复的字符串
     if (len1)
     {
         strcpy(str, setpaif->startNode->inputset);
-        free(setpaif->startNode->inputset);
+        my_free(setpaif->startNode->inputset);
     }
     int count = 0;
     // 结束检查集合栈内字符
@@ -139,7 +144,7 @@ void checkSetStack()
         BOOL is = findChar(*s, str);
         str[len1 + count] = *s;
         count++;
-        free(s);
+        my_free(s);
         s = NULL;
     }
     str[len1 + count] = '\0';
