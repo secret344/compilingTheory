@@ -1,7 +1,5 @@
 # compilingTheory
 
-compilingTheory
-
 目前使用方式：
 
 -   使用 **vscode** 编辑器，其他编辑器需自行修改配置。

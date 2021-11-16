@@ -177,6 +177,30 @@ lex_stack.c.s:
 	cd /d D:\my-demo\compilingTheory\build && $(MAKE) $(MAKESILENT) -f datastructure\CMakeFiles\datastructure.dir\build.make datastructure/CMakeFiles/datastructure.dir/lex_stack.c.s
 .PHONY : lex_stack.c.s
 
+memory_management.obj: memory_management.c.obj
+.PHONY : memory_management.obj
+
+# target to build an object file
+memory_management.c.obj:
+	cd /d D:\my-demo\compilingTheory\build && $(MAKE) $(MAKESILENT) -f datastructure\CMakeFiles\datastructure.dir\build.make datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj
+.PHONY : memory_management.c.obj
+
+memory_management.i: memory_management.c.i
+.PHONY : memory_management.i
+
+# target to preprocess a source file
+memory_management.c.i:
+	cd /d D:\my-demo\compilingTheory\build && $(MAKE) $(MAKESILENT) -f datastructure\CMakeFiles\datastructure.dir\build.make datastructure/CMakeFiles/datastructure.dir/memory_management.c.i
+.PHONY : memory_management.c.i
+
+memory_management.s: memory_management.c.s
+.PHONY : memory_management.s
+
+# target to generate assembly for a file
+memory_management.c.s:
+	cd /d D:\my-demo\compilingTheory\build && $(MAKE) $(MAKESILENT) -f datastructure\CMakeFiles\datastructure.dir\build.make datastructure/CMakeFiles/datastructure.dir/memory_management.c.s
+.PHONY : memory_management.c.s
+
 trie.obj: trie.c.obj
 .PHONY : trie.obj
 
@@ -216,6 +240,9 @@ help:
 	@echo ... lex_stack.obj
 	@echo ... lex_stack.i
 	@echo ... lex_stack.s
+	@echo ... memory_management.obj
+	@echo ... memory_management.i
+	@echo ... memory_management.s
 	@echo ... trie.obj
 	@echo ... trie.i
 	@echo ... trie.s

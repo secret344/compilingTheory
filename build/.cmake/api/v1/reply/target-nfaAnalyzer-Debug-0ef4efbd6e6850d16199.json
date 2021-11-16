@@ -3,7 +3,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "datastructure/libdatastructure.a"
+			"path" : "nfaAnalyzer/libnfaAnalyzer.a"
 		}
 	],
 	"backtrace" : 1,
@@ -12,13 +12,13 @@
 		"commands" : 
 		[
 			"add_library",
-			"target_link_libraries",
 			"target_include_directories",
+			"target_link_libraries",
 			"target_sources"
 		],
 		"files" : 
 		[
-			"datastructure/CMakeLists.txt"
+			"nfaAnalyzer/CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -34,13 +34,13 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 17,
+				"line" : 22,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 21,
+				"line" : 16,
 				"parent" : 0
 			},
 			{
@@ -63,16 +63,16 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
-					"path" : "D:/my-demo/compilingTheory/datastructure"
-				},
-				{
 					"backtrace" : 2,
 					"path" : "D:/my-demo/compilingTheory/nfaAnalyzer"
 				},
 				{
-					"backtrace" : 2,
+					"backtrace" : 3,
 					"path" : "D:/my-demo/compilingTheory/readfile"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "D:/my-demo/compilingTheory/datastructure"
 				}
 			],
 			"language" : "C",
@@ -80,24 +80,26 @@
 			[
 				0,
 				1,
-				2
+				2,
+				3,
+				4,
+				5
 			]
 		}
 	],
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 2,
-			"id" : "readfile::@0e95d617262a246f53b7"
+			"id" : "datastructure::@abfe2264bc379fa7349f"
 		}
 	],
-	"id" : "datastructure::@abfe2264bc379fa7349f",
-	"name" : "datastructure",
-	"nameOnDisk" : "libdatastructure.a",
+	"id" : "nfaAnalyzer::@c5b3e6ff79a338640971",
+	"name" : "nfaAnalyzer",
+	"nameOnDisk" : "libnfaAnalyzer.a",
 	"paths" : 
 	{
-		"build" : "datastructure",
-		"source" : "datastructure"
+		"build" : "nfaAnalyzer",
+		"source" : "nfaAnalyzer"
 	},
 	"sourceGroups" : 
 	[
@@ -107,21 +109,25 @@
 			[
 				0,
 				1,
-				2
+				2,
+				3,
+				4,
+				5
 			]
 		},
 		{
 			"name" : "Header Files",
 			"sourceIndexes" : 
 			[
-				3,
-				4,
-				5,
 				6,
 				7,
 				8,
 				9,
-				10
+				10,
+				11,
+				12,
+				13,
+				14
 			]
 		}
 	],
@@ -130,59 +136,82 @@
 		{
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
-			"path" : "datastructure/cJSON.c",
+			"path" : "nfaAnalyzer/nfa_Intepretor.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
-			"path" : "datastructure/lex_stack.c",
+			"path" : "nfaAnalyzer/nfa_parse.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
-			"path" : "datastructure/trie.c",
+			"path" : "nfaAnalyzer/optr_utils.c",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
-			"path" : "datastructure/trie.h",
-			"sourceGroupIndex" : 1
+			"compileGroupIndex" : 0,
+			"path" : "nfaAnalyzer/set_utils.c",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
-			"path" : "datastructure/lex_stack.h",
-			"sourceGroupIndex" : 1
+			"compileGroupIndex" : 0,
+			"path" : "nfaAnalyzer/stns_utils.c",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
-			"path" : "datastructure/bool.h",
-			"sourceGroupIndex" : 1
+			"compileGroupIndex" : 0,
+			"path" : "nfaAnalyzer/utils.c",
+			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 4,
-			"path" : "datastructure/cJSON.h",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 2,
 			"path" : "nfaAnalyzer/nfa_Intepretor.h",
 			"sourceGroupIndex" : 1
 		},
 		{
-			"backtrace" : 2,
+			"backtrace" : 4,
 			"path" : "nfaAnalyzer/nfa_parse.h",
 			"sourceGroupIndex" : 1
 		},
 		{
-			"backtrace" : 2,
+			"backtrace" : 4,
 			"path" : "nfaAnalyzer/utils.h",
 			"sourceGroupIndex" : 1
 		},
 		{
-			"backtrace" : 2,
+			"backtrace" : 3,
 			"path" : "readfile/read_file.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 3,
+			"path" : "datastructure/trie.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 3,
+			"path" : "datastructure/lex_stack.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 3,
+			"path" : "datastructure/bool.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 3,
+			"path" : "datastructure/cJSON.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 3,
+			"path" : "datastructure/memory_management.h",
 			"sourceGroupIndex" : 1
 		}
 	],

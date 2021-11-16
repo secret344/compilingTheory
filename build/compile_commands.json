@@ -46,6 +46,11 @@
 },
 {
   "directory": "D:/my-demo/compilingTheory/build/datastructure",
+  "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/datastructure.dir/includes_C.rsp -g -o CMakeFiles\\datastructure.dir\\memory_management.c.obj -c D:\\my-demo\\compilingTheory\\datastructure\\memory_management.c",
+  "file": "D:/my-demo/compilingTheory/datastructure/memory_management.c"
+},
+{
+  "directory": "D:/my-demo/compilingTheory/build/datastructure",
   "command": "C:\\PROGRA~2\\MINGW-~1\\I686-5~1.0-P\\mingw32\\bin\\I6EEE3~1.EXE  @CMakeFiles/datastructure.dir/includes_C.rsp -g -o CMakeFiles\\datastructure.dir\\trie.c.obj -c D:\\my-demo\\compilingTheory\\datastructure\\trie.c",
   "file": "D:/my-demo/compilingTheory/datastructure/trie.c"
 },

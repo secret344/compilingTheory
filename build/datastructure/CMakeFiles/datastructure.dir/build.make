@@ -98,11 +98,26 @@ datastructure/CMakeFiles/datastructure.dir/lex_stack.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/datastructure.dir/lex_stack.c.s"
 	cd /d D:\my-demo\compilingTheory\build\datastructure && C:\PROGRA~2\MINGW-~1\I686-5~1.0-P\mingw32\bin\I6EEE3~1.EXE $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\my-demo\compilingTheory\datastructure\lex_stack.c -o CMakeFiles\datastructure.dir\lex_stack.c.s
 
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj: datastructure/CMakeFiles/datastructure.dir/flags.make
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj: datastructure/CMakeFiles/datastructure.dir/includes_C.rsp
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj: ../datastructure/memory_management.c
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj: datastructure/CMakeFiles/datastructure.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\my-demo\compilingTheory\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj"
+	cd /d D:\my-demo\compilingTheory\build\datastructure && C:\PROGRA~2\MINGW-~1\I686-5~1.0-P\mingw32\bin\I6EEE3~1.EXE $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj -MF CMakeFiles\datastructure.dir\memory_management.c.obj.d -o CMakeFiles\datastructure.dir\memory_management.c.obj -c D:\my-demo\compilingTheory\datastructure\memory_management.c
+
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/datastructure.dir/memory_management.c.i"
+	cd /d D:\my-demo\compilingTheory\build\datastructure && C:\PROGRA~2\MINGW-~1\I686-5~1.0-P\mingw32\bin\I6EEE3~1.EXE $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\my-demo\compilingTheory\datastructure\memory_management.c > CMakeFiles\datastructure.dir\memory_management.c.i
+
+datastructure/CMakeFiles/datastructure.dir/memory_management.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/datastructure.dir/memory_management.c.s"
+	cd /d D:\my-demo\compilingTheory\build\datastructure && C:\PROGRA~2\MINGW-~1\I686-5~1.0-P\mingw32\bin\I6EEE3~1.EXE $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\my-demo\compilingTheory\datastructure\memory_management.c -o CMakeFiles\datastructure.dir\memory_management.c.s
+
 datastructure/CMakeFiles/datastructure.dir/trie.c.obj: datastructure/CMakeFiles/datastructure.dir/flags.make
 datastructure/CMakeFiles/datastructure.dir/trie.c.obj: datastructure/CMakeFiles/datastructure.dir/includes_C.rsp
 datastructure/CMakeFiles/datastructure.dir/trie.c.obj: ../datastructure/trie.c
 datastructure/CMakeFiles/datastructure.dir/trie.c.obj: datastructure/CMakeFiles/datastructure.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\my-demo\compilingTheory\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object datastructure/CMakeFiles/datastructure.dir/trie.c.obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\my-demo\compilingTheory\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object datastructure/CMakeFiles/datastructure.dir/trie.c.obj"
 	cd /d D:\my-demo\compilingTheory\build\datastructure && C:\PROGRA~2\MINGW-~1\I686-5~1.0-P\mingw32\bin\I6EEE3~1.EXE $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT datastructure/CMakeFiles/datastructure.dir/trie.c.obj -MF CMakeFiles\datastructure.dir\trie.c.obj.d -o CMakeFiles\datastructure.dir\trie.c.obj -c D:\my-demo\compilingTheory\datastructure\trie.c
 
 datastructure/CMakeFiles/datastructure.dir/trie.c.i: cmake_force
@@ -117,6 +132,7 @@ datastructure/CMakeFiles/datastructure.dir/trie.c.s: cmake_force
 datastructure_OBJECTS = \
 "CMakeFiles/datastructure.dir/cJSON.c.obj" \
 "CMakeFiles/datastructure.dir/lex_stack.c.obj" \
+"CMakeFiles/datastructure.dir/memory_management.c.obj" \
 "CMakeFiles/datastructure.dir/trie.c.obj"
 
 # External object files for target datastructure
@@ -124,10 +140,11 @@ datastructure_EXTERNAL_OBJECTS =
 
 datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/cJSON.c.obj
 datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/lex_stack.c.obj
+datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj
 datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/trie.c.obj
 datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/build.make
 datastructure/libdatastructure.a: datastructure/CMakeFiles/datastructure.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\my-demo\compilingTheory\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C static library libdatastructure.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\my-demo\compilingTheory\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C static library libdatastructure.a"
 	cd /d D:\my-demo\compilingTheory\build\datastructure && $(CMAKE_COMMAND) -P CMakeFiles\datastructure.dir\cmake_clean_target.cmake
 	cd /d D:\my-demo\compilingTheory\build\datastructure && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\datastructure.dir\link.txt --verbose=$(VERBOSE)
 

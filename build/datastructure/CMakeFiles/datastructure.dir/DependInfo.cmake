@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/my-demo/compilingTheory/datastructure/cJSON.c" "datastructure/CMakeFiles/datastructure.dir/cJSON.c.obj" "gcc" "datastructure/CMakeFiles/datastructure.dir/cJSON.c.obj.d"
   "D:/my-demo/compilingTheory/datastructure/lex_stack.c" "datastructure/CMakeFiles/datastructure.dir/lex_stack.c.obj" "gcc" "datastructure/CMakeFiles/datastructure.dir/lex_stack.c.obj.d"
+  "D:/my-demo/compilingTheory/datastructure/memory_management.c" "datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj" "gcc" "datastructure/CMakeFiles/datastructure.dir/memory_management.c.obj.d"
   "D:/my-demo/compilingTheory/datastructure/trie.c" "datastructure/CMakeFiles/datastructure.dir/trie.c.obj" "gcc" "datastructure/CMakeFiles/datastructure.dir/trie.c.obj.d"
   )
 
