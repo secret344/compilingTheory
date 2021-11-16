@@ -20,6 +20,6 @@ compilingTheory
 
 ## 目前效果图(时间：2021年11月16日 22:24:21)
 - 图1
-[<img height="300" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
+[<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
 - 图2
-[<img height="300" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
+[<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
