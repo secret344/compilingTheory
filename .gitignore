@@ -1,5 +1,6 @@
 **/*.exe
 dist
 wasm_folder
+build
 emsdk
 node_modules
