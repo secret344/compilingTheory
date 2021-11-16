@@ -2,6 +2,9 @@
 #ifndef _UTILS_
 #define _UTILS_
 #include "nfa_Interface.h"
+#include "lex_stack.h"
+#include "cJSON.h"
+
 extern BOOL isSTNS(char str);
 extern BOOL isOPTR(char str);
 extern BOOL findChar(char s, char str[]);
@@ -12,4 +15,5 @@ extern char *noStrRepetition(char *str);
 extern char *setComplement(char *str);
 extern void printfNfa(NfaPair *n);
 extern void setInitPair(NfaPair *n);
+extern void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName);
 #endif

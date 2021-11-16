@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "stack.h"
-#include "../lexicalAnalyzer/nfa_Interface.h"
+#include "lex_stack.h"
+#include "nfa_Interface.h"
 
 Stack *new_stack()
-{	
-    Stack *PStack = (Stack *)malloc(sizeof(Stack));
-    PStack->base = (StackNode *)malloc(sizeof(StackNode));
+{
+    Stack *PStack = (Stack *)my_malloc(sizeof(Stack));
+    PStack->base = (StackNode *)my_malloc(sizeof(StackNode));
 
     PStack->top = PStack->base;
     PStack->base->PStackNext = NULL;
@@ -17,25 +17,25 @@ Stack *new_stack()
 
 void spush(Stack *PStack, char *val)
 {
-    StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-	char *str = (char *)malloc(strlen(val) + 1);
+    StackNode *p = (StackNode *)my_malloc(sizeof(StackNode));
+    char *str = (char *)my_malloc(strlen(val) + 1);
     strcpy(str, val);
-	p->data.s = str;
+    p->data.p = str;
     p->PStackNext = PStack->top;
     PStack->top = p;
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
-void sOptrPush(Stack *PStack, void *val)
+void sPointPush(Stack *PStack, void *val)
 {
-    StackNode *p = (StackNode *)malloc(sizeof(StackNode));
-    p->data.nfa = val;
+    StackNode *p = (StackNode *)my_malloc(sizeof(StackNode));
+    p->data.p = val;
     p->PStackNext = PStack->top;
     PStack->top = p;
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
-char *spop(Stack *PStack)
+void *spop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
     {
@@ -43,29 +43,12 @@ char *spop(Stack *PStack)
     };
 
     StackNode *p = PStack->top;
-    char *_Destination = (char *)malloc(strlen(p->data.s) + 1);
-    strcpy(_Destination, p->data.s);
+    void *_Destination = p->data.p;
     PStack->top = p->PStackNext;
-    free(p->data.s);
-    p->data.s = NULL;
-    free(p);
-    p = NULL;
-    PStack->base->data.n = PStack->base->data.n - 1;
-    return _Destination;
-}
 
-void *sOptrPop(Stack *PStack)
-{
-    if (PStack->top == PStack->base)
-    {
-        return NULL;
-    };
-
-    StackNode *p = PStack->top;
-    void *_Destination = p->data.nfa;
-    PStack->top = p->PStackNext;
-    free(p);
+    my_free(p);
     p = NULL;
+    
     PStack->base->data.n = PStack->base->data.n - 1;
     return _Destination;
 }
@@ -85,7 +68,7 @@ void straversal(Stack *PStack)
     while (PStack->top != PStack->base)
     {
         StackNode *p = PStack->top;
-        printf("%s ", p->data.s);
+        printf("%s ", p->data.p);
         PStack->top = p->PStackNext;
     }
     printf("\n");
@@ -93,18 +76,25 @@ void straversal(Stack *PStack)
     PStack->top = temp;
 }
 
-void sdestory(Stack *PStack)
+void sdestory(Stack *PStack, void (*fn)(void *))
 {
-    char *s;
-    while (s = spop(PStack))
+    while (stacksize(PStack))
     {
-        free(s);
-        s = NULL;
+        StackNode *s = spop(PStack);
+        if (fn != NULL)
+        {
+            fn(s);
+        }
+        else
+        {
+            my_free(s);
+            s = NULL;
+        }
     }
     PStack->top = NULL;
-    free(PStack->base);
+    my_free(PStack->base);
     PStack->base = NULL;
-    free(PStack);
+    my_free(PStack);
     PStack = NULL;
 }
 
@@ -126,7 +116,7 @@ BOOL stackInclude(Stack *PStack, void *val)
         while (PStack->top != PStack->base)
         {
             StackNode *p = PStack->top;
-            if (p->data.nfa == val)
+            if (p->data.p == val)
             {
                 bool = TRUE;
             }

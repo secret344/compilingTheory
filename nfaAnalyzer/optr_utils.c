@@ -1,16 +1,16 @@
-﻿#include "lexical.h"
+﻿#include "nfa_parse.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
 #include "nfa_Interface.h"
-#include "../readfile/read_file.h"
+#include "read_file.h"
 
 static NfaPair *optrpaif = NULL;
 static Stack *optrStack = NULL;
 void optrInitStack()
 {
-    if (!optrStack)
+    if (optrStack == NULL)
     {
         optrStack = new_stack();
     }
@@ -78,7 +78,7 @@ void orDispose(char *s)
     curNfa = NULL;
     spush(OPTR, s);
     // // 保存上一次节点，等待下次生成节点进行合并
-    sOptrPush(optrStack, optrpaif);
+    sPointPush(optrStack, optrpaif);
 }
 
 void bracketDispose(char *s)
@@ -86,7 +86,7 @@ void bracketDispose(char *s)
     if (*s == '(')
     {
         // 如果是括号构造新的节点链 保存之前的节点链，等待括号运算结束合并
-        sOptrPush(optrStack, nfapaif);
+        sPointPush(optrStack, nfapaif);
         spush(OPTR, s);
         nfapaif = NULL;
         return;
@@ -101,8 +101,8 @@ void bracketDispose(char *s)
         printf(") 必须含有相对应的 (,位置 行：%d 列：%d \n", row, col);
     }
     curNfa = nfapaif;
-    nfapaif = sOptrPop(optrStack);
-    free(str);
+    nfapaif = spop(optrStack);
+    my_free(str);
     str = NULL;
 }
 
@@ -115,11 +115,12 @@ void switchOptr(char *s)
     case '+':
     case '?':
         wholeStatus->state = PSWoptr;
-        optrpaif = (NfaPair *)malloc(sizeof(NfaPair));
+        optrpaif = (NfaPair *)my_malloc(sizeof(NfaPair));
         setInitPair(optrpaif);
         StarClosure(*s);
         PlusClosure(*s);
         OptionsClosure(*s);
+        my_free(optrpaif);
         wholeStatus->state = PSWdef;
         break;
     case '|':
@@ -149,10 +150,10 @@ void OptrDispose(char s)
     case '|':
         printf("");
         // 取出当前运算符栈需要的节点 单步处理的节点不需保存到栈
-        NfaPair *n = sOptrPop(optrStack); // 或运算符 next
-        NfaPair *b = curNfa;              // 或运算符 next2
+        NfaPair *n = spop(optrStack); // 或运算符 next
+        NfaPair *b = curNfa;          // 或运算符 next2
         // 进行或链接 合并成curNfa 暂不链接，等待下一个字符处理程序处理
-        optrpaif = (NfaPair *)malloc(sizeof(NfaPair)); // 生成两端节点
+        optrpaif = (NfaPair *)my_malloc(sizeof(NfaPair)); // 生成两端节点
         setInitPair(optrpaif);
         //  a | b
 
@@ -165,6 +166,8 @@ void OptrDispose(char s)
         n->endNode->next = optrpaif->endNode;
         b->endNode->next = optrpaif->endNode;
 
+        my_free(n);
+        my_free(b);
         curNfa = optrpaif;
         break;
     case '(': //括号运算符需要等待字符 ) 取出
@@ -173,6 +176,6 @@ void OptrDispose(char s)
         spush(OPTR, str);
         break;
     }
-    free(str);
+    my_free(str);
     str = NULL;
 }

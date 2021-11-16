@@ -1,9 +1,11 @@
 #ifndef _LEXICAL_
 #define _LEXICAL_
-#include "../datastructure/stack.h"
+#include "lex_stack.h"
 #include "nfa_Interface.h"
+#include "memory_management.h"
+
 typedef void (*fun_base)(char);
-typedef int (*fun_lex)(char*, fun_base);
+typedef int (*fun_lex)(char *, fun_base);
 
 typedef struct WholeState
 {
@@ -15,6 +17,8 @@ extern Stack *STNS;
 extern WholeState *wholeStatus;
 extern NfaPair *curNfa;
 extern NfaPair *nfapaif;
-extern int initParse(char *path, fun_lex parseFun);
 extern Stack *nfaSet;
+extern int StateNum;
+
+extern char *initParse(char *path, fun_lex parseFun);
 #endif

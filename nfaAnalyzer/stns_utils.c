@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils.h"
-#include "lexical.h"
+#include "nfa_parse.h"
 
 static NfaPair *stnspaif = NULL;
 void stnsInitfun(char str)
@@ -12,7 +12,7 @@ void stnsInitfun(char str)
     {
         wholeStatus->state = PSWsinglechar;
     }
-    stnspaif = (NfaPair *)malloc(sizeof(NfaPair));
+    stnspaif = (NfaPair *)my_malloc(sizeof(NfaPair));
     setInitPair(stnspaif);
     curNfa = stnspaif;
 }

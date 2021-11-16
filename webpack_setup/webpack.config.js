@@ -30,6 +30,18 @@ module.exports = {
                 use: ["vue-style-loader", "css-loader"],
             },
             {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: [
+                            ["@babel/preset-env", { targets: "defaults" }],
+                        ],
+                    },
+                },
+            },
+            {
                 test: /\.vue$/,
                 loader: "vue-loader",
                 options: {

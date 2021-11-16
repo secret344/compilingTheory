@@ -1,11 +1,10 @@
 ﻿#include <stdio.h>
-#include <malloc.h>
 #include <string.h>
 #include <time.h>
-#include "lexical.h"
+#include "nfa_parse.h"
 #include "nfa_Intepretor.h"
 #include "read_file.h"
-#include <emscripten.h>
+#include "utils.h"
 
 // void wait(int seconds)
 // {
@@ -15,10 +14,10 @@
 //     {
 //     }
 // }
-int regParse(char *str)
+char *regParse(char *str)
 {
-    int f = initParse(str, initReadChar);
-    return f;
+    char *JsonStr = initParse(str, initReadChar);
+    return JsonStr;
 }
 
 int matchStr(char *str)
