@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "main": "web_src/main.js",
   "repository": "https://github.com/secret344/compilingTheory.git",
-  "author": "zhaozhuang <zzzhaozzzz@163.com>",
   "license": "MIT",
   "scripts": {
     "serve": "webpack server --progress --config webpack_setup/webpack.config.js",
