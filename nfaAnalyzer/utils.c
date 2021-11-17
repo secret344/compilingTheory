@@ -135,7 +135,7 @@ char *setComplement(char *str)
 {
     char s[129];
     int count = 0;
-    for (int i = 1; i < 128; i++)
+    for (int i = 0; i < 128; i++)
     {
         int is = findChar(i, str);
         if (!is)
