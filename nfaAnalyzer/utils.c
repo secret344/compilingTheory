@@ -135,7 +135,7 @@ char *setComplement(char *str)
 {
     char s[129];
     int count = 0;
-    for (int i = 0; i < 128; i++)
+    for (int i = 0; i < ASCII_COUNT; i++)
     {
         int is = findChar(i, str);
         if (!is)
@@ -212,7 +212,7 @@ void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName)
     cJSON_AddItemToObject(current, "edge", edge);
     cJSON_AddItemToObject(current, "inputset", inputset);
     cJSON_AddItemToObject(parentNode, childName, current);
-    
+
     if (n->visited)
     {
         return;

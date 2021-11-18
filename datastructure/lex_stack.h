@@ -29,5 +29,5 @@ extern void *spop(Stack *PStack);
 extern void straversal(Stack *PStack);
 extern void sdestory(Stack *PStack, void (*fn)(void *));
 extern int stacksize(Stack *PStack);
-extern BOOL stackInclude(Stack *PStack, void *val);
+extern BOOL stackPointerInclude(Stack *PStack, void *val);
 #endif

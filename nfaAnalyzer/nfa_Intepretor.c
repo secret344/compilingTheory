@@ -1,13 +1,10 @@
 ﻿#include <stdio.h>
-#include "lex_stack.h"
 #include "nfa_Interface.h"
 #include "utils.h"
 #include "nfa_Intepretor.h"
 #include <string.h>
 #include "nfa_parse.h"
 
-static Stack *e_closure(Stack *next);
-static Stack *move(Stack *next, char c);
 static BOOL hasAcceptState(Stack *next);
 static int count = 0;
 
@@ -112,7 +109,7 @@ Stack *e_closure(Stack *next)
         // 需要去重
         if (node->next && node->edge == -1)
         {
-            if (stackInclude(nextStack, node->next) == FALSE)
+            if (stackPointerInclude(nextStack, node->next) == FALSE)
             {
                 sPointPush(nextStack, node->next);
                 sPointPush(nfaStack, node->next);
@@ -121,7 +118,7 @@ Stack *e_closure(Stack *next)
 
         if (node->next2 && node->edge == -1)
         {
-            if (stackInclude(nextStack, node->next2) == FALSE)
+            if (stackPointerInclude(nextStack, node->next2) == FALSE)
             {
                 sPointPush(nextStack, node->next2);
                 sPointPush(nfaStack, node->next2);
