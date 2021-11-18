@@ -60,6 +60,7 @@
         "utility": "c",
         "memory_management.h": "c",
         "stdio.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "dfa_utils.h": "c"
     }
 }

@@ -10,7 +10,13 @@ target_sources(dfaAnalyzer
   PUBLIC
       ${CMAKE_CURRENT_LIST_DIR}/dfa_parse.h
   )
-  
+
+target_link_libraries(dfaAnalyzer
+  PUBLIC 
+  datastructure
+  nfaAnalyzer
+)
+
 target_include_directories(dfaAnalyzer
   PUBLIC
       ${CMAKE_CURRENT_LIST_DIR}

@@ -103,7 +103,7 @@ int stacksize(Stack *PStack)
     return PStack->base->data.n;
 }
 
-BOOL stackInclude(Stack *PStack, void *val)
+BOOL stackPointerInclude(Stack *PStack, void *val)
 {
     BOOL bool = FALSE;
     if (PStack->top == PStack->base)
