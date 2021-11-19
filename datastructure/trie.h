@@ -14,7 +14,7 @@ typedef struct Trie
 
 extern Trie *create_trie();
 extern void insert_trie(Trie *root, char *str[], int len); // 插入字典树
-extern BOOL search_word(Trie *root, char *str);            // 查找字典树
+extern int search_word(Trie *root, char *str);            // 查找字典树
 extern void traversal_trie(Trie *root);                    // 遍历字典树
 extern BOOL delete_trie(Trie *root, char *str);            // 删除字典树
 #endif

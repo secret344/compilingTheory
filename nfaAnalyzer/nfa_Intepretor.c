@@ -1,5 +1,4 @@
 ﻿#include <stdio.h>
-#include "nfa_Interface.h"
 #include "utils.h"
 #include "nfa_Intepretor.h"
 #include <string.h>
@@ -70,7 +69,7 @@ void initpretNfa(NfaNode *start, char *str, MatchBackType *mt)
     for (i = count; i < len; i++)
     {
         char c = str[i];
-        next = move(next, c);
+        next = e_move(next, c);
         next = e_closure(next);
         if (stacksize(next))
         {
@@ -129,7 +128,7 @@ Stack *e_closure(Stack *next)
     return nextStack;
 }
 
-Stack *move(Stack *next, char c)
+Stack *e_move(Stack *next, char c)
 {
     Stack *result = new_stack();
     while (stacksize(next))
