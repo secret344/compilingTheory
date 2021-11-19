@@ -21,6 +21,7 @@ typedef union Rbkey
 typedef struct RBNode
 {
     BOOL isRed : 1;
+    BOOL isDelect : 1; // 标记删除
     void *value;
     Rbkey key;
     struct RBNode *left;
