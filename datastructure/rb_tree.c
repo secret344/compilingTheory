@@ -2,9 +2,12 @@
 #include "rb_tree.h"
 
 static void rb_insert_fixup(RbRoot *root, RbNodeP node);
-static BOOL rb_node_key_compare(RBKeyType key_type, RbNodeP a, RbNodeP b);
+static int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b);
 static void rb_left_rotate(RbRoot *root, RbNodeP node);
 static void rb_right_rotate(RbRoot *root, RbNodeP node);
+static void rb_delect_node(RbRoot *root, Rbkey key);
+static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
+static void rb_insert_node(RbRoot *root, RbNodeP node);
 
 RbRoot *rb_create(RBKeyType key_type)
 {
@@ -13,7 +16,56 @@ RbRoot *rb_create(RBKeyType key_type)
     root->key_type = key_type;
     return root;
 }
+/**
+ * @brief 查找节点
+ * 
+ * @param root 
+ * @param key 
+ * @return RbNodeP 
+ */
+RbNodeP rb_search_node(RbRoot *root, Rbkey key)
+{
+    RBKeyType key_type = root->key_type;
+    RbNodeP node = root->node;
 
+    while (node)
+    {
+        int result = rb_node_key_compare(key_type, key, node);
+        if (result == TRUE)
+        {
+            node = node->left;
+        }
+        else if (result == FALSE)
+        {
+            node = node->right;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    return node;
+}
+
+// 根据自己设置的rbtree key类型传递
+RbNodeP rb_new_node(Rbkey key, void *value)
+{
+    RbNodeP new = my_malloc(sizeof(RBNode));
+    new->left = NULL;
+    new->right = NULL;
+    new->parent = NULL;
+    new->key = key;
+    new->value = value;
+    new->isDelect = FALSE;
+    return new;
+}
+/**
+ * @brief 插入节点
+ * 
+ * @param root 
+ * @param node 
+ */
 void rb_insert_node(RbRoot *root, RbNodeP node)
 {
     RbNodeP current = NULL;
@@ -22,7 +74,7 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
     while (x != NULL)
     {
         current = x;
-        if (rb_node_key_compare(root->key_type, node, current))
+        if (rb_node_key_compare(root->key_type, node->key, current) > 0)
             x = x->left;
         else
             x = x->right;
@@ -31,7 +83,7 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
     // 判断是左子节点还是右子节点 插入到 current 子节点中
     if (current != NULL)
     {
-        if (rb_node_key_compare(root->key_type, node, current))
+        if (rb_node_key_compare(root->key_type, node->key, current) > 0)
             current->left = node;
         else
             current->right = node;
@@ -44,6 +96,118 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
     // 进行自平衡
     rb_insert_fixup(root, node);
 }
+
+/**
+ * @brief 删除树节点
+ * 不实现标记删除，自行拓展
+ * 保留标记删除字段
+ */
+void rb_delect_node(RbRoot *root, Rbkey key)
+{
+    RbNodeP node = rb_search_node(root, key);
+    if (node == NULL)
+    {
+        return;
+    }
+
+    RbNodeP child, parent;
+    int color;
+    // 存在左右子节点
+    if (node->left != NULL && node->right != NULL)
+    {
+        RbNodeP replace = node;
+        // 获取后继节点 替换需要删除的值
+        replace = replace->right;
+        while (replace->left != NULL)
+            replace = replace->left;
+        // 替换节点
+        if (node->parent == NULL)
+        {
+            // 如果删除节点是根节点
+            // 更新根节点
+            root->node = replace;
+        }
+        else
+        {
+            // 如果删除节点不是根节点
+            if (node->parent->left == node)
+            {
+                node->parent->left = replace;
+            }
+            else
+            {
+                node->parent->right = replace;
+            }
+        }
+
+        // 保存"替换节点"的颜色 如果是黑色节点 表示红黑树不平衡
+        color = replace->isRed;
+        // 替换节点 是后继节点 所以不存在左子节点
+        child = replace->right;
+        // 保存替换节点的父亲节点
+        parent = replace->parent;
+
+        if (parent == node)
+        {
+            // 如果替换节点父亲节点就是当前删除节点
+            parent = replace;
+        }
+        else
+        {
+            parent->left = child;
+            replace->right = node->right;
+            node->right->parent = replace;
+        }
+
+        replace->parent = node->parent;
+        replace->isRed = node->isRed;
+        replace->left = node->left;
+        node->left->parent = replace;
+    }
+    else
+    {
+        if (node->left == NULL)
+        {
+            child = node->right;
+        }
+        else
+        {
+            child = node->left;
+        }
+        color = node->isRed;
+        parent = node->parent;
+
+        if (child)
+        {
+            child->parent = parent;
+        }
+
+        if (parent == NULL)
+        {
+            root->node = child;
+        }
+        else
+        {
+            // 如果删除节点不是根节点
+            if (node->parent->left == node)
+            {
+                node->parent->left = child;
+            }
+            else
+            {
+                node->parent->right = child;
+            }
+        }
+    }
+
+    if (color == FALSE && child != NULL)
+    {
+        // 需要修正
+        rb_delete_fixup(root, child, parent);
+    }
+    my_free(node);
+}
+
 /** 
  * 进行插入自平衡
  * @brief 
@@ -105,7 +269,7 @@ void rb_insert_fixup(RbRoot *root, RbNodeP node)
                 node = gparent;
                 continue;
             }
-            if (parent->right == node)
+            if (parent->left == node)
             {
                 rb_right_rotate(root, parent);
                 RbNodeP tmp = parent;
@@ -120,17 +284,106 @@ void rb_insert_fixup(RbRoot *root, RbNodeP node)
     // 根节点设黑色
     root->node->isRed = FALSE;
 }
-// 根据自己设置的rbtree key类型传递
-RbNodeP rb_new_node(Rbkey key, void *value)
+/**
+ * @brief 删除修正
+ * 
+ * @param root 
+ * @param node 
+ * @param parent 
+ */
+void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
 {
-    RbNodeP new = my_malloc(sizeof(RBNode));
-    new->left = NULL;
-    new->right = NULL;
-    new->parent = NULL;
-    new->key = key;
-    new->value = value;
-    new->isDelect = FALSE;
-    return new;
+    RbNodeP sibling;
+    while (node == NULL || node->isRed == FALSE && node != root->node)
+    {
+        if (parent->left == node)
+        {
+            sibling = parent->right;
+            if (sibling->isRed == TRUE)
+            {
+                // 场景2.1:兄弟节点是红色
+                // 兄弟节点设置为黑色
+                sibling->isRed = FALSE;
+                parent->isRed = TRUE;
+                rb_left_rotate(root, parent);
+                sibling = parent->right;
+            }
+            // 场景2.4: 兄弟节点两个子节点都是黑色
+            // node的兄弟节点是黑色的切2个子节点也是黑色的
+            if ((sibling->right == NULL || sibling->right->isRed == FALSE) && (sibling->left == NULL || sibling->left->isRed == FALSE))
+            {
+                sibling->isRed = TRUE;
+                //再次以父节点为新节点作自平衡处理。
+                node = parent;
+                parent = node->parent;
+                continue;
+            }
+            else if (sibling->right == NULL || sibling->right->isRed == FALSE)
+            {
+                // node的兄弟sibling是黑色的，并且sibling的左孩子是红色，右孩子为黑色。
+                // 场景2.3: 兄弟节点的左子节点是黑色，转换到场景2.2.
+                // 替换节点的兄弟节点sibling设置成红色，兄弟节点的左子节点 SL 设置为黑色，再对节点 S 右旋操作，转换到了场景 2.2
+                sibling->left->isRed = FALSE;
+                sibling->isRed = TRUE;
+                rb_right_rotate(root, sibling);
+                sibling = parent->right;
+            }
+
+            if (sibling->right && sibling->right->isRed == TRUE)
+            {
+                //场景2.2：兄弟节点的右节点是红色
+                // node的兄弟sibling是黑色的；并且sibling的右孩子是红色的，左孩子任意颜色。
+                sibling->isRed = parent->isRed;
+                parent->isRed = FALSE;
+                sibling->isRed = FALSE;
+                rb_left_rotate(root, parent);
+                node = root->node;
+            }
+        }
+        else
+        {
+            // 节点是父节点的右子节点
+            sibling = parent->left;
+            // 场景 3.1：替换节点的兄弟节点是红色
+            if (sibling->isRed == TRUE)
+            {
+                sibling->isRed = FALSE;
+                parent->isRed = TRUE;
+                rb_right_rotate(root, parent);
+                sibling = parent->left;
+            }
+            // 场景3.4：替换节点的两个子节点都是黑色
+            if ((sibling->right == NULL || sibling->right->isRed == FALSE) && (sibling->left == NULL || sibling->left->isRed == FALSE))
+            {
+                sibling->isRed = TRUE;
+                node = parent;
+                parent = node->parent;
+                continue;
+            }
+            else if (sibling->left == NULL || sibling->left->isRed == FALSE)
+            {
+                // 场景3.3:兄弟节点的右子节点是红色
+                sibling->right->isRed = FALSE;
+                sibling->isRed = TRUE;
+                rb_left_rotate(root, sibling);
+                sibling = parent->left;
+            }
+
+            if (sibling->left && sibling->left->isRed == TRUE)
+            {
+                // 场景3.2：兄弟节点的左子节点是红色
+                sibling->isRed = parent->isRed;
+                parent->isRed = FALSE;
+                sibling->left->isRed = FALSE;
+                rb_right_rotate(root, parent);
+                node = root->node;
+            }
+        }
+    }
+    if (node != NULL)
+    {
+        node->isRed = FALSE;
+    }
 }
 /* 
  * 对红黑树的节点(node下图 x)进行左旋转
@@ -228,7 +481,7 @@ void rb_right_rotate(RbRoot *root, RbNodeP node)
 
 // 比较 a b 大小
 // 大于 TRUE 小于等于 FALSE
-BOOL rb_node_key_compare(RBKeyType key_type, RbNodeP a, RbNodeP b)
+int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b)
 {
     BOOL result;
     switch (key_type)
@@ -236,27 +489,16 @@ BOOL rb_node_key_compare(RBKeyType key_type, RbNodeP a, RbNodeP b)
     // 结构体比较 比较地址 存放时只存放地址
     case RB_Struct:
     case RB_Number:
-        result = a->key.n > b->key.n ? TRUE : FALSE;
+        result = key.n > b->key.n ? TRUE : key.n == b->key.n ? COMPARE_EQ
+                                                             : FALSE;
         break;
     // 字符串比较 从左到右比较 左边字母越大自身越大
     case RB_String:
-        result = string_compare_gt(a->key.p, b->key.p);
-        if (result == COMPARE_EQ)
-        {
-            result = FALSE;
-        }
+        result = string_compare_gt(key.p, b->key.p);
         break;
     default:
         printf("红黑树节点KEY类型未定义");
         break;
     }
     return result;
-}
-
-/**
- * @brief 删除树节点
- * 使用标记删除，数据量超过阈值 进行实际删除
- */
-void rb_delect_node()
-{
 }
