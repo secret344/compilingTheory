@@ -1,14 +1,18 @@
 
 #include "rb_tree.h"
 
-static void rb_insert_fixup(RbRoot *root, RbNodeP node);
 static int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b);
 static void rb_left_rotate(RbRoot *root, RbNodeP node);
 static void rb_right_rotate(RbRoot *root, RbNodeP node);
-static void rb_delect_node(RbRoot *root, Rbkey key);
 static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
-static void rb_insert_node(RbRoot *root, RbNodeP node);
-
+static void rb_insert_fixup(RbRoot *root, RbNodeP node);
+static void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP));
+/**
+ * @brief 创建红黑树根
+ * 
+ * @param key_type 
+ * @return RbRoot* 
+ */
 RbRoot *rb_create(RBKeyType key_type)
 {
     RbRoot *root = (RbRoot *)my_malloc(sizeof(RbRoot));
@@ -16,6 +20,29 @@ RbRoot *rb_create(RBKeyType key_type)
     root->key_type = key_type;
     return root;
 }
+
+/**
+ * @brief 卸载红黑树
+ * 
+ * @param root 
+ * @param handle 
+ */
+void rb_destory(RbRoot *root, void (*handle)(RbNodeP))
+{
+    if (root == NULL)
+    {
+        return;
+    }
+
+    RbNodeP node = root->node;
+    if (node != NULL)
+    {
+        rb_destory_static(node, handle);
+    }
+
+    free(root);
+}
+
 /**
  * @brief 查找节点
  * 
@@ -33,11 +60,11 @@ RbNodeP rb_search_node(RbRoot *root, Rbkey key)
         int result = rb_node_key_compare(key_type, key, node);
         if (result == TRUE)
         {
-            node = node->left;
+            node = node->right;
         }
         else if (result == FALSE)
         {
-            node = node->right;
+            node = node->left;
         }
         else
         {
@@ -48,7 +75,13 @@ RbNodeP rb_search_node(RbRoot *root, Rbkey key)
     return node;
 }
 
-// 根据自己设置的rbtree key类型传递
+/**
+ * @brief 新建树节点
+ * 新建节点key需要跟树节点相同
+ * @param key 
+ * @param value 
+ * @return RbNodeP 
+ */
 RbNodeP rb_new_node(Rbkey key, void *value)
 {
     RbNodeP new = my_malloc(sizeof(RBNode));
@@ -74,7 +107,7 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
     while (x != NULL)
     {
         current = x;
-        if (rb_node_key_compare(root->key_type, node->key, current) > 0)
+        if (rb_node_key_compare(root->key_type, node->key, x) == 0)
             x = x->left;
         else
             x = x->right;
@@ -83,7 +116,7 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
     // 判断是左子节点还是右子节点 插入到 current 子节点中
     if (current != NULL)
     {
-        if (rb_node_key_compare(root->key_type, node->key, current) > 0)
+        if (rb_node_key_compare(root->key_type, node->key, current) == 0)
             current->left = node;
         else
             current->right = node;
@@ -98,9 +131,10 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
 }
 
 /**
- * @brief 删除树节点
- * 不实现标记删除，自行拓展
- * 保留标记删除字段
+ * @brief  删除树节点
+ * 保留标记删除属性项
+ * @param root 
+ * @param key 
  */
 void rb_delect_node(RbRoot *root, Rbkey key)
 {
@@ -479,8 +513,27 @@ void rb_right_rotate(RbRoot *root, RbNodeP node)
     node->parent = x;
 }
 
-// 比较 a b 大小
-// 大于 TRUE 小于等于 FALSE
+void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP))
+{
+    if (node->left != NULL)
+    {
+        rb_destory_static(node->left, handle);
+    }
+    if (node->right != NULL)
+    {
+        rb_destory_static(node->right, handle);
+    }
+    handle(node);
+    free(node);
+}
+/**
+ * @brief 比大小
+ * 大于 1 小于 0  等于 -1
+ * @param key_type 
+ * @param key 
+ * @param b 
+ * @return int 
+ */
 int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b)
 {
     BOOL result;
