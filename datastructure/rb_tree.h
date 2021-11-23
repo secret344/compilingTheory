@@ -36,4 +36,8 @@ typedef struct RbRoot
 } RbRoot;
 
 extern RbRoot *rb_create(RBKeyType key_type);
+extern RbNodeP rb_new_node(Rbkey key, void *value);
+extern void rb_insert_node(RbRoot *root, RbNodeP node);
+extern void rb_delect_node(RbRoot *root, Rbkey key);
+extern void rb_destory(RbRoot *root, void (*handle)(RbNodeP));
 #endif

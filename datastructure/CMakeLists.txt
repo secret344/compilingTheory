@@ -13,7 +13,6 @@ target_sources(datastructure
       ${CMAKE_CURRENT_LIST_DIR}/bool.h
       ${CMAKE_CURRENT_LIST_DIR}/cJSON.h 
       ${CMAKE_CURRENT_LIST_DIR}/memory_management.h
-      ${CMAKE_CURRENT_LIST_DIR}/rb_tree.h
   )
   
 target_link_libraries(datastructure
