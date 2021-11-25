@@ -4,6 +4,7 @@
 #include "bool.h"
 #include "data_struct_utils.h"
 #include <stdio.h>
+#include <string.h>
 
 typedef enum RBKeyType
 {
@@ -36,7 +37,8 @@ typedef struct RbRoot
 } RbRoot;
 
 extern RbRoot *rb_create(RBKeyType key_type);
-extern RbNodeP rb_new_node(Rbkey key, void *value);
+extern RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
+extern RbNodeP rb_search_node(RbRoot *root, Rbkey key);
 extern void rb_insert_node(RbRoot *root, RbNodeP node);
 extern void rb_delect_node(RbRoot *root, Rbkey key);
 extern void rb_destory(RbRoot *root, void (*handle)(RbNodeP));

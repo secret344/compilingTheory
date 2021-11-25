@@ -64,6 +64,9 @@
         "dfa_utils.h": "c",
         "__node_handle": "c",
         "charconv": "c",
-        "functional": "c"
+        "functional": "c",
+        "utils.h": "c",
+        "my_map.h": "c",
+        "rb_tree.h": "c"
     }
 }

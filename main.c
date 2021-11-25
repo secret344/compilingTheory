@@ -5,7 +5,7 @@
 #include "nfa_Intepretor.h"
 #include "read_file.h"
 #include "utils.h"
-
+#include "my_map.h"
 // void wait(int seconds)
 // {
 //     clock_t endwait;
@@ -28,6 +28,6 @@ int matchStr(char *str)
 
 int main()
 {
-    printf("加载webassembly模块");
+    printf("加载webassembly模块 \n");
     return 0;
 }
