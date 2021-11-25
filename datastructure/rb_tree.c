@@ -6,7 +6,7 @@ static void rb_left_rotate(RbRoot *root, RbNodeP node);
 static void rb_right_rotate(RbRoot *root, RbNodeP node);
 static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
 static void rb_insert_fixup(RbRoot *root, RbNodeP node);
-static void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP));
+static void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type);
 /**
  * @brief 创建红黑树根
  * 
@@ -35,9 +35,10 @@ void rb_destory(RbRoot *root, void (*handle)(RbNodeP))
     }
 
     RbNodeP node = root->node;
+    RBKeyType type = root->key_type;
     if (node != NULL)
     {
-        rb_destory_static(node, handle);
+        rb_destory_static(node, handle, type);
     }
 
     free(root);
@@ -82,15 +83,24 @@ RbNodeP rb_search_node(RbRoot *root, Rbkey key)
  * @param value 
  * @return RbNodeP 
  */
-RbNodeP rb_new_node(Rbkey key, void *value)
+RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value)
 {
     RbNodeP new = my_malloc(sizeof(RBNode));
     new->left = NULL;
     new->right = NULL;
     new->parent = NULL;
-    new->key = key;
     new->value = value;
     new->isDelect = FALSE;
+
+    if (type == RB_String)
+    {
+        // 字符串需要拷贝
+        char *p = key.p;
+        key.p = (char *)my_malloc(strlen(p) + 1);
+        strcpy(key.p, p);
+    }
+
+    new->key = key;
     return new;
 }
 /**
@@ -239,6 +249,13 @@ void rb_delect_node(RbRoot *root, Rbkey key)
         // 需要修正
         rb_delete_fixup(root, child, parent);
     }
+
+    if (root->key_type == RB_String)
+    {
+        // 字符串key释放
+        my_free(node->key.p);
+    }
+
     my_free(node);
 }
 
@@ -513,17 +530,24 @@ void rb_right_rotate(RbRoot *root, RbNodeP node)
     node->parent = x;
 }
 
-void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP))
+void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type)
 {
     if (node->left != NULL)
     {
-        rb_destory_static(node->left, handle);
+        rb_destory_static(node->left, handle, type);
     }
     if (node->right != NULL)
     {
-        rb_destory_static(node->right, handle);
+        rb_destory_static(node->right, handle, type);
     }
     handle(node);
+
+    if (type == RB_String)
+    {
+        // 字符串key释放
+        my_free(node->key.p);
+    }
+
     free(node);
 }
 /**
