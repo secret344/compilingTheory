@@ -5,6 +5,7 @@
 #include "data_struct_utils.h"
 #include <stdio.h>
 #include <string.h>
+#include "my-iterator.h"
 
 typedef enum RBKeyType
 {
@@ -36,10 +37,16 @@ typedef struct RbRoot
     RBKeyType key_type;
 } RbRoot;
 
+typedef struct Rb_Iter_Inner
+{
+    RbNodeP item;
+} Rb_Iter_Inner, *rb_iter_inner;
+
 extern RbRoot *rb_create(RBKeyType key_type);
 extern RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
 extern RbNodeP rb_search_node(RbRoot *root, Rbkey key);
 extern void rb_insert_node(RbRoot *root, RbNodeP node);
 extern void rb_delect_node(RbRoot *root, Rbkey key);
 extern void rb_destory(RbRoot *root, void (*handle)(RbNodeP));
+extern My_Iterator *new_rb_iterator(RbRoot *root);
 #endif

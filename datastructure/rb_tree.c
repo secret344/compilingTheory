@@ -7,6 +7,11 @@ static void rb_right_rotate(RbRoot *root, RbNodeP node);
 static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
 static void rb_insert_fixup(RbRoot *root, RbNodeP node);
 static void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type);
+static RbNodeP rb_right_back(RbNodeP node);
+static RbNodeP rb_set_next(RbNodeP cur);
+static RbNodeP rb_get_next(void *iter_instance, void *iter_inner);
+static RbNodeP rb_left_back(RbNodeP node);
+
 /**
  * @brief 创建红黑树根
  * 
@@ -103,6 +108,24 @@ RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value)
     new->key = key;
     return new;
 }
+
+/**
+ * @brief 生成迭代器
+ * 使用迭代器期间不能对rb_tree做增加删除
+ * 会导致意想不到的后果
+ * @param root 
+ * @return My_Iterator* 
+ */
+My_Iterator *new_rb_iterator(RbRoot *root)
+{
+    rb_iter_inner p = NULL;
+    p = my_malloc(sizeof(*p));
+    if (!p)
+        return NULL;
+    p->item = root->node;
+    return my_iterator_new(root, p, (void *)rb_get_next);
+}
+
 /**
  * @brief 插入节点
  * 
@@ -578,4 +601,77 @@ int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b)
         break;
     }
     return result;
+}
+/**
+ * @brief 查找下一个节点
+ * 
+ * @param iter_instance 
+ * @param iter_inner 
+ * @return RbNodeP 
+ */
+RbNodeP rb_get_next(void *iter_instance, void *iter_inner)
+{
+    rb_iter_inner p = (rb_iter_inner)iter_inner;
+    RbNodeP item = p->item;
+
+    p->item = rb_set_next(item);
+
+    return item;
+}
+RbNodeP rb_left_back(RbNodeP node)
+{
+    RbNodeP parent = node->parent;
+    if (parent->right)
+    {
+        return parent->right;
+    }
+    else
+    {
+        if (parent->parent == NULL)
+            return NULL;
+        if (parent->parent->left == parent)
+        {
+            return rb_left_back(parent);
+        }
+        return rb_right_back(parent);
+    }
+}
+
+RbNodeP rb_right_back(RbNodeP node)
+{
+    // 右子节点回退
+    RbNodeP parent = node->parent;
+    if (parent == NULL || parent->parent == NULL)
+    {
+        // 根节点说明遍历结束
+        return NULL;
+    }
+    if (parent->parent->left == parent)
+    {
+        // 如果父节点是左子节点 返回左子节点回退结果
+        return rb_left_back(parent);
+    }
+    // 如果父节点是右子节点 继续回退
+    return rb_right_back(parent);
+}
+
+RbNodeP rb_set_next(RbNodeP cur)
+{
+    if (cur == NULL)
+    {
+        return NULL;
+    }
+    // 存在左子节点
+    if (cur->left)
+        return cur->left;
+    // 存在右子节点
+    if (cur->right)
+        return cur->right;
+    // 都不存在
+    RbNodeP parent = cur->parent;
+    if (parent && parent->left == cur)
+    {
+        return rb_left_back(cur);
+    }
+    return rb_right_back(cur);
 }

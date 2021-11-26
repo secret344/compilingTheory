@@ -14,6 +14,7 @@ target_sources(datastructure
       ${CMAKE_CURRENT_LIST_DIR}/cJSON.h 
       ${CMAKE_CURRENT_LIST_DIR}/memory_management.h
       ${CMAKE_CURRENT_LIST_DIR}/my_map.h
+      ${CMAKE_CURRENT_LIST_DIR}/my-iterator.h
   )
   
 target_link_libraries(datastructure
