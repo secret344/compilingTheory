@@ -22,6 +22,7 @@ RbRoot *rb_create(RBKeyType key_type)
 {
     RbRoot *root = (RbRoot *)my_malloc(sizeof(RbRoot));
     root->node = NULL;
+    root->size = 0;
     root->key_type = key_type;
     return root;
 }
@@ -159,6 +160,7 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
         root->node = node;
     }
     node->isRed = TRUE;
+    root->size++;
     // 进行自平衡
     rb_insert_fixup(root, node);
 }
@@ -278,7 +280,7 @@ void rb_delect_node(RbRoot *root, Rbkey key)
         // 字符串key释放
         my_free(node->key.p);
     }
-
+    root->size--;
     my_free(node);
 }
 
