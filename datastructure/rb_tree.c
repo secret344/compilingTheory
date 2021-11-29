@@ -11,7 +11,7 @@ static RbNodeP rb_right_back(RbNodeP node);
 static RbNodeP rb_set_next(RbNodeP cur);
 static RbNodeP rb_get_next(void *iter_instance, void *iter_inner);
 static RbNodeP rb_left_back(RbNodeP node);
-
+static BOOL rb_has_next(void *iter_instance, void *iter_inner);
 /**
  * @brief 创建红黑树根
  * 
@@ -123,7 +123,7 @@ My_Iterator *new_rb_iterator(RbRoot *root)
     if (!p)
         return NULL;
     p->item = root->node;
-    return my_iterator_new(root, p, (void *)rb_get_next);
+    return my_iterator_new(root, p, (GET_NEXT_HOOK_FUNC)rb_get_next, (HAS_NEXT_HOOK_FUNC)rb_has_next);
 }
 
 /**
@@ -674,4 +674,14 @@ RbNodeP rb_set_next(RbNodeP cur)
         return rb_left_back(cur);
     }
     return rb_right_back(cur);
+}
+
+BOOL rb_has_next(void *iter_instance, void *iter_inner)
+{
+    rb_iter_inner p = (rb_iter_inner)iter_inner;
+    if (p->item == NULL)
+    {
+        return FALSE;
+    }
+    return TRUE;
 }
