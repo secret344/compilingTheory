@@ -22,19 +22,24 @@ MapRoot new_map(MapType type)
     MapRoot root = rb_create((RBKeyType)type);
     return root;
 }
+
+My_Iterator *new_Map_iterator(MapRoot root)
+{
+    return new_rb_iterator(root);
+}
 /**
  * @brief 删除节点
  * @param k 
  * @param root 
  */
-void remove_number_map(MapRoot root, int k)
+void removem_number_map(MapRoot root, int k)
 {
     Rbkey key;
     key.n = k;
     rb_delect_node(root, key);
 }
 
-void remove_string_map(MapRoot root, char *k)
+void removem_string_map(MapRoot root, char *k)
 {
     Rbkey key;
     key.p = k;
@@ -47,7 +52,7 @@ void remove_string_map(MapRoot root, char *k)
  * @param value 
  * @param root 
  */
-void set_number_node(MapRoot root, int k, void *value)
+void setm_number_node(MapRoot root, int k, void *value)
 {
     Rbkey key;
     key.n = k;
@@ -61,7 +66,7 @@ void set_number_node(MapRoot root, int k, void *value)
  * @param value 
  * @param root 
  */
-void set_string_node(MapRoot root, char *k, void *value)
+void setm_string_node(MapRoot root, char *k, void *value)
 {
     Rbkey key;
     key.p = k;
@@ -75,14 +80,14 @@ void set_string_node(MapRoot root, char *k, void *value)
  * @param k 
  * @return void* 
  */
-void *get_number_node(MapRoot root, int k)
+void *getm_number_node(MapRoot root, int k)
 {
     Rbkey key;
     key.n = k;
     return get_node(root, key);
 }
 
-void *get_string_node(MapRoot root, char *k)
+void *getm_string_node(MapRoot root, char *k)
 {
     Rbkey key;
     key.p = k;

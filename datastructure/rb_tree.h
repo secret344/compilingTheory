@@ -5,7 +5,7 @@
 #include "data_struct_utils.h"
 #include <stdio.h>
 #include <string.h>
-#include "my-iterator.h"
+#include "my_iterator.h"
 
 typedef enum RBKeyType
 {
