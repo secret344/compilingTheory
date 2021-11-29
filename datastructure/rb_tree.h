@@ -35,6 +35,7 @@ typedef struct RbRoot
 {
     RbNodeP node;
     RBKeyType key_type;
+    int size; // 树节点数量  insert +1 delect -1
 } RbRoot;
 
 typedef struct Rb_Iter_Inner
