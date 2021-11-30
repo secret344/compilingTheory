@@ -138,7 +138,7 @@ BOOL isn_Set_Eq(SetRoot a, SetRoot b)
     while (has_Set_iterator_next(itorA))
     {
         int n = getn_Set_iterator_next(itorA);
-        if (!setn_has(b, n))
+        if (!hasn_set(b, n))
         {
             return FALSE;
         }
@@ -152,7 +152,7 @@ BOOL isp_Set_Eq(SetRoot a, SetRoot b)
     while (has_Set_iterator_next(itorA))
     {
         void *n = getp_Set_iterator_next(itorA);
-        if (!setp_has(b, n))
+        if (!hasp_set(b, n))
         {
             return FALSE;
         }
