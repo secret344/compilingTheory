@@ -42,7 +42,6 @@ void convertNfaToDfa()
                 {
                     // 不存在 新建dfa节点
                     Dfa *newDfa = getDfaFromNfaSet(closure);
-                    addp_set(dfaList, newDfa);
                     nextNum = newDfa->stateNum;
                     // 加入栈 继续循环
                     sPointPush(dfaset, newDfa);

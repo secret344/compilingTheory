@@ -47,7 +47,7 @@ void rb_destory(RbRoot *root, void (*handle)(RbNodeP))
         rb_destory_static(node, handle, type);
     }
 
-    free(root);
+    my_free(root);
 }
 
 /**
@@ -573,7 +573,7 @@ void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type)
         my_free(node->key.p);
     }
 
-    free(node);
+    my_free(node);
 }
 /**
  * @brief 比大小
