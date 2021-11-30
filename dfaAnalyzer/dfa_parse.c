@@ -1,5 +1,5 @@
 #include "dfa_parse.h"
-
+static void convertNfaToDfa();
 static NfaPair *nfaMachine = NULL;
 static SetRoot dfaList = NULL;
 
@@ -7,6 +7,7 @@ void initDfaParse(NfaPair *nfaPair)
 {
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
+    convertNfaToDfa();
 }
 
 void convertNfaToDfa()
@@ -21,11 +22,11 @@ void convertNfaToDfa()
     // 开始创建首个dfa节点
     Dfa *start = getDfaFromNfaSet(nfaStartClosure);
     sPointPush(dfaset, start);
+    addp_set(dfaList, start);
 
     while (stacksize(dfaset))
     {
         Dfa *currentDfa = spop(dfaset);
-        addp_set(dfaList, currentDfa);
 
         for (size_t i = 0; i < ASCII_COUNT; i++)
         {
@@ -43,6 +44,7 @@ void convertNfaToDfa()
                     // 不存在 新建dfa节点
                     Dfa *newDfa = getDfaFromNfaSet(closure);
                     nextNum = newDfa->stateNum;
+                    addp_set(dfaList, newDfa);
                     // 加入栈 继续循环
                     sPointPush(dfaset, newDfa);
                 }
@@ -58,7 +60,7 @@ void convertNfaToDfa()
             }
             if (nextNum != STATE_FAILURE)
             {
-                printf("DFA from state: %d to state: %d on char: %zu", currentDfa->stateNum, nextNum, i);
+                printf("DFA from state: %d to state: %d on char: %zu \n", currentDfa->stateNum, nextNum, i);
             }
         }
     }
