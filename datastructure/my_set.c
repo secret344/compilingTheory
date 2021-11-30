@@ -2,6 +2,8 @@
 #include "my_set.h"
 static BOOL set_node(SetRoot root, Rbkey key, void *value);
 static BOOL has_node(SetRoot root, Rbkey key);
+static BOOL isp_Set_Eq(SetRoot a, SetRoot b);
+static BOOL isn_Set_Eq(SetRoot a, SetRoot b);
 /**
  * @brief 
  * 区分数字指针类型
@@ -82,15 +84,25 @@ BOOL has_node(SetRoot root, Rbkey key)
     return TRUE;
 }
 
-BOOL set_node(SetRoot root, Rbkey key, void *value)
+BOOL is_Set_Eq(SetRoot a, SetRoot b)
 {
-    BOOL v = has_node(root, key);
-    if (!v)
+    BOOL result = TRUE;
+    int n1 = a->size;
+    int n2 = b->size;
+    if (n1 != n2 || a->key_type != b->key_type)
     {
-        rb_insert_node(root, rb_new_node(root->key_type, key, value));
-        return TRUE;
+        return FALSE;
     }
-    return FALSE;
+    switch (a->key_type)
+    {
+    case Set_Number:
+        return isn_Set_Eq(a, b);
+    case Set_String:
+    case Set_Struct:
+        return isp_Set_Eq(a, b);
+    default:
+        return FALSE;
+    }
 }
 
 My_Iterator *new_Point_Set_iterator(SetRoot root)
@@ -118,4 +130,43 @@ int getn_Set_iterator_next(my_iterator itor)
 int has_Set_iterator_next(my_iterator itor)
 {
     return has_itor_next(itor);
+}
+
+BOOL isn_Set_Eq(SetRoot a, SetRoot b)
+{
+    My_Iterator *itorA = new_Point_Set_iterator(a);
+    while (has_Set_iterator_next(itorA))
+    {
+        int n = getn_Set_iterator_next(itorA);
+        if (!setn_has(b, n))
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+BOOL isp_Set_Eq(SetRoot a, SetRoot b)
+{
+    My_Iterator *itorA = new_Point_Set_iterator(a);
+    while (has_Set_iterator_next(itorA))
+    {
+        void *n = getp_Set_iterator_next(itorA);
+        if (!setp_has(b, n))
+        {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+BOOL set_node(SetRoot root, Rbkey key, void *value)
+{
+    BOOL v = has_node(root, key);
+    if (!v)
+    {
+        rb_insert_node(root, rb_new_node(root->key_type, key, value));
+        return TRUE;
+    }
+    return FALSE;
 }
