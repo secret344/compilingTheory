@@ -23,14 +23,17 @@ int matchStr(char *str)
 int dfaParse()
 {
     Stack *new = new_stack();
-    while (stacksize(nfaSet) > 0)
+    //   printf("dfaParsesad %d\n", stacksize(nfaSet));
+    printf("dfaParse \n");
+    while (stacksize(nfaSet))
     {
         NfaPair *node = spop(nfaSet);
-        initDfaParse(node);
         sPointPush(new, node);
+        initDfaParse(node);
     }
     sdestory(nfaSet, NULL);
     nfaSet = new;
+    printf("dfaParse end \n");
     return 0;
 }
 

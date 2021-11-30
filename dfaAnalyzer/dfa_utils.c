@@ -2,6 +2,11 @@
 
 static int STATE_NUM = 0;
 
+void resetStateNum()
+{
+    STATE_NUM = 0;
+}
+
 Dfa *getDfaFromNfaSet(Stack *input)
 {
     Dfa *dfa = (Dfa *)my_malloc(sizeof(Dfa));
@@ -47,9 +52,14 @@ Dfa *isNfaStatesExistInDfa(Stack *closure, SetRoot dfaList)
                 break;
             }
         }
+        my_iterator_free(itorNfa);
         if (is)
+        {
+            my_iterator_free(itor);
             return dfa;
+        }
     }
+    my_iterator_free(itor);
     return NULL;
 }
 
@@ -61,4 +71,5 @@ void set_To_Stack(Stack *target, SetRoot source)
         void *p = getp_Set_iterator_next(itor);
         sPointPush(target, p);
     }
+    my_iterator_free(itor);
 }

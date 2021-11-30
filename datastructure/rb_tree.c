@@ -565,7 +565,11 @@ void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type)
     {
         rb_destory_static(node->right, handle, type);
     }
-    handle(node);
+
+    if (handle != NULL)
+    {
+        handle(node);
+    }
 
     if (type == RB_String)
     {

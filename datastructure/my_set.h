@@ -28,4 +28,6 @@ extern int getn_Set_iterator_next(my_iterator itor);
 extern int has_Set_iterator_next(my_iterator itor);
 
 extern BOOL is_Set_Eq(SetRoot a, SetRoot b);
+
+extern void set_destory(RbRoot *root);
 #endif

@@ -15,6 +15,16 @@ SetRoot new_Set(SetType type)
     SetRoot root = rb_create((RBKeyType)type);
     return root;
 }
+/**
+ * @brief 清除set
+ * 
+ * @param root 
+ * @param handle 
+ */
+void set_destory(RbRoot *root)
+{
+    rb_destory(root, NULL);
+}
 
 /**
  * @brief 设置指针节点

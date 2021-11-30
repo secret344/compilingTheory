@@ -48,7 +48,7 @@ void *spop(Stack *PStack)
 
     my_free(p);
     p = NULL;
-    
+
     PStack->base->data.n = PStack->base->data.n - 1;
     return _Destination;
 }
@@ -80,7 +80,7 @@ void sdestory(Stack *PStack, void (*fn)(void *))
 {
     while (stacksize(PStack))
     {
-        StackNode *s = spop(PStack);
+        void *s = spop(PStack);
         if (fn != NULL)
         {
             fn(s);

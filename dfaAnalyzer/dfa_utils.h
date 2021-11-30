@@ -9,4 +9,5 @@ extern Dfa *getDfaFromNfaSet(Stack *input);
 extern Dfa *isNfaStatesExistInDfa(Stack *closure, SetRoot dfaList);
 // 临时的Set转为栈结构
 extern void set_To_Stack(Stack *target, SetRoot source);
+extern void resetStateNum();
 #endif

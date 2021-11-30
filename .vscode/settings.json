@@ -68,6 +68,7 @@
         "utils.h": "c",
         "my_map.h": "c",
         "rb_tree.h": "c",
-        "my_set.h": "c"
+        "my_set.h": "c",
+        "time.h": "c"
     }
 }
