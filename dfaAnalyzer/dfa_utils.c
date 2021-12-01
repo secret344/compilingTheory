@@ -2,6 +2,11 @@
 
 static int STATE_NUM = 0;
 
+void resetStateNum()
+{
+    STATE_NUM = 0;
+}
+
 Dfa *getDfaFromNfaSet(Stack *input)
 {
     Dfa *dfa = (Dfa *)my_malloc(sizeof(Dfa));
@@ -24,33 +29,42 @@ Dfa *getDfaFromNfaSet(Stack *input)
 
 Dfa *isNfaStatesExistInDfa(Stack *closure, SetRoot dfaList)
 {
+    int count = 0;
     int s1 = stacksize(closure);
+    Dfa *result = NULL;
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
     // 获取dfa集合迭代器
     while (has_Set_iterator_next(itor))
     {
+        count++;
         BOOL is = TRUE;
         Dfa *dfa = getp_Set_iterator_next(itor);
         int s2 = dfa->nfaStates->size;
         if (s1 != s2)
         {
-            break;
+            continue;
         }
         // 判断相等
         My_Iterator *itorNfa = new_Point_Set_iterator(dfa->nfaStates);
         while (has_Set_iterator_next(itorNfa))
         {
             NfaNode *nfa = getp_Set_iterator_next(itorNfa);
-            if (!stackPointerInclude(closure, nfa))
+            if (stackPointerInclude(closure, nfa) == FALSE)
             {
                 is = FALSE;
                 break;
             }
         }
-        if (is)
-            return dfa;
+        my_iterator_free(itorNfa);
+
+        if (is == TRUE)
+        {
+            result = dfa;
+            break;
+        }
     }
-    return NULL;
+    my_iterator_free(itor);
+    return result;
 }
 
 void set_To_Stack(Stack *target, SetRoot source)
@@ -60,5 +74,22 @@ void set_To_Stack(Stack *target, SetRoot source)
     {
         void *p = getp_Set_iterator_next(itor);
         sPointPush(target, p);
+    }
+    my_iterator_free(itor);
+}
+/**
+ * @brief 打印dfa状态转移表
+ * 
+ */
+void printDfaStateTransformTable(int **a, int count)
+{
+    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
+    {
+        printf("%c ", i);
+        for (size_t j = 0; j < count; j++)
+        {
+            printf(" %d ", a[i][j]);
+        }
+        printf("\n");
     }
 }

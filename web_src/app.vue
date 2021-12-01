@@ -32,12 +32,13 @@ export default {
     };
 
     const onclick = () => {
-      const { regParse, matchStr } = wsFun;
+      const { regParse, matchStr, dfaParse } = wsFun;
       let str = regParse(regValue.value);
       console.log("格式化结果", JSON.parse(str));
+      dfaParse();
     };
     const onclickmatch = () => {
-      const { matchStr } = wsFun;
+      const { matchStr, dfaParse } = wsFun;
       matchStr(regValue.matchValue);
     };
     return { onregcontent, onregmatch, onclickmatch, onclick, regValue };

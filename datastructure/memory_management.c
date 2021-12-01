@@ -7,6 +7,12 @@ void *my_malloc(size_t size)
     return malloc(size);
 }
 
+void *my_calloc(size_t _Count, size_t _Size)
+{
+    countM++;
+    return calloc(_Count, _Size);
+}
+
 void my_free(void *ptr)
 {
     countM--;
