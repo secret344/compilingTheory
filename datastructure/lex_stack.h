@@ -23,11 +23,11 @@ typedef struct Stack
 
 Stack *new_stack();
 
-extern void spush(Stack *PStack, char *val);
-extern void sPointPush(Stack *PStack, void *val);
-extern void *spop(Stack *PStack);
-extern void straversal(Stack *PStack);
-extern void sdestory(Stack *PStack, void (*fn)(void *));
-extern int stacksize(Stack *PStack);
-extern BOOL stackPointerInclude(Stack *PStack, void *val);
+void spush(Stack *PStack, char *val);
+void sPointPush(Stack *PStack, void *val);
+void *spop(Stack *PStack);
+void straversal(Stack *PStack);
+void sdestory(Stack *PStack, void (*fn)(void *));
+int stacksize(Stack *PStack);
+BOOL stackPointerInclude(Stack *PStack, void *val);
 #endif

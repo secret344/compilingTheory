@@ -43,11 +43,11 @@ typedef struct Rb_Iter_Inner
     RbNodeP item;
 } Rb_Iter_Inner, *rb_iter_inner;
 
-extern RbRoot *rb_create(RBKeyType key_type);
-extern RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
-extern RbNodeP rb_search_node(RbRoot *root, Rbkey key);
-extern void rb_insert_node(RbRoot *root, RbNodeP node);
-extern void rb_delect_node(RbRoot *root, Rbkey key);
-extern void rb_destory(RbRoot *root, void (*handle)(RbNodeP));
-extern My_Iterator *new_rb_iterator(RbRoot *root);
+RbRoot *rb_create(RBKeyType key_type);
+RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
+RbNodeP rb_search_node(RbRoot *root, Rbkey key);
+void rb_insert_node(RbRoot *root, RbNodeP node);
+void rb_delect_node(RbRoot *root, Rbkey key);
+void rb_destory(RbRoot *root, void (*handle)(RbNodeP));
+My_Iterator *new_rb_iterator(RbRoot *root);
 #endif

@@ -6,7 +6,7 @@ static void rb_left_rotate(RbRoot *root, RbNodeP node);
 static void rb_right_rotate(RbRoot *root, RbNodeP node);
 static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
 static void rb_insert_fixup(RbRoot *root, RbNodeP node);
-static void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type);
+static void rb_destory_static(RbNodeP node, void (*handle)(void *), RBKeyType type);
 static RbNodeP rb_right_back(RbNodeP node);
 static RbNodeP rb_set_next(RbNodeP cur);
 static RbNodeP rb_get_next(void *iter_instance, void *iter_inner);

@@ -20,5 +20,5 @@ extern NfaPair *nfapaif;
 extern Stack *nfaSet;
 extern int StateNum;
 
-extern char *initParse(char *path, fun_lex parseFun);
+char *initParse(char *path, fun_lex parseFun);
 #endif
