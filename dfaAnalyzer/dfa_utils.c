@@ -77,3 +77,19 @@ void set_To_Stack(Stack *target, SetRoot source)
     }
     my_iterator_free(itor);
 }
+/**
+ * @brief 打印dfa状态转移表
+ * 
+ */
+void printDfaStateTransformTable(int **a, int count)
+{
+    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
+    {
+        printf("%c ", i);
+        for (size_t j = 0; j < count; j++)
+        {
+            printf(" %d ", a[i][j]);
+        }
+        printf("\n");
+    }
+}

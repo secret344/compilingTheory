@@ -3,6 +3,7 @@ static void convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
 static void destoryDfaList();
+static void destoryDfaStateTransformTable(int **a);
 
 static NfaPair *nfaMachine = NULL;
 static SetRoot dfaList = NULL;
@@ -101,15 +102,10 @@ void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
     {
         Dfa_Transfrom_Table *d = spop(dfa_transfrom_table);
         a[d->c][d->stateNum] = d->targetNum;
-        // printf("DFA from state: %d to state: %d on char: %d \n", d->stateNum, d->targetNum, d->c);
         my_free(d);
     }
-
-    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
-    {
-        my_free(a[i]);
-    }
-    my_free(a);
+    printDfaStateTransformTable(a, count);
+    destoryDfaStateTransformTable(a);
 }
 
 void destoryDfaList()
@@ -123,4 +119,13 @@ void destoryDfaList()
     }
     my_iterator_free(itor);
     set_destory(dfaList);
+}
+
+void destoryDfaStateTransformTable(int **a)
+{
+    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
+    {
+        my_free(a[i]);
+    }
+    my_free(a);
 }
