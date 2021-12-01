@@ -114,7 +114,7 @@ void destoryDfaList()
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
-        set_destory(dfa->nfaStates);
+        set_destory(dfa->nfaStates, NULL);
         my_free(dfa);
     }
     my_iterator_free(itor);
