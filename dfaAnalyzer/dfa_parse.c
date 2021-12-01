@@ -35,21 +35,23 @@ void convertNfaToDfa()
 
     sPointPush(dfaset, start);
     addp_set(dfaList, start);
-
     while (stacksize(dfaset))
     {
+        dfacount++;
         Dfa *currentDfa = spop(dfaset);
         for (size_t i = 0; i < ASCII_COUNT; i++)
         {
             Stack *currentState = new_stack();
             set_To_Stack(currentState, currentDfa->nfaStates);
             // 数据格式不同 转为相同格式
-            Stack *move = e_move(currentState, i);
+            Stack *move = e_move(currentState, (char)i);
             if (stacksize(move))
             {
                 Stack *closure = e_closure(move);
                 // 判断dfaList是否已经存在相应dfa节点
+
                 Dfa *dfa = isNfaStatesExistInDfa(closure, dfaList);
+
                 if (dfa == NULL)
                 {
                     // 不存在 新建dfa节点
@@ -58,7 +60,6 @@ void convertNfaToDfa()
                     addp_set(dfaList, newDfa);
                     // 加入栈 继续循环
                     sPointPush(dfaset, newDfa);
-                    dfacount++;
                 }
                 else
                 {
@@ -73,20 +74,17 @@ void convertNfaToDfa()
                 sdestory(move, NULL);
             }
 
-            if (nextNum != STATE_FAILURE)
-            {
-                // Dfa_Transfrom_Table *t = my_malloc(sizeof(Dfa_Transfrom_Table));
-                // t->stateNum = currentDfa->stateNum;
-                // t->targetNum = nextNum;
-                // t->c = i;
-                // sPointPush(dfa_transfrom_table, t);
-            }
+            Dfa_Transfrom_Table *t = my_malloc(sizeof(Dfa_Transfrom_Table));
+            t->stateNum = currentDfa->stateNum;
+            t->targetNum = nextNum;
+            t->c = i;
+            sPointPush(dfa_transfrom_table, t);
         }
     }
 
-    sdestory(dfaset, NULL);
+    sdestory(dfaset, destoryNull);
     // 生成dfa状态转移表
-    // creatDfaStateTransformTable(dfacount, dfa_transfrom_table);
+    creatDfaStateTransformTable(dfacount, dfa_transfrom_table);
     sdestory(dfa_transfrom_table, NULL);
 }
 
@@ -96,7 +94,7 @@ void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
         return;
     // 动态创建二维数组
     int **a = (int **)my_calloc(ASCII_COUNT + 1, sizeof(int *));
-    for (size_t i = 0; i < ASCII_COUNT; i++)
+    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
         a[i] = (int *)my_calloc(count, sizeof(int));
 
     while (stacksize(dfa_transfrom_table))

@@ -29,38 +29,42 @@ Dfa *getDfaFromNfaSet(Stack *input)
 
 Dfa *isNfaStatesExistInDfa(Stack *closure, SetRoot dfaList)
 {
+    int count = 0;
     int s1 = stacksize(closure);
+    Dfa *result = NULL;
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
     // 获取dfa集合迭代器
     while (has_Set_iterator_next(itor))
     {
+        count++;
         BOOL is = TRUE;
         Dfa *dfa = getp_Set_iterator_next(itor);
         int s2 = dfa->nfaStates->size;
         if (s1 != s2)
         {
-            break;
+            continue;
         }
         // 判断相等
         My_Iterator *itorNfa = new_Point_Set_iterator(dfa->nfaStates);
         while (has_Set_iterator_next(itorNfa))
         {
             NfaNode *nfa = getp_Set_iterator_next(itorNfa);
-            if (!stackPointerInclude(closure, nfa))
+            if (stackPointerInclude(closure, nfa) == FALSE)
             {
                 is = FALSE;
                 break;
             }
         }
         my_iterator_free(itorNfa);
-        if (is)
+
+        if (is == TRUE)
         {
-            my_iterator_free(itor);
-            return dfa;
+            result = dfa;
+            break;
         }
     }
     my_iterator_free(itor);
-    return NULL;
+    return result;
 }
 
 void set_To_Stack(Stack *target, SetRoot source)

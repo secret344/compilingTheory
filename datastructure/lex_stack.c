@@ -119,6 +119,7 @@ BOOL stackPointerInclude(Stack *PStack, void *val)
             if (p->data.p == val)
             {
                 bool = TRUE;
+                break;
             }
             PStack->top = p->PStackNext;
         }
