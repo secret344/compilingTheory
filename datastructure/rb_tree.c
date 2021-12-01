@@ -555,7 +555,7 @@ void rb_right_rotate(RbRoot *root, RbNodeP node)
     node->parent = x;
 }
 
-void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type)
+void rb_destory_static(RbNodeP node, void (*handle)(void *), RBKeyType type)
 {
     if (node->left != NULL)
     {
@@ -568,7 +568,7 @@ void rb_destory_static(RbNodeP node, void (*handle)(RbNodeP), RBKeyType type)
 
     if (handle != NULL)
     {
-        handle(node);
+        handle(node->value);
     }
 
     if (type == RB_String)

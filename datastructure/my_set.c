@@ -15,15 +15,23 @@ SetRoot new_Set(SetType type)
     SetRoot root = rb_create((RBKeyType)type);
     return root;
 }
+
 /**
  * @brief 清除set
  * 
  * @param root 
  * @param handle 
  */
-void set_destory(RbRoot *root)
+void set_destory(RbRoot *root, void (*handle)(void *))
 {
-    rb_destory(root, NULL);
+    SetType type = root->key_type;
+    if (type == Set_Number)
+    {
+        // 数字类型不需要清除value
+        rb_destory(root, NULL);
+        return;
+    }
+    rb_destory(root, handle);
 }
 
 /**

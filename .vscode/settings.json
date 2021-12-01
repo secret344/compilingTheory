@@ -71,6 +71,8 @@
         "my_set.h": "c",
         "time.h": "c",
         "chrono": "c",
-        "__bit_reference": "c"
+        "__bit_reference": "c",
+        "stdarg.h": "c",
+        "__functional_03": "cpp"
     }
 }
