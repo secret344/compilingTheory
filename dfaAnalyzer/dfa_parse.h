@@ -11,6 +11,6 @@ typedef struct Dfa_Transfrom_Table
     int c;
 } Dfa_Transfrom_Table;
 
-extern void initDfaParse(NfaPair *nfa);
+void initDfaParse(NfaPair *nfa);
 
 #endif

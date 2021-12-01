@@ -5,15 +5,15 @@
 #include "lex_stack.h"
 #include "cJSON.h"
 
-extern BOOL isSTNS(char str);
-extern BOOL isOPTR(char str);
-extern BOOL findChar(char s, char str[]);
-extern char *ESCmatch(char s);
-extern char *getSetLetter(char a, char b);
-extern char *concatstr(char *target, char *source);
-extern char *noStrRepetition(char *str);
-extern char *setComplement(char *str);
-extern void printfNfa(NfaPair *n);
-extern void setInitPair(NfaPair *n);
-extern void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName);
+BOOL isSTNS(char str);
+BOOL isOPTR(char str);
+BOOL findChar(char s, char str[]);
+char *ESCmatch(char s);
+char *getSetLetter(char a, char b);
+char *concatstr(char *target, char *source);
+char *noStrRepetition(char *str);
+char *setComplement(char *str);
+void printfNfa(NfaPair *n);
+void setInitPair(NfaPair *n);
+void JsonNfaParse(NfaNode *n, cJSON *parentNode, char *childName);
 #endif

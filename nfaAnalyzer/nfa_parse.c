@@ -29,7 +29,6 @@ NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
 WholeState *wholeStatus = NULL; // 当前程序状态
 Stack *nfaSet = NULL;
 int StateNum = 0;
-char *JsonStr = NULL;
 
 char *initParse(char *path, fun_lex parseFun)
 {

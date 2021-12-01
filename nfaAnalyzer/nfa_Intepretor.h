@@ -13,8 +13,8 @@ typedef union
     int num;
 } MatchBackType;
 
-extern void initpretNfa(NfaNode *start, char *str, MatchBackType *mt);
-extern void initMatchNfa(char *str);
-extern Stack *e_closure(Stack *next);
-extern Stack *e_move(Stack *next, char c);
+void initpretNfa(NfaNode *start, char *str, MatchBackType *mt);
+void initMatchNfa(char *str);
+Stack *e_closure(Stack *next);
+Stack *e_move(Stack *next, char c);
 #endif

@@ -118,7 +118,7 @@ void destoryDfaList()
         my_free(dfa);
     }
     my_iterator_free(itor);
-    set_destory(dfaList);
+    set_destory(dfaList, NULL);
 }
 
 void destoryDfaStateTransformTable(int **a)
