@@ -73,6 +73,15 @@
         "chrono": "c",
         "__bit_reference": "c",
         "stdarg.h": "c",
-        "__functional_03": "cpp"
+        "__functional_03": "cpp",
+        "istream": "c",
+        "memory": "c",
+        "tuple": "c",
+        "variant": "c",
+        "xlocmes": "c",
+        "xlocmon": "c",
+        "xlocnum": "c",
+        "xloctime": "c",
+        "__functional_base": "c"
     }
 }

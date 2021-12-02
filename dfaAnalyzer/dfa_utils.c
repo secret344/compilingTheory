@@ -93,3 +93,8 @@ void printDfaStateTransformTable(int **a, int count)
         printf("\n");
     }
 }
+
+void dfadestory(Dfa *dfa)
+{
+    
+}
