@@ -18,6 +18,6 @@ typedef struct Dfa_Group_Struct
 Dfa_Group_Struct *newDfaGroup(BOOL isAdd);
 Dfa_Group_Struct *getContainingGroup(int dfaStateNum);
 void commitRemove(dfa_group_struct dfagroup);
-void resetGroupCount();
+void resetGroup();
 void concatDfaGroup(SetRoot target, SetRoot source);
 #endif

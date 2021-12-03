@@ -14,7 +14,7 @@ static int **minDfa = NULL;
 
 void MinimizeDFA(SetRoot dfaList, int **dfaStateTransformTable)
 {
-    resetGroupCount();
+    resetGroup();
     minimize();
 }
 
@@ -41,7 +41,6 @@ void sliceDfaGroup()
     SetRoot temp = new_Set(Set_Struct);
     while (has_Set_iterator_next(itor))
     {
-        newGroup = NULL;
 
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
         My_Iterator *itorDfaGroup = new_Point_Set_iterator(dfagroup->dfagroup);
@@ -62,13 +61,14 @@ void sliceDfaGroup()
             next = getp_Set_iterator_next(itorDfaGroup);
         }
 
-        commitRemove(dfagroup);
         my_iterator_free(itorDfaGroup);
         // dfaGroupManager循环内部添加 会影响迭代器
         if (newGroup != NULL)
         {
             addp_set(temp, newGroup);
+            newGroup = NULL;
         }
+        commitRemove(dfagroup);
     }
     concatDfaGroup(dfaGroupManager, temp);
     set_destory(temp, NULL);
