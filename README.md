@@ -1,6 +1,16 @@
 # compilingTheory
 
-目前使用方式：
+## 项目状态
+
+-   已经可以生成最小化的 DFA 状态转移表
+
+## 下一步
+
+-   语法分析预热((lll￢ω￢))
+-   完善 NFA 警告
+-   完善 NFA DFA
+
+## 目前使用方式：
 
 -   使用 **vscode** 编辑器，其他编辑器需自行修改配置。
 -   yarn 安装依赖包
@@ -12,12 +22,14 @@
     2. 方案二: 自行使用 emscripten 加 cmake 打包,将生成的**lexical.js**,以及**lexical.wasm**文件放入 **wasm_folder** 文件夹中。
 -   运行 **yarn serve**
 -   建议安装 **CMake Tools** 拓展
+
 ## 依赖包
 
 -   [CJSON](https://github.com/DaveGamble/cJSON)
 
-## 目前效果图(时间：2021年11月16日 22:24:21)
-- 图1
-[<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
-- 图2
-[<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
+## 目前效果图(时间：2021 年 11 月 16 日 22:24:21)
+
+-   图 1
+    [<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
+-   图 2
+    [<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
