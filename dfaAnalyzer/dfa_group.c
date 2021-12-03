@@ -1,10 +1,32 @@
 #include "dfa_group.h"
 static BOOL groupContainsDfa(SetRoot group, int dfaStateNum);
+static void destorydfaGroup();
 static int GROUP_COUNT = 0;
 SetRoot dfaGroupManager = NULL;
-void resetGroupCount()
+void resetGroup()
 {
     GROUP_COUNT = 0;
+    if (dfaGroupManager != NULL)
+    {
+        printf("dfaGroupManager %d\n", dfaGroupManager->size);
+        destorydfaGroup();
+    }
+}
+
+void destorydfaGroup()
+{
+    My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
+        printf("dfaGroupManager dfagroup %d %d\n", dfagroup->dfagroup->size, dfagroup->tobeRemove->size);
+        set_destory(dfagroup->dfagroup, NULL);
+        set_destory(dfagroup->tobeRemove, NULL);
+        my_free(dfagroup);
+    }
+    my_iterator_free(itor);
+    set_destory(dfaGroupManager, NULL);
+    dfaGroupManager = NULL;
 }
 
 Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
@@ -18,6 +40,7 @@ Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
     dfagroup->dfagroup = new_Set(Set_Struct);
     dfagroup->tobeRemove = new_Set(Set_Struct);
     dfagroup->group_num = GROUP_COUNT++;
+    printf("GROUP_COUNT %d \n", GROUP_COUNT);
     if (isAdd)
     {
         addp_set(dfaGroupManager, dfagroup);
@@ -32,19 +55,20 @@ Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
  */
 Dfa_Group_Struct *getContainingGroup(int dfaStateNum)
 {
+    dfa_group_struct result = NULL;
     My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
     while (has_Set_iterator_next(itor))
     {
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
         if (groupContainsDfa(dfagroup->dfagroup, dfaStateNum))
         {
-            my_iterator_free(itor);
             // 存在该节点 返回分区
-            return dfagroup;
+            result = dfagroup;
+            break;
         }
     }
     my_iterator_free(itor);
-    return NULL;
+    return result;
 }
 /**
  * @brief 判断该分区是否存在dfa节点
@@ -55,18 +79,19 @@ Dfa_Group_Struct *getContainingGroup(int dfaStateNum)
  */
 BOOL groupContainsDfa(SetRoot group, int dfaStateNum)
 {
+    BOOL result = FALSE;
     My_Iterator *itor = new_Point_Set_iterator(group);
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
         if (dfa->stateNum == dfaStateNum)
         {
-            my_iterator_free(itor);
-            return TRUE;
+            result = TRUE;
+            break;
         }
     }
     my_iterator_free(itor);
-    return FALSE;
+    return result;
 }
 
 /**
@@ -85,10 +110,17 @@ void commitRemove(dfa_group_struct dfagroup)
     my_iterator_free(itor);
     // 清理待清理
     set_destory(dfagroup->tobeRemove, NULL);
+    // 清理结束
+    dfagroup->tobeRemove = new_Set(Set_Struct);
 }
 
 void concatDfaGroup(SetRoot target, SetRoot source)
 {
+    if (source->size <= 0)
+    {
+        return;
+    }
+
     My_Iterator *itor = new_Point_Set_iterator(source);
     while (has_Set_iterator_next(itor))
     {
