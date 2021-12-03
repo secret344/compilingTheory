@@ -8,9 +8,9 @@ void resetGroup()
     GROUP_COUNT = 0;
     if (dfaGroupManager != NULL)
     {
-        printf("dfaGroupManager %d\n", dfaGroupManager->size);
         destorydfaGroup();
     }
+    dfaGroupManager = NULL;
 }
 
 void destorydfaGroup()
@@ -19,14 +19,12 @@ void destorydfaGroup()
     while (has_Set_iterator_next(itor))
     {
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
-        printf("dfaGroupManager dfagroup %d %d\n", dfagroup->dfagroup->size, dfagroup->tobeRemove->size);
         set_destory(dfagroup->dfagroup, NULL);
         set_destory(dfagroup->tobeRemove, NULL);
         my_free(dfagroup);
     }
     my_iterator_free(itor);
     set_destory(dfaGroupManager, NULL);
-    dfaGroupManager = NULL;
 }
 
 Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
@@ -40,7 +38,6 @@ Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
     dfagroup->dfagroup = new_Set(Set_Struct);
     dfagroup->tobeRemove = new_Set(Set_Struct);
     dfagroup->group_num = GROUP_COUNT++;
-    printf("GROUP_COUNT %d \n", GROUP_COUNT);
     if (isAdd)
     {
         addp_set(dfaGroupManager, dfagroup);
@@ -110,6 +107,7 @@ void commitRemove(dfa_group_struct dfagroup)
     my_iterator_free(itor);
     // 清理待清理
     set_destory(dfagroup->tobeRemove, NULL);
+    dfagroup->tobeRemove = NULL;
     // 清理结束
     dfagroup->tobeRemove = new_Set(Set_Struct);
 }

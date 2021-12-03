@@ -7,7 +7,6 @@
 #include "read_file.h"
 #include "utils.h"
 #include "my_map.h"
-
 char *regParse(char *str)
 {
     char *JsonStr = initParse(str, initReadChar);

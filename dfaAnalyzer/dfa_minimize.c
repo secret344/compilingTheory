@@ -1,8 +1,10 @@
 #include "dfa_minimize.h"
 static void seperationAcceptedDfaGroup();
-static BOOL spliceGroupOnInput(dfa_group_struct group, Dfa *first, Dfa *next, char c);
+static BOOL spliceGroupOnInput(dfa_group_struct group, Dfa *first, Dfa *next, int c);
 static void minimize();
 static void sliceDfaGroup();
+static void creatMiniDfaTransTable();
+static void initMiniDfaTransTable();
 
 extern SetRoot dfaGroupManager;
 extern SetRoot dfaList;
@@ -14,6 +16,12 @@ static int **minDfa = NULL;
 
 void MinimizeDFA(SetRoot dfaList, int **dfaStateTransformTable)
 {
+    if (minDfa != NULL)
+    {
+        destoryDfaStateTransformTable(minDfa);
+    }
+
+    minDfa = NULL;
     resetGroup();
     minimize();
 }
@@ -30,6 +38,7 @@ void minimize()
     } while (addNewGroup);
 
     // 分割完毕 开始创建最小化dfa状态转移表
+    creatMiniDfaTransTable();
 }
 
 void sliceDfaGroup()
@@ -48,17 +57,19 @@ void sliceDfaGroup()
         Dfa *first = getp_Set_iterator_next(itorDfaGroup);
         Dfa *next = getp_Set_iterator_next(itorDfaGroup);
         // 判断分割 单个节点不在分割
-        while (next != NULL)
         {
-            for (size_t i = 0; i < ASCII_COUNT; i++)
+            while (next != NULL)
             {
-                if (spliceGroupOnInput(dfagroup, first, next, i) == TRUE)
+                for (int i = 0; i < ASCII_COUNT; i++)
                 {
-                    addNewGroup = TRUE;
-                    break;
+                    if (spliceGroupOnInput(dfagroup, first, next, i) == TRUE)
+                    {
+                        addNewGroup = TRUE;
+                        break;
+                    }
                 }
+                next = getp_Set_iterator_next(itorDfaGroup);
             }
-            next = getp_Set_iterator_next(itorDfaGroup);
         }
 
         my_iterator_free(itorDfaGroup);
@@ -75,11 +86,12 @@ void sliceDfaGroup()
     my_iterator_free(itor);
 }
 
-BOOL spliceGroupOnInput(dfa_group_struct group, Dfa *first, Dfa *next, char c)
+BOOL spliceGroupOnInput(dfa_group_struct group, Dfa *first, Dfa *next, int c)
 {
     // 跳转后的节点 判断是否在同一分区
     int to_first = dfaStateTransformTable[c][first->stateNum];
     int to_next = dfaStateTransformTable[c][next->stateNum];
+
     if (getContainingGroup(to_first) != getContainingGroup(to_next))
     {
         // 不在同一分区 进行切割
@@ -97,9 +109,8 @@ BOOL spliceGroupOnInput(dfa_group_struct group, Dfa *first, Dfa *next, char c)
 void seperationAcceptedDfaGroup()
 {
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
-
-    dfa_group_struct acc = newDfaGroup(TRUE);
     dfa_group_struct noacc = newDfaGroup(TRUE);
+    dfa_group_struct acc = newDfaGroup(TRUE);
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
@@ -113,4 +124,46 @@ void seperationAcceptedDfaGroup()
         }
     }
     my_iterator_free(itor);
+}
+/**
+ * @brief 创建miniDfa状态转移表
+ * 
+ */
+void creatMiniDfaTransTable()
+{
+    initMiniDfaTransTable();
+
+    My_Iterator *itor = new_Point_Set_iterator(dfaList);
+    // 拿到所有dfa节点
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa *dfa = getp_Set_iterator_next(itor);
+        for (int i = 0; i < ASCII_COUNT; i++)
+        {
+            // 获取dfa状态转移目标节点
+            if (dfaStateTransformTable[i][dfa->stateNum] != STATE_FAILURE)
+            {
+                int toNum = dfaStateTransformTable[i][dfa->stateNum];
+                // 找到状态转移集合
+                dfa_group_struct fromgroup = getContainingGroup(dfa->stateNum);
+                dfa_group_struct togroup = getContainingGroup(toNum);
+                // 生成最小化的dfa状态转移表
+                minDfa[i][fromgroup->group_num] = togroup->group_num;
+            }
+        }
+    }
+    my_iterator_free(itor);
+}
+// 初始化状态转移表
+void initMiniDfaTransTable()
+{
+    minDfa = (int **)my_malloc((ASCII_COUNT) * sizeof(int *));
+    for (int i = 0; i < ASCII_COUNT; i++)
+    {
+        minDfa[i] = (int *)my_malloc((dfaGroupManager->size) * sizeof(int));
+        for (int j = 0; j < dfaGroupManager->size; j++)
+        {
+            minDfa[i][j] = STATE_FAILURE;
+        }
+    }
 }
