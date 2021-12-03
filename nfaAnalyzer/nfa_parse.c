@@ -323,7 +323,6 @@ void resetNfaSet()
     if (!nfaSet)
     {
         nfaSet = new_stack();
-        printfM();
         return;
     }
     Stack *skPoint = new_stack();
@@ -335,5 +334,4 @@ void resetNfaSet()
         my_free(node);
     }
     sdestory(skPoint, NULL);
-    printfM();
 }

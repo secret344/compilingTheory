@@ -83,7 +83,7 @@ void set_To_Stack(Stack *target, SetRoot source)
  */
 void printDfaStateTransformTable(int **a, int count)
 {
-    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
+    for (size_t i = 0; i < ASCII_COUNT; i++)
     {
         printf("%c ", i);
         for (size_t j = 0; j < count; j++)
@@ -93,8 +93,16 @@ void printDfaStateTransformTable(int **a, int count)
         printf("\n");
     }
 }
-
-void dfadestory(Dfa *dfa)
+/**
+ * @brief 卸载dfa状态转移表
+ * 
+ * @param a 
+ */
+void destoryDfaStateTransformTable(int **a)
 {
-    
+    for (size_t i = 0; i < ASCII_COUNT; i++)
+    {
+        my_free(a[i]);
+    }
+    my_free(a);
 }

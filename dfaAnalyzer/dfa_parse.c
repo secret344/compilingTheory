@@ -3,7 +3,6 @@ static void convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
 static void destoryDfaList();
-static void destoryDfaStateTransformTable(int **a);
 
 static NfaPair *nfaMachine = NULL;
 SetRoot dfaList = NULL;
@@ -11,16 +10,20 @@ int **dfaStateTransformTable;
 
 void initDfaParse(NfaPair *nfaPair)
 {
+    // 生成dfa状态转移表结束 清理dfa节点
+    if (dfaList != NULL)
+        destoryDfaList();
+    // 清理dfa复杂状态转移表
+    if (dfaStateTransformTable != NULL)
+        destoryDfaStateTransformTable(dfaStateTransformTable);
+
+    dfaList = NULL;
+    dfaStateTransformTable = NULL;
     resetStateNum();
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
     convertNfaToDfa();
     MinimizeDFA(dfaList, dfaStateTransformTable);
-    // 生成dfa状态转移表结束 清理dfa节点
-    destoryDfaList();
-    // 清理dfa复杂状态转移表
-    destoryDfaStateTransformTable(dfaStateTransformTable);
-    printfM();
 }
 
 void convertNfaToDfa()
@@ -45,7 +48,7 @@ void convertNfaToDfa()
     {
         dfacount++;
         Dfa *currentDfa = spop(dfaset);
-        for (size_t i = 0; i < ASCII_COUNT; i++)
+        for (int i = 0; i < ASCII_COUNT; i++)
         {
             Stack *currentState = new_stack();
             set_To_Stack(currentState, currentDfa->nfaStates);
@@ -99,8 +102,8 @@ void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
     if (count <= 0)
         return;
     // 动态创建二维数组
-    int **a = (int **)my_calloc(ASCII_COUNT + 1, sizeof(int *));
-    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
+    int **a = (int **)my_calloc(ASCII_COUNT, sizeof(int *));
+    for (size_t i = 0; i < ASCII_COUNT; i++)
         a[i] = (int *)my_calloc(count, sizeof(int));
 
     while (stacksize(dfa_transfrom_table))
@@ -124,13 +127,4 @@ void destoryDfaList()
     }
     my_iterator_free(itor);
     set_destory(dfaList, NULL);
-}
-
-void destoryDfaStateTransformTable(int **a)
-{
-    for (size_t i = 0; i < ASCII_COUNT + 1; i++)
-    {
-        my_free(a[i]);
-    }
-    my_free(a);
 }

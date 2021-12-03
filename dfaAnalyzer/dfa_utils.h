@@ -11,4 +11,5 @@ Dfa *isNfaStatesExistInDfa(Stack *closure, SetRoot dfaList);
 void set_To_Stack(Stack *target, SetRoot source);
 void resetStateNum();
 void printDfaStateTransformTable(int **a, int count);
+void destoryDfaStateTransformTable(int **a);
 #endif
