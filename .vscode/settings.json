@@ -82,6 +82,11 @@
         "xlocmon": "c",
         "xlocnum": "c",
         "xloctime": "c",
-        "__functional_base": "c"
+        "__functional_base": "c",
+        "xtr1common": "c",
+        "__memory": "c",
+        "filesystem": "c",
+        "limits": "c",
+        "ratio": "c"
     }
 }

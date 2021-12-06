@@ -11,6 +11,10 @@ typedef struct Dfa_Transfrom_Table
     int c;
 } Dfa_Transfrom_Table;
 
+extern SetRoot dfaGroupManager;
+extern SetRoot dfaList;
+extern int **dfaStateTransformTable;
+
 void initDfaParse(NfaPair *nfa);
 
 #endif

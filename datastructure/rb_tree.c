@@ -223,6 +223,9 @@ void rb_delect_node(RbRoot *root, Rbkey key)
         }
         else
         {
+            // 修正删除节点异常
+            if (child)
+                child->parent = parent;
             parent->left = child;
             replace->right = node->right;
             node->right->parent = replace;
@@ -269,7 +272,7 @@ void rb_delect_node(RbRoot *root, Rbkey key)
         }
     }
 
-    if (color == FALSE && child != NULL)
+    if (color == FALSE)
     {
         // 需要修正
         rb_delete_fixup(root, child, parent);
@@ -370,7 +373,7 @@ void rb_insert_fixup(RbRoot *root, RbNodeP node)
 void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
 {
     RbNodeP sibling;
-    while (node == NULL || node->isRed == FALSE && node != root->node)
+    while ((node->isRed == FALSE) && node != root->node)
     {
         if (parent->left == node)
         {
@@ -392,21 +395,20 @@ void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
                 //再次以父节点为新节点作自平衡处理。
                 node = parent;
                 parent = node->parent;
-                continue;
             }
-            else if (sibling->right == NULL || sibling->right->isRed == FALSE)
+            else
             {
-                // node的兄弟sibling是黑色的，并且sibling的左孩子是红色，右孩子为黑色。
-                // 场景2.3: 兄弟节点的左子节点是黑色，转换到场景2.2.
-                // 替换节点的兄弟节点sibling设置成红色，兄弟节点的左子节点 SL 设置为黑色，再对节点 S 右旋操作，转换到了场景 2.2
-                sibling->left->isRed = FALSE;
-                sibling->isRed = TRUE;
-                rb_right_rotate(root, sibling);
-                sibling = parent->right;
-            }
+                if (sibling->right == NULL || sibling->right->isRed == FALSE)
+                {
+                    // node的兄弟sibling是黑色的，并且sibling的左孩子是红色，右孩子为黑色。
+                    // 场景2.3: 兄弟节点的左子节点是黑色，转换到场景2.2.
+                    // 替换节点的兄弟节点sibling设置成红色，兄弟节点的左子节点 SL 设置为黑色，再对节点 S 右旋操作，转换到了场景 2.2
+                    sibling->left->isRed = FALSE;
+                    sibling->isRed = TRUE;
+                    rb_right_rotate(root, sibling);
+                    sibling = parent->right;
+                }
 
-            if (sibling->right && sibling->right->isRed == TRUE)
-            {
                 //场景2.2：兄弟节点的右节点是红色
                 // node的兄弟sibling是黑色的；并且sibling的右孩子是红色的，左孩子任意颜色。
                 sibling->isRed = parent->isRed;
@@ -414,6 +416,7 @@ void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
                 sibling->isRed = FALSE;
                 rb_left_rotate(root, parent);
                 node = root->node;
+                break;
             }
         }
         else
@@ -434,25 +437,25 @@ void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
                 sibling->isRed = TRUE;
                 node = parent;
                 parent = node->parent;
-                continue;
             }
-            else if (sibling->left == NULL || sibling->left->isRed == FALSE)
+            else
             {
-                // 场景3.3:兄弟节点的右子节点是红色
-                sibling->right->isRed = FALSE;
-                sibling->isRed = TRUE;
-                rb_left_rotate(root, sibling);
-                sibling = parent->left;
-            }
+                if (sibling->left == NULL || sibling->left->isRed == FALSE)
+                {
+                    // 场景3.3:兄弟节点的右子节点是红色
+                    sibling->right->isRed = FALSE;
+                    sibling->isRed = TRUE;
+                    rb_left_rotate(root, sibling);
+                    sibling = parent->left;
+                }
 
-            if (sibling->left && sibling->left->isRed == TRUE)
-            {
                 // 场景3.2：兄弟节点的左子节点是红色
                 sibling->isRed = parent->isRed;
                 parent->isRed = FALSE;
                 sibling->left->isRed = FALSE;
                 rb_right_rotate(root, parent);
                 node = root->node;
+                break;
             }
         }
     }

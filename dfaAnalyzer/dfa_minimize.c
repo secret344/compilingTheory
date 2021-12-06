@@ -5,16 +5,13 @@ static void minimize();
 static void sliceDfaGroup();
 static void creatMiniDfaTransTable();
 static void initMiniDfaTransTable();
-
-extern SetRoot dfaGroupManager;
-extern SetRoot dfaList;
-extern int **dfaStateTransformTable;
+void viewGroup();
 
 static BOOL addNewGroup = FALSE;
 static dfa_group_struct newGroup = NULL;
 static int **minDfa = NULL;
 
-void MinimizeDFA(SetRoot dfaList, int **dfaStateTransformTable)
+void MinimizeDFA()
 {
     if (minDfa != NULL)
     {
@@ -36,7 +33,7 @@ void minimize()
         // 开始进行切割 若产生分割（产生分割有可能导致旧的不可分割产生分割） 重复此步骤
         sliceDfaGroup();
     } while (addNewGroup);
-
+    // viewGroup();
     // 分割完毕 开始创建最小化dfa状态转移表
     creatMiniDfaTransTable();
 }
@@ -50,7 +47,7 @@ void sliceDfaGroup()
     SetRoot temp = new_Set(Set_Struct);
     while (has_Set_iterator_next(itor))
     {
-
+        newGroup = NULL;
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
         My_Iterator *itorDfaGroup = new_Point_Set_iterator(dfagroup->dfagroup);
 
@@ -77,7 +74,6 @@ void sliceDfaGroup()
         if (newGroup != NULL)
         {
             addp_set(temp, newGroup);
-            newGroup = NULL;
         }
         commitRemove(dfagroup);
     }
@@ -132,7 +128,6 @@ void seperationAcceptedDfaGroup()
 void creatMiniDfaTransTable()
 {
     initMiniDfaTransTable();
-
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
     // 拿到所有dfa节点
     while (has_Set_iterator_next(itor))
@@ -166,4 +161,25 @@ void initMiniDfaTransTable()
             minDfa[i][j] = STATE_FAILURE;
         }
     }
+}
+
+void viewGroup()
+{
+    printf("viewGroup %d \n", dfaList->size);
+    My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
+        printf("dfagroup %d \n", dfagroup->group_num);
+        My_Iterator *itor1 = new_Point_Set_iterator(dfagroup->dfagroup);
+        while (has_Set_iterator_next(itor1))
+        {
+            Dfa *dfa = getp_Set_iterator_next(itor1);
+            printf("打印dfa %d %d \n", dfa->stateNum, dfa->accepted);
+        }
+        printf("\n");
+        my_iterator_free(itor1);
+    }
+    my_iterator_free(itor);
+    printf("viewGroup end %d \n", dfaList->size);
 }

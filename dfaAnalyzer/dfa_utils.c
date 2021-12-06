@@ -11,7 +11,8 @@ Dfa *getDfaFromNfaSet(Stack *input)
 {
     Dfa *dfa = (Dfa *)my_malloc(sizeof(Dfa));
     dfa->nfaStates = new_Set(Set_Struct);
-
+    dfa->accepted = FALSE;
+    
     while (stacksize(input))
     {
         NfaNode *nfa = spop(input);

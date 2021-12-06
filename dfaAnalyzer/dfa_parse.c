@@ -3,6 +3,7 @@ static void convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
 static void destoryDfaList();
+void viewDfaList();
 
 static NfaPair *nfaMachine = NULL;
 SetRoot dfaList = NULL;
@@ -20,10 +21,12 @@ void initDfaParse(NfaPair *nfaPair)
     dfaList = NULL;
     dfaStateTransformTable = NULL;
     resetStateNum();
+
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
     convertNfaToDfa();
-    MinimizeDFA(dfaList, dfaStateTransformTable);
+    // viewDfaList();
+    MinimizeDFA();
 }
 
 void convertNfaToDfa()
@@ -127,4 +130,15 @@ void destoryDfaList()
     }
     my_iterator_free(itor);
     set_destory(dfaList, NULL);
+}
+
+void viewDfaList()
+{
+    My_Iterator *itor = new_Point_Set_iterator(dfaList);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa *dfa = getp_Set_iterator_next(itor);
+        printf("打印 %d %d \n", dfa->stateNum, dfa->accepted);
+    }
+    my_iterator_free(itor);
 }

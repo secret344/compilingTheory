@@ -1,6 +1,7 @@
 #include "dfa_group.h"
 static BOOL groupContainsDfa(SetRoot group, int dfaStateNum);
 static void destorydfaGroup();
+static void destorydfaGroupItem(Dfa_Group_Struct *dfagroup);
 static int GROUP_COUNT = 0;
 SetRoot dfaGroupManager = NULL;
 void resetGroup()
@@ -13,18 +14,16 @@ void resetGroup()
     dfaGroupManager = NULL;
 }
 
+void destorydfaGroupItem(Dfa_Group_Struct *dfagroup)
+{
+    set_destory(dfagroup->dfagroup, NULL);
+    set_destory(dfagroup->tobeRemove, NULL);
+    my_free(dfagroup);
+}
+
 void destorydfaGroup()
 {
-    My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
-    while (has_Set_iterator_next(itor))
-    {
-        Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
-        set_destory(dfagroup->dfagroup, NULL);
-        set_destory(dfagroup->tobeRemove, NULL);
-        my_free(dfagroup);
-    }
-    my_iterator_free(itor);
-    set_destory(dfaGroupManager, NULL);
+    set_destory(dfaGroupManager, destorydfaGroupItem);
 }
 
 Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
@@ -90,6 +89,45 @@ BOOL groupContainsDfa(SetRoot group, int dfaStateNum)
     my_iterator_free(itor);
     return result;
 }
+static int c = 0;
+void realSize(RbNodeP root, int lr)
+{
+    c++;
+    Dfa *dfa = root->value;
+    RbNodeP p = root->parent;
+    if (p != NULL)
+    {
+        Dfa *pp = p->value;
+        printf(" 父亲 %d %d 方向%d \n", pp, pp->stateNum, lr);
+    }
+
+    printf(" 我自己 %d %d \n", dfa->stateNum, dfa);
+    if (root->left != NULL)
+    {
+        realSize(root->left, 1);
+    }
+    if (root->right != NULL)
+    {
+        realSize(root->right, 2);
+    }
+}
+
+void viewGroupSize(SetRoot dfagroup)
+{
+    c = 0;
+    realSize(dfagroup->node, 0);
+    My_Iterator *itor = new_Point_Set_iterator(dfagroup);
+    int count = 0;
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa *dfa = getp_Set_iterator_next(itor);
+        printf(" viewGroupSize自己 %d ", dfa->stateNum);
+        count++;
+    }
+    printf("\n");
+    printf("真实size %d 迭代器size %d 节点size %d \n", c, count, dfagroup->size);
+    my_iterator_free(itor);
+}
 
 /**
  * @brief 提交清理
@@ -97,13 +135,18 @@ BOOL groupContainsDfa(SetRoot group, int dfaStateNum)
  */
 void commitRemove(dfa_group_struct dfagroup)
 {
+    printf("\n");
+    printf("开始\n");
+    viewGroupSize(dfagroup->dfagroup);
+    printf("\n");
     My_Iterator *itor = new_Point_Set_iterator(dfagroup->tobeRemove);
     while (has_Set_iterator_next(itor))
     {
-        Dfa *dfa = getp_Set_iterator_next(itor);
         // 清理分区
-        removep_set(dfagroup->dfagroup, dfa);
+        Dfa *d = getp_Set_iterator_next(itor);
+        removep_set(dfagroup->dfagroup, d);
     }
+    viewGroupSize(dfagroup->dfagroup);
     my_iterator_free(itor);
     // 清理待清理
     set_destory(dfagroup->tobeRemove, NULL);
