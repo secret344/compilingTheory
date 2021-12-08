@@ -139,6 +139,8 @@ void commitRemove(dfa_group_struct dfagroup)
     printf("开始\n");
     viewGroupSize(dfagroup->dfagroup);
     printf("\n");
+    viewGroupSize(dfagroup->tobeRemove);
+    printf("\n");
     My_Iterator *itor = new_Point_Set_iterator(dfagroup->tobeRemove);
     while (has_Set_iterator_next(itor))
     {

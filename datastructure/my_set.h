@@ -16,8 +16,8 @@ SetRoot new_Set(SetType);
 void removep_set(SetRoot root, void *k);
 void removen_set(SetRoot root, int k);
 
-BOOL addp_set(SetRoot root, void *value);
-BOOL addn_set(SetRoot root, int value);
+void addp_set(SetRoot root, void *value);
+void addn_set(SetRoot root, int value);
 
 BOOL hasp_set(SetRoot root, void *k);
 BOOL hasn_set(SetRoot root, int k);

@@ -2,16 +2,24 @@
 #include "rb_tree.h"
 
 static int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b);
-static void rb_left_rotate(RbRoot *root, RbNodeP node);
-static void rb_right_rotate(RbRoot *root, RbNodeP node);
-static void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent);
-static void rb_insert_fixup(RbRoot *root, RbNodeP node);
 static void rb_destory_static(RbNodeP node, void (*handle)(void *), RBKeyType type);
 static RbNodeP rb_right_back(RbNodeP node);
 static RbNodeP rb_set_next(RbNodeP cur);
 static RbNodeP rb_get_next(void *iter_instance, void *iter_inner);
 static RbNodeP rb_left_back(RbNodeP node);
 static BOOL rb_has_next(void *iter_instance, void *iter_inner);
+
+static RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
+static RbNodeP balance(RbNodeP h);
+static void flipColors(RbNodeP node);
+static RbNodeP rb_left_rotate(RbNodeP node);
+static RbNodeP rb_right_rotate(RbNodeP node);
+static RbNodeP rb_move_red_to_left(RbNodeP h);
+static RbNodeP rb_move_red_to_right(RbNodeP h);
+static RbNodeP min_node(RbNodeP h);
+static RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key);
+static RbNodeP rb_insert(RbRoot *root, RbNodeP h, Rbkey key, void *value);
+
 /**
  * @brief 创建红黑树根
  * 
@@ -91,18 +99,20 @@ RbNodeP rb_search_node(RbRoot *root, Rbkey key)
  */
 RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value)
 {
+
     RbNodeP new = my_malloc(sizeof(RBNode));
     new->left = NULL;
     new->right = NULL;
     new->parent = NULL;
     new->value = value;
     new->isDelect = FALSE;
+    new->isRed = TRUE;
 
     if (type == RB_String)
     {
         // 字符串需要拷贝
         char *p = key.p;
-        key.p = (char *)my_malloc(strlen(p) + 1);
+        key.p = (char *)malloc(strlen(p) + 1);
         strcpy(key.p, p);
     }
 
@@ -133,36 +143,10 @@ My_Iterator *new_rb_iterator(RbRoot *root)
  * @param root 
  * @param node 
  */
-void rb_insert_node(RbRoot *root, RbNodeP node)
+void rb_insert_node(RbRoot *root, Rbkey key, void *value)
 {
-    RbNodeP current = NULL;
-    RbNodeP x = root->node;
-    // 寻找插入位置
-    while (x != NULL)
-    {
-        current = x;
-        if (rb_node_key_compare(root->key_type, node->key, x) == 0)
-            x = x->left;
-        else
-            x = x->right;
-    }
-    node->parent = current;
-    // 判断是左子节点还是右子节点 插入到 current 子节点中
-    if (current != NULL)
-    {
-        if (rb_node_key_compare(root->key_type, node->key, current) == 0)
-            current->left = node;
-        else
-            current->right = node;
-    }
-    else
-    {
-        root->node = node;
-    }
-    node->isRed = TRUE;
-    root->size++;
-    // 进行自平衡
-    rb_insert_fixup(root, node);
+    root->node = rb_insert(root, root->node, key, value);
+    root->node->isRed = FALSE;
 }
 
 /**
@@ -173,389 +157,195 @@ void rb_insert_node(RbRoot *root, RbNodeP node)
  */
 void rb_delect_node(RbRoot *root, Rbkey key)
 {
-    RbNodeP node = rb_search_node(root, key);
-    if (node == NULL)
+    if (rb_search_node(root, key) == NULL)
     {
         return;
     }
-
-    RbNodeP child, parent;
-    int color;
-    // 存在左右子节点
-    if (node->left != NULL && node->right != NULL)
-    {
-        RbNodeP replace = node;
-        // 获取后继节点 替换需要删除的值
-        replace = replace->right;
-        while (replace->left != NULL)
-            replace = replace->left;
-        // 替换节点
-        if (node->parent == NULL)
-        {
-            // 如果删除节点是根节点
-            // 更新根节点
-            root->node = replace;
-        }
-        else
-        {
-            // 如果删除节点不是根节点
-            if (node->parent->left == node)
-            {
-                node->parent->left = replace;
-            }
-            else
-            {
-                node->parent->right = replace;
-            }
-        }
-
-        // 保存"替换节点"的颜色 如果是黑色节点 表示红黑树不平衡
-        color = replace->isRed;
-        // 替换节点 是后继节点 所以不存在左子节点
-        child = replace->right;
-        // 保存替换节点的父亲节点
-        parent = replace->parent;
-
-        if (parent == node)
-        {
-            // 如果替换节点父亲节点就是当前删除节点
-            parent = replace;
-        }
-        else
-        {
-            // 修正删除节点异常
-            if (child)
-                child->parent = parent;
-            parent->left = child;
-            replace->right = node->right;
-            node->right->parent = replace;
-        }
-
-        replace->parent = node->parent;
-        replace->isRed = node->isRed;
-        replace->left = node->left;
-        node->left->parent = replace;
-    }
-    else
-    {
-        if (node->left == NULL)
-        {
-            child = node->right;
-        }
-        else
-        {
-            child = node->left;
-        }
-        color = node->isRed;
-        parent = node->parent;
-
-        if (child)
-        {
-            child->parent = parent;
-        }
-
-        if (parent == NULL)
-        {
-            root->node = child;
-        }
-        else
-        {
-            // 如果删除节点不是根节点
-            if (node->parent->left == node)
-            {
-                node->parent->left = child;
-            }
-            else
-            {
-                node->parent->right = child;
-            }
-        }
-    }
-
-    if (color == FALSE)
-    {
-        // 需要修正
-        rb_delete_fixup(root, child, parent);
-    }
-
-    if (root->key_type == RB_String)
-    {
-        // 字符串key释放
-        my_free(node->key.p);
-    }
+    if (!IsRed(root->node->left) && !IsRed(root->node->right))
+        root->node->isRed = TRUE;
+    root->node = rb_delect(root->key_type, root->node, key);
     root->size--;
-    my_free(node);
-}
-
-/** 
- * 进行插入自平衡
- * @brief 
- * 1 插入节点的父节点和其叔叔节点（祖父节点的另一个子节点）均为红色。
- * 2 插入节点的父节点是红色的，叔叔节点是黑色的，且插入节点是其父节点的右子节点。
- * 3 插入节点的父节点是红色的，叔叔节点是黑色的，且插入节点是其父节点的左子节点。
- * @param root 
- * @param node 
- */
-void rb_insert_fixup(RbRoot *root, RbNodeP node)
-{
-    // 定义父节点，祖父节点
-    RbNodeP parent, gparent;
-    // 父节点存在 且为红色节点
-    // 不存在则子身为根节点，不是红色节点则不需要自平衡
-    while ((parent = node->parent) && parent->isRed)
+    if (root->size > 0)
     {
-        gparent = parent->parent;
-        // 区分node父节点是祖父节点的左右子节点状态
-        // 叔叔节点的获取不同 旋转方向不同
-        if (gparent->left == parent)
-        {
-            RbNodeP uncle = gparent->right;
-            // 叔叔节点红色 状态1
-            if (uncle && uncle->isRed)
-            {
-                uncle->isRed = FALSE;
-                parent->isRed = FALSE;
-                gparent->isRed = TRUE;
-                // 颜色变化结束，检查祖父节点平衡状态
-                node = gparent;
-                continue;
-            }
-            // 状态2
-            // 父节点是红色的，叔叔节点是黑色的，且插入节点是其父节点的右子节点
-            if (parent->right == node)
-            {
-                // 左旋
-                rb_left_rotate(root, parent);
-                // 将自己与父节点调换位置
-                RbNodeP tmp = parent;
-                parent = node;
-                node = tmp;
-            }
-            // 状态3
-            // 父节点是红色的，叔叔节点是黑色的，且插入节点是其父节点的左子节点
-            parent->isRed = FALSE;
-            gparent->isRed = TRUE;
-            rb_right_rotate(root, gparent);
-        }
-        else
-        {
-            RbNodeP uncle = gparent->left;
-            if (uncle && uncle->isRed)
-            {
-                uncle->isRed = FALSE;
-                parent->isRed = FALSE;
-                gparent->isRed = TRUE;
-                node = gparent;
-                continue;
-            }
-            if (parent->left == node)
-            {
-                rb_right_rotate(root, parent);
-                RbNodeP tmp = parent;
-                parent = node;
-                node = tmp;
-            }
-            parent->isRed = FALSE;
-            gparent->isRed = TRUE;
-            rb_left_rotate(root, gparent);
-        }
-    }
-    // 根节点设黑色
-    root->node->isRed = FALSE;
-}
-/**
- * @brief 删除修正
- * 
- * @param root 
- * @param node 
- * @param parent 
- */
-void rb_delete_fixup(RbRoot *root, RbNodeP node, RbNodeP parent)
-{
-    RbNodeP sibling;
-    while ((node->isRed == FALSE) && node != root->node)
-    {
-        if (parent->left == node)
-        {
-            sibling = parent->right;
-            if (sibling->isRed == TRUE)
-            {
-                // 场景2.1:兄弟节点是红色
-                // 兄弟节点设置为黑色
-                sibling->isRed = FALSE;
-                parent->isRed = TRUE;
-                rb_left_rotate(root, parent);
-                sibling = parent->right;
-            }
-            // 场景2.4: 兄弟节点两个子节点都是黑色
-            // node的兄弟节点是黑色的切2个子节点也是黑色的
-            if ((sibling->right == NULL || sibling->right->isRed == FALSE) && (sibling->left == NULL || sibling->left->isRed == FALSE))
-            {
-                sibling->isRed = TRUE;
-                //再次以父节点为新节点作自平衡处理。
-                node = parent;
-                parent = node->parent;
-            }
-            else
-            {
-                if (sibling->right == NULL || sibling->right->isRed == FALSE)
-                {
-                    // node的兄弟sibling是黑色的，并且sibling的左孩子是红色，右孩子为黑色。
-                    // 场景2.3: 兄弟节点的左子节点是黑色，转换到场景2.2.
-                    // 替换节点的兄弟节点sibling设置成红色，兄弟节点的左子节点 SL 设置为黑色，再对节点 S 右旋操作，转换到了场景 2.2
-                    sibling->left->isRed = FALSE;
-                    sibling->isRed = TRUE;
-                    rb_right_rotate(root, sibling);
-                    sibling = parent->right;
-                }
-
-                //场景2.2：兄弟节点的右节点是红色
-                // node的兄弟sibling是黑色的；并且sibling的右孩子是红色的，左孩子任意颜色。
-                sibling->isRed = parent->isRed;
-                parent->isRed = FALSE;
-                sibling->isRed = FALSE;
-                rb_left_rotate(root, parent);
-                node = root->node;
-                break;
-            }
-        }
-        else
-        {
-            // 节点是父节点的右子节点
-            sibling = parent->left;
-            // 场景 3.1：替换节点的兄弟节点是红色
-            if (sibling->isRed == TRUE)
-            {
-                sibling->isRed = FALSE;
-                parent->isRed = TRUE;
-                rb_right_rotate(root, parent);
-                sibling = parent->left;
-            }
-            // 场景3.4：替换节点的两个子节点都是黑色
-            if ((sibling->right == NULL || sibling->right->isRed == FALSE) && (sibling->left == NULL || sibling->left->isRed == FALSE))
-            {
-                sibling->isRed = TRUE;
-                node = parent;
-                parent = node->parent;
-            }
-            else
-            {
-                if (sibling->left == NULL || sibling->left->isRed == FALSE)
-                {
-                    // 场景3.3:兄弟节点的右子节点是红色
-                    sibling->right->isRed = FALSE;
-                    sibling->isRed = TRUE;
-                    rb_left_rotate(root, sibling);
-                    sibling = parent->left;
-                }
-
-                // 场景3.2：兄弟节点的左子节点是红色
-                sibling->isRed = parent->isRed;
-                parent->isRed = FALSE;
-                sibling->left->isRed = FALSE;
-                rb_right_rotate(root, parent);
-                node = root->node;
-                break;
-            }
-        }
-    }
-    if (node != NULL)
-    {
-        node->isRed = FALSE;
+        root->node->isRed = FALSE;
     }
 }
-/* 
- * 对红黑树的节点(node下图 x)进行左旋转
- *
- * 左旋示意图(对节点x进行左旋)：
- *      px                              px
- *     /                               /
- *    x                               y                
- *   /  \      --(左旋)-->           / \                #
- *  lx   y                          x  ry     
- *     /   \                       /  \
- *    ly   ry                     lx  ly  
- *
- *
- */
-void rb_left_rotate(RbRoot *root, RbNodeP node)
+
+RbNodeP rb_insert(RbRoot *root, RbNodeP h, Rbkey key, void *value)
 {
-    // 拿到节点的右子节点
-    RbNodeP y = node->right;
-    // 将右子节点的左子节点设为他的右子节点
-    node->right = y->left;
-    // 判断是否为NULL，如果不是NULL设置右子节点的左子节点父亲节点为node
-    if (y->left != NULL)
+    RBKeyType key_type = root->key_type;
+    if (h == NULL)
     {
-        y->left->parent = node;
+        root->size++;
+        return rb_new_node(key_type, key, value);
     }
-    // 将node右子节点的父节点设置为node的父节点
-    // 移动到node自己头上
-    y->parent = node->parent;
-    // node不存在父亲节点(意思就是他是根节点)，将右子节点设置为根节点
-    if (node->parent == NULL)
+    // 大于 1 小于 0 等于 -1
+    int cmp = rb_node_key_compare(key_type, key, h);
+    if (cmp == FALSE)
     {
-        root->node = y;
+        // 小于 往树左子节点走
+        h->left = rb_insert(root, h->left, key, value);
+        SetParent(h->left, h);
+    }
+    else if (cmp == TRUE)
+    {
+        // 大于 往树右子节点走
+        h->right = rb_insert(root, h->right, key, value);
+        SetParent(h->right, h);
     }
     else
     {
-        // 判断node是左子节点还是右子节点
-        // 旋转替代node节点位置用
-        if (node->parent->left == node)
+        // 相等节点 替换value
+        h->value = value;
+    }
+    // 添加完成 进行递归修正
+    h = balance(h);
+    return h;
+}
+
+RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
+{
+    int cmp = rb_node_key_compare(key_type, key, h);
+    if (cmp == 0)
+    {
+        // 在左子树中 如果左子树不是3节点
+        if (!IsRed(h->left) && !IsRed(h->left->left))
         {
-            node->parent->left = y;
+            h = rb_move_red_to_left(h);
+        }
+        // 继续查找左子树
+        h->left = rb_delect(key_type, h->left, key);
+    }
+    else
+    {
+        // 找到 或者在右子树中
+        //  将左边的红链接 变成右边的
+        if (IsRed(h->left))
+            h = rb_right_rotate(h);
+
+        if (cmp == COMPARE_EQ && h->right == NULL)
+        {
+            // 找到了 且不存在右子节点
+            my_free(h);
+            return NULL;
+        }
+
+        // 右子节点不是3节点
+        if (!IsRed(h->right) && !IsRed(h->right->left))
+        {
+            h = rb_move_red_to_right(h);
+        }
+
+        if (cmp == COMPARE_EQ)
+        {
+            RbNodeP x = min_node(h->right); //找到后继节点
+            h->key = x->key;
+            h->value = x->value;
+            h->right = rb_delect(key_type, h->right, x->key); // 在右子树中删除后继;
         }
         else
-        {
-            node->parent->right = y;
-        }
+            h->right = rb_delect(key_type, h->right, key);
     }
-    // 链接node跟转移后的node右子节点
-    y->left = node;
-    node->parent = y;
+
+    return balance(h);
+}
+
+// 查找后继节点
+RbNodeP min_node(RbNodeP h)
+{
+    if (h->left != NULL)
+        return min_node(h->left);
+    else
+        return h;
+}
+
+RbNodeP rb_move_red_to_left(RbNodeP h)
+{
+    flipColors(h);
+    if (IsRed(h->right->left))
+    {
+        // 如果右儿子为3 - 节点
+        //通过两次旋转将替代者上移至h处
+        h->right = rb_right_rotate(h->right);
+        h = rb_left_rotate(h);
+        flipColors(h); //#分裂5 - 节点
+    }
+    return h;
+}
+
+RbNodeP rb_move_red_to_right(RbNodeP h)
+{
+    flipColors(h);
+    if (IsRed(h->left->left))
+    {
+        h->right = rb_right_rotate(h); // h的左儿子就是替代者
+        flipColors(h);
+    }
+
+    return h;
+}
+
+void flipColors(RbNodeP node)
+{
+    node->isRed = FlipBool(node->isRed);
+    node->left->isRed = FlipBool(node->left->isRed);
+    node->right->isRed = FlipBool(node->right->isRed);
+}
+/* 
+ * 对红黑树的节点进行左旋转
+ * 保证二叉搜索树和红黑树的性质的前提下，来转换红链接的位置
+ */
+RbNodeP rb_left_rotate(RbNodeP node)
+{
+    RbNodeP x = node->right;
+    SetParent(x, node->parent);
+
+    node->right = x->left;
+    SetParent(x->left, node);
+
+    x->left = node;
+    SetParent(node, x);
+
+    x->isRed = x->left->isRed;
+    x->left->isRed = TRUE;
+    return x;
 }
 
 /* 
- * 对红黑树的节点(node 下图 y)进行右旋转
- *
- * 右旋示意图(对节点y进行左旋)：
- *            py                               py
- *           /                                /
- *          y                                x                  
- *         /  \      --(右旋)-->            /  \                     #
- *        x   ry                           lx   y  
- *       / \                                   / \                   #
- *      lx  rx                                rx  ry
- * 
+ * 对红黑树的节点进行右旋转
  */
-void rb_right_rotate(RbRoot *root, RbNodeP node)
+RbNodeP rb_right_rotate(RbNodeP node)
 {
-    // 保存node的左子节点
-    // 左旋右旋对称 流程差不多
     RbNodeP x = node->left;
+    SetParent(x, node->parent);
+
     node->left = x->right;
-    if (x->right != NULL)
-    {
-        x->right->parent = node;
-    }
-    x->parent = node->parent;
-    if (node->parent == NULL)
-    {
-        root->node = x;
-    }
-    else
-    {
-        if (node->parent->left == node)
-        {
-            node->parent->left = x;
-        }
-        else
-        {
-            node->parent->right = x;
-        }
-    }
+    SetParent(x->right, node);
+
     x->right = node;
-    node->parent = x;
+    SetParent(node, x);
+
+    x->isRed = x->right->isRed;
+    x->right->isRed = TRUE;
+    return x;
+}
+
+RbNodeP balance(RbNodeP h)
+{
+    // 1 右儿子红色 左儿子黑色
+    // 左旋 让右子节点旋转到左边
+    if (IsRed(h->right) && !IsRed(h->left))
+        h = rb_left_rotate(h);
+
+    // 2 左儿子红 左儿子的左儿子也红 (4节点)
+    // 右旋 进入3
+    if (IsRed(h->left) && IsRed(h->left->left))
+        h = rb_right_rotate(h);
+    // 3 左儿子红右儿子红 (4节点)
+    // 颜色反转
+    if (IsRed(h->right) && IsRed(h->left))
+        flipColors(h);
+    return h;
 }
 
 void rb_destory_static(RbNodeP node, void (*handle)(void *), RBKeyType type)
@@ -611,6 +401,7 @@ int rb_node_key_compare(RBKeyType key_type, Rbkey key, RbNodeP b)
     }
     return result;
 }
+
 /**
  * @brief 查找下一个节点
  * 
