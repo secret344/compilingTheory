@@ -56,7 +56,7 @@ void setm_number_node(MapRoot root, int k, void *value)
 {
     Rbkey key;
     key.n = k;
-    rb_insert_node(root, rb_new_node(root->key_type, key, value));
+    rb_insert_node(root, key, value);
 }
 
 /**
@@ -70,7 +70,7 @@ void setm_string_node(MapRoot root, char *k, void *value)
 {
     Rbkey key;
     key.p = k;
-    rb_insert_node(root, rb_new_node(root->key_type, key, value));
+    rb_insert_node(root, key, value);
 }
 
 /**

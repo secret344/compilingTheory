@@ -33,7 +33,7 @@ void minimize()
         // 开始进行切割 若产生分割（产生分割有可能导致旧的不可分割产生分割） 重复此步骤
         sliceDfaGroup();
     } while (addNewGroup);
-    // viewGroup();
+    viewGroup();
     // 分割完毕 开始创建最小化dfa状态转移表
     creatMiniDfaTransTable();
 }
@@ -139,9 +139,11 @@ void creatMiniDfaTransTable()
             if (dfaStateTransformTable[i][dfa->stateNum] != STATE_FAILURE)
             {
                 int toNum = dfaStateTransformTable[i][dfa->stateNum];
+                printf("真实size %d 迭代器size %d\n", dfa->stateNum, toNum);
                 // 找到状态转移集合
                 dfa_group_struct fromgroup = getContainingGroup(dfa->stateNum);
                 dfa_group_struct togroup = getContainingGroup(toNum);
+                printf("真实size %d 迭代器size %d\n\n", fromgroup->group_num, togroup->group_num);
                 // 生成最小化的dfa状态转移表
                 minDfa[i][fromgroup->group_num] = togroup->group_num;
             }

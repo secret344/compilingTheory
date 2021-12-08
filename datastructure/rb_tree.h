@@ -6,6 +6,14 @@
 #include <stdio.h>
 #include <string.h>
 #include "my_iterator.h"
+#define IsRed(h) ((h == NULL || h->isRed == FALSE) ? FALSE : TRUE)
+#define FlipBool(b) (b == TRUE ? FALSE : TRUE)
+#define SetParent(n, p)    \
+    {                      \
+        if (n != NULL)     \
+            n->parent = p; \
+    }
+
 
 typedef enum RBKeyType
 {
@@ -44,9 +52,8 @@ typedef struct Rb_Iter_Inner
 } Rb_Iter_Inner, *rb_iter_inner;
 
 RbRoot *rb_create(RBKeyType key_type);
-RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value);
 RbNodeP rb_search_node(RbRoot *root, Rbkey key);
-void rb_insert_node(RbRoot *root, RbNodeP node);
+void rb_insert_node(RbRoot *root, Rbkey key, void *value);
 void rb_delect_node(RbRoot *root, Rbkey key);
 void rb_destory(RbRoot *root, void (*handle)(RbNodeP));
 My_Iterator *new_rb_iterator(RbRoot *root);

@@ -1,6 +1,6 @@
 
 #include "my_set.h"
-static BOOL set_node(SetRoot root, Rbkey key, void *value);
+static void set_node(SetRoot root, Rbkey key, void *value);
 static BOOL has_node(SetRoot root, Rbkey key);
 static BOOL isp_Set_Eq(SetRoot a, SetRoot b);
 static BOOL isn_Set_Eq(SetRoot a, SetRoot b);
@@ -42,13 +42,14 @@ void set_destory(RbRoot *root, void (*handle)(void *))
  * @param value 
  * @param root 
  */
-BOOL addp_set(SetRoot root, void *value)
+void addp_set(SetRoot root, void *value)
 {
     Rbkey key;
     key.p = value;
     return set_node(root, key, value);
 }
-BOOL addn_set(SetRoot root, int value)
+
+void addn_set(SetRoot root, int value)
 {
     Rbkey key;
     key.n = value;
@@ -63,7 +64,7 @@ BOOL addn_set(SetRoot root, int value)
 void removep_set(SetRoot root, void *k)
 {
     Rbkey key;
-    key.p = k;
+    key.n = &*k;
     rb_delect_node(root, key);
 }
 void removen_set(SetRoot root, int k)
@@ -82,7 +83,7 @@ void removen_set(SetRoot root, int k)
 BOOL hasp_set(SetRoot root, void *k)
 {
     Rbkey key;
-    key.p = k;
+    key.n = &*k;
     return has_node(root, key);
 }
 BOOL hasn_set(SetRoot root, int k)
@@ -178,13 +179,7 @@ BOOL isp_Set_Eq(SetRoot a, SetRoot b)
     return TRUE;
 }
 
-BOOL set_node(SetRoot root, Rbkey key, void *value)
+void set_node(SetRoot root, Rbkey key, void *value)
 {
-    BOOL v = has_node(root, key);
-    if (!v)
-    {
-        rb_insert_node(root, rb_new_node(root->key_type, key, value));
-        return TRUE;
-    }
-    return FALSE;
+    rb_insert_node(root, key, value);
 }
