@@ -349,6 +349,11 @@ RbNodeP balance(RbNodeP h)
 
 void rb_destory_static(RbNodeP node, void (*handle)(void *), RBKeyType type)
 {
+    if (node == NULL)
+    {
+        return;
+    }
+
     if (node->left != NULL)
     {
         rb_destory_static(node->left, handle, type);
