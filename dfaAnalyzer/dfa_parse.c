@@ -12,11 +12,10 @@ int **dfaStateTransformTable;
 void initDfaParse(NfaPair *nfaPair)
 {
     // 生成dfa状态转移表结束 清理dfa节点
-    if (dfaList != NULL)
-        destoryDfaList();
-    // 清理dfa复杂状态转移表
-    if (dfaStateTransformTable != NULL)
-        destoryDfaStateTransformTable(dfaStateTransformTable);
+    // if (dfaList != NULL)
+    //     destoryDfaList();
+    // // 清理dfa复杂状态转移表
+    // if (dfaStateTransformTable != NULL)
 
     dfaList = NULL;
     dfaStateTransformTable = NULL;
@@ -27,6 +26,9 @@ void initDfaParse(NfaPair *nfaPair)
     convertNfaToDfa();
     // viewDfaList();
     MinimizeDFA();
+    
+    destoryDfaList();
+    destoryDfaStateTransformTable(dfaStateTransformTable);
 }
 
 void convertNfaToDfa()

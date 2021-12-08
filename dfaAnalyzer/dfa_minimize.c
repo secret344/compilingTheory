@@ -13,14 +13,10 @@ static int **minDfa = NULL;
 
 void MinimizeDFA()
 {
-    if (minDfa != NULL)
-    {
-        destoryDfaStateTransformTable(minDfa);
-    }
-
     minDfa = NULL;
-    resetGroup();
     minimize();
+    resetGroup();
+    destoryDfaStateTransformTable(minDfa);
 }
 
 void minimize()
