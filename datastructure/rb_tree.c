@@ -205,8 +205,7 @@ RbNodeP rb_insert(RbRoot *root, RbNodeP h, Rbkey key, void *value)
 
 RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
 {
-    int cmp = rb_node_key_compare(key_type, key, h);
-    if (cmp == 0)
+    if (rb_node_key_compare(key_type, key, h) == FALSE)
     {
         // 在左子树中 如果左子树不是3节点
         if (!IsRed(h->left) && !IsRed(h->left->left))
@@ -223,7 +222,7 @@ RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
         if (IsRed(h->left))
             h = rb_right_rotate(h);
 
-        if (cmp == COMPARE_EQ && h->right == NULL)
+        if (rb_node_key_compare(key_type, key, h) == COMPARE_EQ && h->right == NULL)
         {
             // 找到了 且不存在右子节点
             my_free(h);
@@ -236,7 +235,7 @@ RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
             h = rb_move_red_to_right(h);
         }
 
-        if (cmp == COMPARE_EQ)
+        if (rb_node_key_compare(key_type, key, h) == COMPARE_EQ)
         {
             RbNodeP x = min_node(h->right); //找到后继节点
             h->key = x->key;

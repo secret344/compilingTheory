@@ -55,7 +55,7 @@ void removem_string_map(MapRoot root, char *k)
 void setm_number_node(MapRoot root, int k, void *value)
 {
     Rbkey key;
-    key.n = k;
+    RBKeyType key_type = root->key_type;
     rb_insert_node(root, key, value);
 }
 

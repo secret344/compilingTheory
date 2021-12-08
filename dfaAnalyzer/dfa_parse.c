@@ -25,8 +25,8 @@ void initDfaParse(NfaPair *nfaPair)
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
     convertNfaToDfa();
-    viewDfaList();
-    // MinimizeDFA();
+    // viewDfaList();
+    MinimizeDFA();
 }
 
 void convertNfaToDfa()
@@ -132,7 +132,7 @@ void destoryDfaList()
     set_destory(dfaList, NULL);
 }
 
-void realSize(RbNodeP root, int lr, int pn)
+static void realSize(RbNodeP root, int lr, int pn)
 {
     if (root == NULL)
     {
@@ -140,15 +140,17 @@ void realSize(RbNodeP root, int lr, int pn)
     }
 
     int num = root->key.n;
+    Dfa *value = root->value;
     RbNodeP p = root->parent;
     if (p != NULL)
     {
         int nump = p->key.n;
-        printf(" 父亲 %d  方向%d \n", nump, lr);
+        Dfa *pv = p->value;
+        printf(" 父亲 %d  方向%d \n", pv->stateNum, lr);
     }
 
     // printf(" 父亲 %d  方向%d \n", pn, lr);
-    printf(" 我自己 %d  %d \n", num, root->isRed);
+    printf(" 我自己 %d %d  %d \n\n", root, value->stateNum, root->isRed);
     if (root->left != NULL)
     {
         realSize(root->left, 1, num);
@@ -162,11 +164,11 @@ void realSize(RbNodeP root, int lr, int pn)
 void viewDfaList()
 {
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
-    realSize(dfaList, 0, 0);
+    realSize(dfaList->node, 0, 0);
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
-        // printf("打印 %d %d \n", dfa->stateNum, dfa->accepted);
+        printf("打印 %d %d \n", dfa->stateNum, dfa->accepted);
     }
     my_iterator_free(itor);
 }
