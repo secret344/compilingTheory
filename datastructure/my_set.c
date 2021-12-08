@@ -45,7 +45,12 @@ void set_destory(RbRoot *root, void (*handle)(void *))
 void addp_set(SetRoot root, void *value)
 {
     Rbkey key;
-    key.p = value;
+    RBKeyType key_type = root->key_type;;
+    if (key_type == Set_Struct)
+        key.n = (int)&*value;
+    else
+        key.p = value;
+
     return set_node(root, key, value);
 }
 
@@ -64,7 +69,11 @@ void addn_set(SetRoot root, int value)
 void removep_set(SetRoot root, void *k)
 {
     Rbkey key;
-    key.n = &*k;
+    RBKeyType key_type = root->key_type;
+    if (key_type == Set_Struct)
+        key.n = &*k;
+    else
+        key.p = k;
     rb_delect_node(root, key);
 }
 void removen_set(SetRoot root, int k)
@@ -83,7 +92,11 @@ void removen_set(SetRoot root, int k)
 BOOL hasp_set(SetRoot root, void *k)
 {
     Rbkey key;
-    key.n = &*k;
+    RBKeyType key_type = root->key_type;
+    if (key_type == Set_Struct)
+        key.n = &*k;
+    else
+        key.p = k;
     return has_node(root, key);
 }
 BOOL hasn_set(SetRoot root, int k)

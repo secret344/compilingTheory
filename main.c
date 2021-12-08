@@ -23,7 +23,7 @@ int dfaParse()
 {
     Stack *new = new_stack();
     //   printf("dfaParsesad %d\n", stacksize(nfaSet));
-    printf("dfaParse \n");
+    printf("dfaParse \n");  
     while (stacksize(nfaSet))
     {
         NfaPair *node = spop(nfaSet);
@@ -33,7 +33,9 @@ int dfaParse()
     sdestory(nfaSet, NULL);
     nfaSet = new;
     printf("dfaParse end \n");
+    printfM();
     return 0;
+    // id:((<|!|\+|=|\||\-|\*|&)+)|((<|!|\+|=|\||\-|\*|&)=)|(\[|\]|\(|\))
 }
 
 int main()

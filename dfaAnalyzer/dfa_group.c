@@ -92,13 +92,18 @@ BOOL groupContainsDfa(SetRoot group, int dfaStateNum)
 static int c = 0;
 void realSize(RbNodeP root, int lr)
 {
+    if (root == NULL)
+    {
+        return;
+    }
+
     c++;
     Dfa *dfa = root->value;
     RbNodeP p = root->parent;
     if (p != NULL)
     {
         Dfa *pp = p->value;
-        printf(" 父亲 %d %d 方向%d \n", pp, pp->stateNum, lr);
+        // printf(" 父亲 %d %d 方向%d \n", pp, pp->stateNum, lr);
     }
 
     printf(" 我自己 %d %d \n", dfa->stateNum, dfa);
@@ -135,12 +140,6 @@ void viewGroupSize(SetRoot dfagroup)
  */
 void commitRemove(dfa_group_struct dfagroup)
 {
-    printf("\n");
-    printf("开始\n");
-    viewGroupSize(dfagroup->dfagroup);
-    printf("\n");
-    viewGroupSize(dfagroup->tobeRemove);
-    printf("\n");
     My_Iterator *itor = new_Point_Set_iterator(dfagroup->tobeRemove);
     while (has_Set_iterator_next(itor))
     {
@@ -148,7 +147,6 @@ void commitRemove(dfa_group_struct dfagroup)
         Dfa *d = getp_Set_iterator_next(itor);
         removep_set(dfagroup->dfagroup, d);
     }
-    viewGroupSize(dfagroup->dfagroup);
     my_iterator_free(itor);
     // 清理待清理
     set_destory(dfagroup->tobeRemove, NULL);

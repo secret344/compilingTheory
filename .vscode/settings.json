@@ -87,6 +87,10 @@
         "__memory": "c",
         "filesystem": "c",
         "limits": "c",
-        "ratio": "c"
+        "ratio": "c",
+        "*.tcc": "c",
+        "optional": "c",
+        "atomic": "c",
+        "cstddef": "c"
     }
 }
