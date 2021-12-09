@@ -20,4 +20,5 @@ Dfa_Group_Struct *getContainingGroup(int dfaStateNum);
 void commitRemove(dfa_group_struct dfagroup);
 void resetGroup();
 void concatDfaGroup(SetRoot target, SetRoot source);
+void viewGroupSize(SetRoot dfagroup);
 #endif

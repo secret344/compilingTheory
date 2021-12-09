@@ -10,13 +10,23 @@ void viewGroup();
 static BOOL addNewGroup = FALSE;
 static dfa_group_struct newGroup = NULL;
 static int **minDfa = NULL;
+void destoryMinimizeDfa()
+{
+    if (minDfa != NULL)
+    {
+        destoryDfaStateTransformTable(minDfa);
+        minDfa = NULL;
+    }
+    resetGroup();
+}
 
 void MinimizeDFA()
 {
-    minDfa = NULL;
     minimize();
-    resetGroup();
-    destoryDfaStateTransformTable(minDfa);
+    printf("生成结束,开始打印最小化的dfa节点状态表 : \n");
+    printDfaStateTransformTable(minDfa, dfaGroupManager->size);
+    printf("节点状态表打印完毕. \n");
+    viewGroup();
 }
 
 void minimize()
@@ -29,7 +39,6 @@ void minimize()
         // 开始进行切割 若产生分割（产生分割有可能导致旧的不可分割产生分割） 重复此步骤
         sliceDfaGroup();
     } while (addNewGroup);
-    // viewGroup();
     // 分割完毕 开始创建最小化dfa状态转移表
     creatMiniDfaTransTable();
 }
@@ -166,14 +175,14 @@ void viewGroup()
     while (has_Set_iterator_next(itor))
     {
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
-        printf("dfagroup %d \n", dfagroup->group_num);
+        printf("dfagroup序号 %d \n", dfagroup->group_num);
         My_Iterator *itor1 = new_Point_Set_iterator(dfagroup->dfagroup);
         while (has_Set_iterator_next(itor1))
         {
             Dfa *dfa = getp_Set_iterator_next(itor1);
             printf("打印dfa %d %d \n", dfa->stateNum, dfa->accepted);
         }
-        printf("\n");
+        printf("dfagroup单个结束 \n");
         my_iterator_free(itor1);
     }
     my_iterator_free(itor);

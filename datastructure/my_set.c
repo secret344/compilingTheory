@@ -31,7 +31,7 @@ void set_destory(RbRoot *root, void (*handle)(void *))
         rb_destory(root, NULL);
         return;
     }
-    rb_destory(root, handle);
+    rb_destory(root, (void (*)(RbNodeP))handle);
 }
 
 /**
@@ -45,7 +45,8 @@ void set_destory(RbRoot *root, void (*handle)(void *))
 void addp_set(SetRoot root, void *value)
 {
     Rbkey key;
-    RBKeyType key_type = root->key_type;;
+    RBKeyType key_type = root->key_type;
+    ;
     if (key_type == Set_Struct)
         key.n = (int)&*value;
     else

@@ -21,12 +21,15 @@ int matchStr(char *str)
 
 int dfaParse()
 {
+
     Stack *new = new_stack();
     //   printf("dfaParsesad %d\n", stacksize(nfaSet));
     printf("dfaParse \n");
     while (stacksize(nfaSet))
     {
         NfaPair *node = spop(nfaSet);
+        char *name = node->endNode->name;
+        printf("当前生成dfa nfa名称 %s \n", name);
         sPointPush(new, node);
         initDfaParse(node);
     }

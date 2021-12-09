@@ -8,27 +8,25 @@ void viewDfaList();
 static NfaPair *nfaMachine = NULL;
 SetRoot dfaList = NULL;
 int **dfaStateTransformTable;
-
 void initDfaParse(NfaPair *nfaPair)
 {
     // 生成dfa状态转移表结束 清理dfa节点
-    // if (dfaList != NULL)
-    //     destoryDfaList();
-    // // 清理dfa复杂状态转移表
-    // if (dfaStateTransformTable != NULL)
+    if (dfaList != NULL)
+        destoryDfaList();
+    // 清理dfa复杂状态转移表
+    if (dfaStateTransformTable != NULL)
+        destoryDfaStateTransformTable(dfaStateTransformTable);
+    destoryMinimizeDfa();
 
+    printfM();
     dfaList = NULL;
     dfaStateTransformTable = NULL;
-    resetStateNum();
-
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
     convertNfaToDfa();
     // viewDfaList();
     MinimizeDFA();
-    
-    destoryDfaList();
-    destoryDfaStateTransformTable(dfaStateTransformTable);
+    resetStateNum();
 }
 
 void convertNfaToDfa()
@@ -117,7 +115,6 @@ void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
         a[d->c][d->stateNum] = d->targetNum;
         my_free(d);
     }
-    // printDfaStateTransformTable(a, count);
     dfaStateTransformTable = a;
 }
 

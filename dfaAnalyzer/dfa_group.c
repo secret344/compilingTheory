@@ -1,7 +1,7 @@
 #include "dfa_group.h"
 static BOOL groupContainsDfa(SetRoot group, int dfaStateNum);
-static void destorydfaGroup();
 static void destorydfaGroupItem(Dfa_Group_Struct *dfagroup);
+
 static int GROUP_COUNT = 0;
 SetRoot dfaGroupManager = NULL;
 void resetGroup()
@@ -9,9 +9,9 @@ void resetGroup()
     GROUP_COUNT = 0;
     if (dfaGroupManager != NULL)
     {
-        destorydfaGroup();
+        set_destory(dfaGroupManager, (void (*)(void *))destorydfaGroupItem);
+        dfaGroupManager = NULL;
     }
-    dfaGroupManager = NULL;
 }
 
 void destorydfaGroupItem(Dfa_Group_Struct *dfagroup)
@@ -21,15 +21,11 @@ void destorydfaGroupItem(Dfa_Group_Struct *dfagroup)
     my_free(dfagroup);
 }
 
-void destorydfaGroup()
-{
-    set_destory(dfaGroupManager, destorydfaGroupItem);
-}
-
 Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
 {
     if (dfaGroupManager == NULL)
     {
+        printf("新见");
         dfaGroupManager = new_Set(Set_Struct);
     }
 
@@ -89,6 +85,44 @@ BOOL groupContainsDfa(SetRoot group, int dfaStateNum)
     my_iterator_free(itor);
     return result;
 }
+
+/**
+ * @brief 提交清理
+ * @param dfagroup 
+ */
+void commitRemove(dfa_group_struct dfagroup)
+{
+    My_Iterator *itor = new_Point_Set_iterator(dfagroup->tobeRemove);
+    while (has_Set_iterator_next(itor))
+    {
+        // 清理分区
+        Dfa *d = getp_Set_iterator_next(itor);
+        removep_set(dfagroup->dfagroup, d);
+    }
+    my_iterator_free(itor);
+    // 清理待清理
+    set_destory(dfagroup->tobeRemove, NULL);
+    dfagroup->tobeRemove = NULL;
+    // 清理结束
+    dfagroup->tobeRemove = new_Set(Set_Struct);
+}
+
+void concatDfaGroup(SetRoot target, SetRoot source)
+{
+    if (source->size <= 0)
+    {
+        return;
+    }
+
+    My_Iterator *itor = new_Point_Set_iterator(source);
+    while (has_Set_iterator_next(itor))
+    {
+        dfa_group_struct dfaGroup = getp_Set_iterator_next(itor);
+        addp_set(target, dfaGroup);
+    }
+    my_iterator_free(itor);
+}
+
 static int c = 0;
 void realSize(RbNodeP root, int lr)
 {
@@ -131,42 +165,5 @@ void viewGroupSize(SetRoot dfagroup)
     }
     printf("\n");
     printf("真实size %d 迭代器size %d 节点size %d \n", c, count, dfagroup->size);
-    my_iterator_free(itor);
-}
-
-/**
- * @brief 提交清理
- * @param dfagroup 
- */
-void commitRemove(dfa_group_struct dfagroup)
-{
-    My_Iterator *itor = new_Point_Set_iterator(dfagroup->tobeRemove);
-    while (has_Set_iterator_next(itor))
-    {
-        // 清理分区
-        Dfa *d = getp_Set_iterator_next(itor);
-        removep_set(dfagroup->dfagroup, d);
-    }
-    my_iterator_free(itor);
-    // 清理待清理
-    set_destory(dfagroup->tobeRemove, NULL);
-    dfagroup->tobeRemove = NULL;
-    // 清理结束
-    dfagroup->tobeRemove = new_Set(Set_Struct);
-}
-
-void concatDfaGroup(SetRoot target, SetRoot source)
-{
-    if (source->size <= 0)
-    {
-        return;
-    }
-
-    My_Iterator *itor = new_Point_Set_iterator(source);
-    while (has_Set_iterator_next(itor))
-    {
-        dfa_group_struct dfaGroup = getp_Set_iterator_next(itor);
-        addp_set(target, dfaGroup);
-    }
     my_iterator_free(itor);
 }
