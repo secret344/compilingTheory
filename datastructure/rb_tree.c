@@ -104,7 +104,7 @@ RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value)
     new->left = NULL;
     new->right = NULL;
     new->parent = NULL;
-    new->value = value;
+    new->value = &*value;
     new->isDelect = FALSE;
     new->isRed = TRUE;
 
@@ -203,6 +203,19 @@ RbNodeP rb_insert(RbRoot *root, RbNodeP h, Rbkey key, void *value)
     return h;
 }
 
+static RbNodeP deleteMin(RbNodeP node)
+{
+    if (node->left == NULL)
+    {
+        my_free(node);
+        return NULL;
+    }
+    if (!IsRed(node->left) && !IsRed(node->right))
+        node = rb_move_red_to_left(node);
+    node->left = deleteMin(node->left);
+    return balance(node);
+}
+
 RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
 {
     if (rb_node_key_compare(key_type, key, h) == FALSE)
@@ -240,7 +253,7 @@ RbNodeP rb_delect(RBKeyType key_type, RbNodeP h, Rbkey key)
             RbNodeP x = min_node(h->right); //找到后继节点
             h->key = x->key;
             h->value = x->value;
-            h->right = rb_delect(key_type, h->right, x->key); // 在右子树中删除后继;
+            h->right = deleteMin(h->right); // 在右子树中删除后继;
         }
         else
             h->right = rb_delect(key_type, h->right, key);
@@ -277,7 +290,7 @@ RbNodeP rb_move_red_to_right(RbNodeP h)
     flipColors(h);
     if (IsRed(h->left->left))
     {
-        h->right = rb_right_rotate(h); // h的左儿子就是替代者
+        h = rb_right_rotate(h); // h的左儿子就是替代者
         flipColors(h);
     }
 

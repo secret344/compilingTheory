@@ -4,5 +4,5 @@
 #include "dfa_parse.h"
 
 void MinimizeDFA();
-
+void destoryMinimizeDfa();
 #endif
