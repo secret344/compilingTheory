@@ -30,6 +30,8 @@
 ## 目前效果图(时间：2021 年 11 月 16 日 22:24:21)
 
 -   图 1
-    [<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
+    [<img height="600" width="800" src="./example_image/nfa_dot.PNG"/>](./example_image/nfa_dot.PNG)
 -   图 2
+    [<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
+-   图 3
     [<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
