@@ -23,5 +23,7 @@
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.4.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "d3-graphviz": "^4.0.0"
+  }
 }

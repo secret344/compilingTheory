@@ -57,7 +57,10 @@ module.exports = {
             hash: true,
         }),
         new CopyPlugin({
-            patterns: [{ from: "wasm_folder/lexical.*" }],
+            patterns: [
+                { from: "wasm_folder/lexical.*" },
+                { from: "assets/**.*", to: "[name][ext]" },
+            ],
         }),
         new VueLoaderPlugin(),
         new webpack.SourceMapDevToolPlugin({}),
