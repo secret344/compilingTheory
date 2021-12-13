@@ -23,8 +23,14 @@ export default {
     });
 
     const d3_Render = (text) => {
-      content.d3_Instance &&
-        content.d3_Instance.renderDot(text || "digraph graphname  {a->b}");
+      nextTick(() => {
+        const d3_Instance = content.d3_Instance;
+        d3_Instance && d3_Instance.destroy();
+        content.d3_Instance = d3
+          .graphviz(`#${content.name}`)
+          .zoom(false)
+          .renderDot(text || "digraph graphname  {a->b}");
+      });
     };
 
     watchEffect(() => {
@@ -39,12 +45,7 @@ export default {
       }
       text += "}";
       text = color += text;
-      nextTick(() => {
-        const d3_Instance = content.d3_Instance;
-        d3_Instance && d3_Instance.destroy();
-        content.d3_Instance = d3.graphviz(`#${content.name}`).zoom(false);
-        d3_Render(text);
-      });
+      d3_Render(text);
     }, [DOTdata]);
 
     return {
