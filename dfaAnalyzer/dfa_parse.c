@@ -1,14 +1,14 @@
 #include "dfa_parse.h"
-static void convertNfaToDfa();
+static cJSON *convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
 static void destoryDfaList();
-void viewDfaList();
+cJSON *dfaToArrayJson();
 
 static NfaPair *nfaMachine = NULL;
 SetRoot dfaList = NULL;
 int **dfaStateTransformTable;
-void initDfaParse(NfaPair *nfaPair)
+cJSON *initDfaParse(NfaPair *nfaPair)
 {
     // 生成dfa状态转移表结束 清理dfa节点
     if (dfaList != NULL)
@@ -18,18 +18,24 @@ void initDfaParse(NfaPair *nfaPair)
         destoryDfaStateTransformTable(dfaStateTransformTable);
     destoryMinimizeDfa();
 
-    printfM();
     dfaList = NULL;
     dfaStateTransformTable = NULL;
     nfaMachine = nfaPair;
     dfaList = new_Set(Set_Struct);
-    convertNfaToDfa();
-    // viewDfaList();
-    MinimizeDFA();
+    cJSON *dfaSTT = convertNfaToDfa();
     resetStateNum();
+    // 生成json
+    cJSON *result = cJSON_CreateObject();
+    cJSON *dfaGroupJson = MinimizeDFA();
+    cJSON *dfajson = dfaToArrayJson();
+
+    cJSON_AddItemToObject(result, "minimizeDfa", dfaGroupJson);
+    cJSON_AddItemToObject(result, "dfaJson", dfajson);
+    cJSON_AddItemToObject(result, "dfaSTT", dfaSTT);
+    return result;
 }
 
-void convertNfaToDfa()
+cJSON *convertNfaToDfa()
 {
     int nextNum = STATE_FAILURE;
     int dfacount = 0; // 记录dfa节点数量
@@ -98,6 +104,8 @@ void convertNfaToDfa()
     // 生成dfa状态转移表
     creatDfaStateTransformTable(dfacount, dfa_transfrom_table);
     sdestory(dfa_transfrom_table, NULL);
+    cJSON *dfaSTT = stateTransformTableToJson(dfaStateTransformTable, ASCII_COUNT, dfacount);
+    return dfaSTT;
 }
 
 void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
@@ -131,43 +139,16 @@ void destoryDfaList()
     set_destory(dfaList, NULL);
 }
 
-static void realSize(RbNodeP root, int lr, int pn)
+cJSON *dfaToArrayJson()
 {
-    if (root == NULL)
-    {
-        return;
-    }
-
-    int num = root->key.n;
-    Dfa *value = root->value;
-    RbNodeP p = root->parent;
-    if (p != NULL)
-    {
-        int nump = p->key.n;
-        Dfa *pv = p->value;
-        printf(" 父亲 %d  方向%d \n", pv->stateNum, lr);
-    }
-
-    // printf(" 父亲 %d  方向%d \n", pn, lr);
-    printf(" 我自己 %d %d  %d \n\n", root, value->stateNum, root->isRed);
-    if (root->left != NULL)
-    {
-        realSize(root->left, 1, num);
-    }
-    if (root->right != NULL)
-    {
-        realSize(root->right, 2, num);
-    }
-}
-
-void viewDfaList()
-{
+    cJSON *dfaset = cJSON_CreateArray();
     My_Iterator *itor = new_Point_Set_iterator(dfaList);
-    realSize(dfaList->node, 0, 0);
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
-        printf("打印 %d %d \n", dfa->stateNum, dfa->accepted);
+        cJSON *dfaJson = DfaToCJson(dfa);
+        cJSON_AddItemToArray(dfaset, dfaJson);
     }
     my_iterator_free(itor);
+    return dfaset;
 }

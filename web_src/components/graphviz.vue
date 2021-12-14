@@ -27,7 +27,11 @@ export default {
         const d3_Instance = content.d3_Instance;
         d3_Instance && d3_Instance.destroy();
         content.d3_Instance = d3
-          .graphviz(`#${content.name}`)
+          .graphviz(`#${content.name}`, {
+            useWorker: false,
+            width: "1000",
+            // zoomScaleExtent: [10, 100],
+          })
           .zoom(false)
           .renderDot(text || "digraph graphname  {a->b}");
       });

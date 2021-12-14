@@ -12,7 +12,7 @@ Dfa *getDfaFromNfaSet(Stack *input)
     Dfa *dfa = (Dfa *)my_malloc(sizeof(Dfa));
     dfa->nfaStates = new_Set(Set_Struct);
     dfa->accepted = FALSE;
-    
+
     while (stacksize(input))
     {
         NfaNode *nfa = spop(input);
@@ -106,4 +106,51 @@ void destoryDfaStateTransformTable(int **a)
         my_free(a[i]);
     }
     my_free(a);
+}
+
+cJSON *DfaToCJson(Dfa *dfa)
+{
+    cJSON *current = cJSON_CreateObject();
+
+    cJSON *stateNum = cJSON_CreateNumber(dfa->stateNum);
+    cJSON *accepted = cJSON_CreateNumber(dfa->accepted);
+
+    cJSON *nfaSet = cJSON_CreateArray();
+    My_Iterator *itor = new_Point_Set_iterator(dfa->nfaStates);
+    while (has_Set_iterator_next(itor))
+    {
+        NfaNode *nfa = getp_Set_iterator_next(itor);
+        cJSON *nfaStateNum = cJSON_CreateNumber(nfa->stateNum);
+        cJSON_AddItemToArray(nfaSet, nfaStateNum);
+    }
+    my_iterator_free(itor);
+
+    cJSON_AddItemToObject(current, "dfaStateNum", stateNum);
+    cJSON_AddItemToObject(current, "accepted", accepted);
+    cJSON_AddItemToObject(current, "nfaset", nfaSet);
+
+    return current;
+}
+/**
+ * @brief 状态转移表 json
+ * 
+ * @param n 
+ * @param row  行数
+ * @param col  列数
+ * @return cJSON* 
+ */
+cJSON *stateTransformTableToJson(int **a, int row, int col)
+{
+    cJSON *root = cJSON_CreateArray();
+    for (size_t i = 0; i < row; i++)
+    {
+        cJSON *colJson = cJSON_CreateArray();
+        for (size_t j = 0; j < col; j++)
+        {
+            cJSON *nJson = cJSON_CreateNumber(a[i][j]);
+            cJSON_AddItemToArray(colJson, nJson);
+        }
+        cJSON_AddItemToArray(root, colJson);
+    }
+    return root;
 }

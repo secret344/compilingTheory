@@ -3,7 +3,7 @@
 import InputReg from "./components/inputReg";
 import MatchReg from "./components/matchReg";
 import Graphviz from "./components/graphviz";
-import { formatterNFAIntermediate } from "./utils";
+import { formatterNFAIntermediate, formatterSTTIntermediate } from "./utils";
 import { WebAssemblyFun, regstr } from "./server/c_bind";
 import { ref, reactive, onBeforeMount } from "vue";
 
@@ -20,9 +20,10 @@ export default {
       defValue: regstr,
       matchValue: "",
       dotArr: [],
+      dfaSTT: [],
+      dfaJson: null,
     });
     let wsFun = null;
-    console.log(regstr);
     onBeforeMount(async () => {
       wsFun = await WebAssemblyFun();
     });
@@ -34,19 +35,39 @@ export default {
     const onregmatch = (value) => {
       regValue.matchValue = value;
     };
-
+    
     const onclick = () => {
-      const { regParse, matchStr, dfaParse } = wsFun;
+      const { regParse, dfaParse } = wsFun;
       let str = regParse(regValue.value);
       regValue.dotArr = formatterNFAIntermediate(JSON.parse(str));
-      console.log("格式化结果(NFA)", regValue.dotArr, JSON.parse(str));
-      // dfaParse();
+      regValue.dfaJson = JSON.parse(dfaParse());
     };
+
+    const lookDfaJson = () => {
+      let dfaJson = regValue.dfaJson;
+      regValue.dfaSTT = [];
+      for (const key in dfaJson) {
+        console.log(dfaJson[key]);
+        regValue.dfaSTT.push({
+          name: key,
+          dfa: formatterSTTIntermediate(dfaJson[key].dfaSTT),
+          miniDfa: formatterSTTIntermediate(dfaJson[key].minimizeDfa.minDfa),
+        });
+      }
+    };
+
     const onclickmatch = () => {
-      const { matchStr, dfaParse } = wsFun;
+      const { matchStr } = wsFun;
       matchStr(regValue.matchValue);
     };
-    return { onregcontent, onregmatch, onclickmatch, onclick, regValue };
+    return {
+      onregcontent,
+      onregmatch,
+      onclickmatch,
+      onclick,
+      regValue,
+      lookDfaJson,
+    };
   },
 };
 </script>
@@ -72,6 +93,7 @@ export default {
         string:(["](.)*["])|(['](.)*['])<br />
       </p>
     </div>
+
     <div>
       <h2>NFA</h2>
       <div class="graphviz_flex">
@@ -80,13 +102,30 @@ export default {
         </div>
       </div>
     </div>
+
+    <div>
+      <h2>DFA AND MINIDFA</h2>
+      <button @click="lookDfaJson">
+        查看dfa状态转移图(请使用简易的正则表达式查看,不要携带控制字符)
+      </button>
+      <div class="graphviz_flex graphviz_dfa">
+        <div v-for="item in regValue.dfaSTT" :key="item.name">
+          <Graphviz
+            :name="item.name + '_dfa'"
+            :graphIntermediate="item.dfa"
+          ></Graphviz>
+          <Graphviz
+            :name="item.name + '_miniDfa'"
+            :graphIntermediate="item.miniDfa"
+          ></Graphviz>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style>
 .app_box {
-  display: flex;
-  flex: 1 1;
 }
 .greeting {
   color: red;
@@ -98,6 +137,9 @@ export default {
 .graphviz_flex {
   display: flex;
   flex-wrap: wrap;
+}
+.graphviz_dfa {
+  flex-direction: column;
 }
 textarea {
   min-width: 400px;

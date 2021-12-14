@@ -2,6 +2,8 @@
 #define _DFA_GROUP_
 #include "my_set.h"
 #include "dfa_interface.h"
+#include "cJSON.h"
+
 #define DfaGroupContains(dfa, target) \
     \hasp_set(dfa->dfagroup, target)
 
@@ -21,4 +23,5 @@ void commitRemove(dfa_group_struct dfagroup);
 void resetGroup();
 void concatDfaGroup(SetRoot target, SetRoot source);
 void viewGroupSize(SetRoot dfagroup);
+cJSON *DfaGroupToCJson(Dfa_Group_Struct *dfagroup);
 #endif

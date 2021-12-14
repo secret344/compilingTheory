@@ -15,6 +15,6 @@ extern SetRoot dfaGroupManager;
 extern SetRoot dfaList;
 extern int **dfaStateTransformTable;
 
-void initDfaParse(NfaPair *nfa);
+cJSON *initDfaParse(NfaPair *nfa);
 
 #endif

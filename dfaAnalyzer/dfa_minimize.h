@@ -3,6 +3,6 @@
 #include "dfa_group.h"
 #include "dfa_parse.h"
 
-void MinimizeDFA();
+cJSON *MinimizeDFA();
 void destoryMinimizeDfa();
 #endif

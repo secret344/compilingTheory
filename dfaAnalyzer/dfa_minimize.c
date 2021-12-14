@@ -5,7 +5,8 @@ static void minimize();
 static void sliceDfaGroup();
 static void creatMiniDfaTransTable();
 static void initMiniDfaTransTable();
-void viewGroup();
+static cJSON *dfaGroupToArrayJson();
+static void viewGroup();
 
 static BOOL addNewGroup = FALSE;
 static dfa_group_struct newGroup = NULL;
@@ -20,13 +21,19 @@ void destoryMinimizeDfa()
     resetGroup();
 }
 
-void MinimizeDFA()
+cJSON *MinimizeDFA()
 {
     minimize();
-    printf("生成结束,开始打印最小化的dfa节点状态表 : \n");
-    printDfaStateTransformTable(minDfa, dfaGroupManager->size);
-    printf("节点状态表打印完毕. \n");
-    viewGroup();
+    // printf("生成结束,开始打印最小化的dfa节点状态表 : \n");
+    // printDfaStateTransformTable(minDfa, dfaGroupManager->size);
+    // printf("节点状态表打印完毕. \n");
+    // viewGroup();
+    cJSON *result = cJSON_CreateObject();
+    cJSON *dfaGroup = dfaGroupToArrayJson();
+    cJSON *minDfaJson = stateTransformTableToJson(minDfa, ASCII_COUNT, dfaGroupManager->size);
+    cJSON_AddItemToObject(result, "dfaGroup", dfaGroup);
+    cJSON_AddItemToObject(result, "minDfa", minDfaJson);
+    return result;
 }
 
 void minimize()
@@ -187,4 +194,20 @@ void viewGroup()
     }
     my_iterator_free(itor);
     printf("viewGroup end %d \n", dfaList->size);
+}
+
+cJSON *dfaGroupToArrayJson()
+{
+    cJSON *result = cJSON_CreateArray();
+
+    My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
+        cJSON *json = DfaGroupToCJson(dfagroup);
+        cJSON_AddItemToArray(result, json);
+    }
+    my_iterator_free(itor);
+
+    return result;
 }

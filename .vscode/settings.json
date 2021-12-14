@@ -91,6 +91,7 @@
         "*.tcc": "c",
         "optional": "c",
         "atomic": "c",
-        "cstddef": "c"
+        "cstddef": "c",
+        "dfa_interface.h": "c"
     }
 }

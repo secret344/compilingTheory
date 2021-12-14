@@ -25,7 +25,6 @@ Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
 {
     if (dfaGroupManager == NULL)
     {
-        printf("新见");
         dfaGroupManager = new_Set(Set_Struct);
     }
 
@@ -166,4 +165,26 @@ void viewGroupSize(SetRoot dfagroup)
     printf("\n");
     printf("真实size %d 迭代器size %d 节点size %d \n", c, count, dfagroup->size);
     my_iterator_free(itor);
+}
+
+cJSON *DfaGroupToCJson(Dfa_Group_Struct *dfagroup)
+{
+    cJSON *cur = cJSON_CreateObject();
+
+    cJSON *group_num = cJSON_CreateNumber(dfagroup->group_num);
+
+    cJSON *dfa_set = cJSON_CreateArray();
+    My_Iterator *itor1 = new_Point_Set_iterator(dfagroup->dfagroup);
+    while (has_Set_iterator_next(itor1))
+    {
+        Dfa *dfa = getp_Set_iterator_next(itor1);
+        cJSON *dfa_num = cJSON_CreateNumber(dfa->stateNum);
+        cJSON_AddItemToArray(dfa_set, dfa_num);
+    }
+    my_iterator_free(itor1);
+
+    cJSON_AddItemToObject(cur, "groupnum", group_num);
+    cJSON_AddItemToObject(cur, "dfaset", dfa_set);
+
+    return cur;
 }

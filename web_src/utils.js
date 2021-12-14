@@ -10,7 +10,7 @@ function nfaRecursion(node, arr) {
             (edge == -2
                 ? inputset.replace(/"/g, '\\"')
                 : edge >= 0
-                ? String.fromCharCode(edge)
+                ? String.fromCharCode(edge).replace(/"/g, '\\"')
                 : edge) + "",
         id: stateNum,
     };
@@ -37,5 +37,28 @@ export function formatterNFAIntermediate(obj) {
             value: graph,
         });
     }
+    return result;
+}
+/**
+ * STT :StateTransformTable
+ * @date 14/12/2021
+ */
+export function formatterSTTIntermediate(arr) {
+    let row = arr.length;
+    let col = arr[0].length;
+    let result = [];
+    for (let i = 0; i < row; i++) {
+        for (let j = 0; j < col; j++) {
+            let r = arr[i][j];
+            if (r != -1) {
+                result.push({
+                    id: j,
+                    value: String.fromCharCode(i).replace(/"/g, '\\"'),
+                    next1: r,
+                });
+            }
+        }
+    }
+    console.log(result);
     return result;
 }

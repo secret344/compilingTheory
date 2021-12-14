@@ -1,6 +1,7 @@
 #ifndef _DFA_UTILS_
 #define _DFA_UTILS_
 #include "dfa_interface.h"
+#include "cJSON.h"
 
 // 新建dfa节点
 // input: nfa集合(栈模拟)
@@ -12,4 +13,6 @@ void set_To_Stack(Stack *target, SetRoot source);
 void resetStateNum();
 void printDfaStateTransformTable(int **a, int count);
 void destoryDfaStateTransformTable(int **a);
+cJSON *DfaToCJson(Dfa *dfa);
+cJSON *stateTransformTableToJson(int **a, int row, int col);
 #endif

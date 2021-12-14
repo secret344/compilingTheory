@@ -19,26 +19,27 @@ int matchStr(char *str)
     return 0;
 }
 
-int dfaParse()
+char *dfaParse()
 {
-
+    cJSON *root = cJSON_CreateObject();
     Stack *new = new_stack();
-    //   printf("dfaParsesad %d\n", stacksize(nfaSet));
-    printf("dfaParse \n");
+    // printf("dfaParse \n");
     while (stacksize(nfaSet))
     {
         NfaPair *node = spop(nfaSet);
         char *name = node->endNode->name;
-        printf("当前生成dfa nfa名称 %s \n", name);
         sPointPush(new, node);
-        initDfaParse(node);
+
+        cJSON *dfajson = initDfaParse(node);
+        cJSON_AddItemToObject(root, name, dfajson);
     }
     sdestory(nfaSet, NULL);
     nfaSet = new;
-    printf("dfaParse end \n");
+    // printf("dfaParse end \n");
     printfM();
-    return 0;
-    // id:((<|!|\+|=|\||\-|\*|&)+)|((<|!|\+|=|\||\-|\*|&)=)|(\[|\]|\(|\))
+    char *s = cJSON_Print(root);
+    cJSON_Delete(root);
+    return s;
 }
 
 int main()
