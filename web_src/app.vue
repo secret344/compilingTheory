@@ -35,23 +35,27 @@ export default {
     const onregmatch = (value) => {
       regValue.matchValue = value;
     };
-    
+
     const onclick = () => {
       const { regParse, dfaParse } = wsFun;
       let str = regParse(regValue.value);
       regValue.dotArr = formatterNFAIntermediate(JSON.parse(str));
       regValue.dfaJson = JSON.parse(dfaParse());
+      regValue.dfaSTT = [];
     };
 
     const lookDfaJson = () => {
-      let dfaJson = regValue.dfaJson;
       regValue.dfaSTT = [];
+      let dfaJson = regValue.dfaJson;
       for (const key in dfaJson) {
-        console.log(dfaJson[key]);
         regValue.dfaSTT.push({
           name: key,
-          dfa: formatterSTTIntermediate(dfaJson[key].dfaSTT),
-          miniDfa: formatterSTTIntermediate(dfaJson[key].minimizeDfa.minDfa),
+          dfa: formatterSTTIntermediate(dfaJson[key].dfaSTT, dfaJson[key]),
+          miniDfa: formatterSTTIntermediate(
+            dfaJson[key].minimizeDfa.minDfa,
+            dfaJson[key],
+            true
+          ),
         });
       }
     };
@@ -104,9 +108,11 @@ export default {
     </div>
 
     <div>
-      <h2>DFA AND MINIDFA</h2>
+      <h2>DFA AND MINIDFA(悬浮节点可见详细提示)</h2>
       <button @click="lookDfaJson">
-        查看dfa状态转移图(请使用简易的正则表达式查看,不要携带控制字符)
+        查看dfa状态转移图(<strong style="color: red"
+          >请使用简易的正则表达式查看,不要携带控制字符</strong
+        >)
       </button>
       <div class="graphviz_flex graphviz_dfa">
         <div v-for="item in regValue.dfaSTT" :key="item.name">

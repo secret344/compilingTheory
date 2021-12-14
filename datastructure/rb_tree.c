@@ -112,7 +112,7 @@ RbNodeP rb_new_node(RBKeyType type, Rbkey key, void *value)
     {
         // 字符串需要拷贝
         char *p = key.p;
-        key.p = (char *)malloc(strlen(p) + 1);
+        key.p = (char *)my_malloc(strlen(p) + 1);
         strcpy(key.p, p);
     }
 

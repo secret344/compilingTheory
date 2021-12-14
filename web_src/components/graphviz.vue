@@ -22,6 +22,12 @@ export default {
       return props.graphIntermediate;
     });
 
+    const reset_room = () => {
+      try {
+        content.d3_Instance.resetZoom();
+      } catch (error) {}
+    };
+
     const d3_Render = (text) => {
       nextTick(() => {
         const d3_Instance = content.d3_Instance;
@@ -29,11 +35,11 @@ export default {
         content.d3_Instance = d3
           .graphviz(`#${content.name}`, {
             useWorker: false,
-            width: "1000",
-            // zoomScaleExtent: [10, 100],
+            width: 1000,
           })
-          .zoom(false)
+          .zoom(true)
           .renderDot(text || "digraph graphname  {a->b}");
+        setTimeout(reset_room);
       });
     };
 
@@ -43,9 +49,11 @@ export default {
       let color =
         'digraph {rankdir="LR"  size="10,10" regular=true node [style="filled"];';
       for (let i = 0; i < arr.length; i++) {
-        const { id, value, next1, next2 } = arr[i];
-        if (next1) text += ` ${id} -> ${next1} [label="${value}"] ; `;
-        if (next2) text += ` ${id} -> ${next2} [label="${value}"] ; `;
+        const { id, value, next1, next2, tooltip } = arr[i];
+        // labeltooltip
+        tooltip && (text = `${id} [tooltip="${tooltip}" ];` + text);
+        if (next1) text += `${id} -> ${next1} [label="${value}"] ; `;
+        if (next2) text += `${id} -> ${next2} [label="${value}"] ; `;
       }
       text += "}";
       text = color += text;
@@ -55,6 +63,7 @@ export default {
     return {
       content,
       DOTdata,
+      reset_room,
     };
   },
 };
@@ -63,6 +72,7 @@ export default {
 <template>
   <div class="graphviz_box">
     <h2>{{ content.name }}</h2>
+    <button @click="reset_room">reset zoom</button>
     <div :id="content.name"></div>
   </div>
 </template>

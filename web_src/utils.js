@@ -43,10 +43,13 @@ export function formatterNFAIntermediate(obj) {
  * STT :StateTransformTable
  * @date 14/12/2021
  */
-export function formatterSTTIntermediate(arr) {
+export function formatterSTTIntermediate(arr, obj, idMini = false) {
     let row = arr.length;
     let col = arr[0].length;
     let result = [];
+
+    let first = {};
+
     for (let i = 0; i < row; i++) {
         for (let j = 0; j < col; j++) {
             let r = arr[i][j];
@@ -56,9 +59,47 @@ export function formatterSTTIntermediate(arr) {
                     value: String.fromCharCode(i).replace(/"/g, '\\"'),
                     next1: r,
                 });
+                if (j === 0) {
+                    first[r] = !!first[r]
+                        ? [
+                              ...first[r],
+                              String.fromCharCode(i).replace(/"/g, '\\"'),
+                          ]
+                        : [String.fromCharCode(i).replace(/"/g, '\\"')];
+                }
             }
         }
     }
-    console.log(result);
+
+    let dfaJson = obj.dfaJson;
+    let dfaGroup = obj.minimizeDfa.dfaGroup;
+    if (idMini) {
+        dfaGroup.forEach((item) => {
+            result.push({
+                id: item.groupnum,
+                tooltip: `dfa节点集合：${item.dfaset.join(",")}`,
+            });
+            if (first[item.groupnum]) {
+                result[result.length - 1].tooltip =
+                    result[result.length - 1].tooltip +
+                    `\n前置输入条件:${first[item.groupnum].join(",")}`;
+            }
+        });
+    } else {
+        dfaJson.forEach((item) => {
+            result.push({
+                id: item.dfaStateNum,
+                tooltip: `终结态:${
+                    item.accepted
+                };\nnfa节点集合:${item.nfaset.join(",")}`,
+            });
+            if (first[item.dfaStateNum]) {
+                result[result.length - 1].tooltip =
+                    result[result.length - 1].tooltip +
+                    `\n前置输入条件:${first[item.dfaStateNum].join(",")}`;
+            }
+        });
+    }
+
     return result;
 }

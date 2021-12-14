@@ -6,7 +6,7 @@
 
 ## 下一步
 
--   语法分析预热((lll￢ω￢))
+-   语法分析预热((lll ￢ ω ￢))
 -   完善 NFA 警告
 -   完善 NFA DFA
 
@@ -27,11 +27,16 @@
 
 -   [CJSON](https://github.com/DaveGamble/cJSON)
 
-## 目前效果图(时间：2021年12月13日 17:09:03)
+## 目前效果图(时间)
 
--   图 1
-    [<img height="600" width="800" src="./example_image/nfa_dot.PNG"/>](./example_image/nfa_dot.PNG)
+-   图 1 ( id:a|b|c )
+
+    [<img height="600" width="800" src="./example_image/nfa_dfa_dot.PNG"/>](./example_image/nfa_dfa_dot.PNG)
+
 -   图 2
+
     [<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
+
 -   图 3
+
     [<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
