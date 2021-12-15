@@ -1,4 +1,5 @@
 #include "dfa_parse.h"
+static cJSON *initDfaParse(NfaPair *nfaPair);
 static cJSON *convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
@@ -8,6 +9,39 @@ cJSON *dfaToArrayJson();
 static NfaPair *nfaMachine = NULL;
 SetRoot dfaList = NULL;
 int **dfaStateTransformTable;
+char *dfaJsonStr = NULL;
+/**
+ * @brief nfa转为dfa
+ * 
+ */
+void dfaParse()
+{
+    if (dfaJsonStr != NULL)
+    {
+        cJSON_free(dfaJsonStr);
+        dfaJsonStr = NULL;
+    }
+
+    cJSON *root = cJSON_CreateObject();
+    Stack *new = new_stack();
+    // printf("dfaParse \n");
+    while (stacksize(nfaSet))
+    {
+        NfaPair *node = spop(nfaSet);
+        char *name = node->endNode->name;
+        sPointPush(new, node);
+
+        cJSON *dfajson = initDfaParse(node);
+        cJSON_AddItemToObject(root, name, dfajson);
+    }
+    sdestory(nfaSet, NULL);
+    nfaSet = new;
+    // printf("dfaParse end \n");
+    printfM();
+    dfaJsonStr = cJSON_Print(root);
+    cJSON_Delete(root);
+}
+
 cJSON *initDfaParse(NfaPair *nfaPair)
 {
     // 生成dfa状态转移表结束 清理dfa节点

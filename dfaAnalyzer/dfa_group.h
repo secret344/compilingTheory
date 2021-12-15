@@ -9,7 +9,8 @@
 
 #define DfaGroupSize(dfa) \
     \(dfa->dfagroup->size)
-
+    
+extern SetRoot dfaGroupManager;
 typedef struct Dfa_Group_Struct
 {
     int group_num;

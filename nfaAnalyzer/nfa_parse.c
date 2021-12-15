@@ -9,6 +9,7 @@
 #include "read_file.h"
 #include "nfa_Interface.h"
 #include "cJSON.h"
+#include "dfa_parse.h"
 
 static void initRegParse(char *str);
 static void switchOption(char str);
@@ -28,15 +29,23 @@ NfaPair *curNfa = NULL;         // 当前正在处理的节点
 NfaPair *nfapaif = NULL;        // 当前正在处理的节点树
 WholeState *wholeStatus = NULL; // 当前程序状态
 Stack *nfaSet = NULL;
+char *NfaJsonStr = NULL;
 int StateNum = 0;
 
 char *initParse(char *path, fun_lex parseFun)
 {
+    if (NfaJsonStr != NULL)
+    {
+        cJSON_free(dfaJsonStr);
+        dfaJsonStr = NULL;
+    }
+
     resetNfaSet();
     wholeStatus->state = PSWdef;
     int status = parseFun(path, judgeBlock);
-    char *JsonStr = getJsonNfa();
-    return JsonStr;
+    NfaJsonStr = getJsonNfa();
+    dfaParse();
+    return NfaJsonStr;
 }
 
 void judgeBlock(char str)

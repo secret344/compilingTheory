@@ -37,10 +37,10 @@ export default {
     };
 
     const onclick = () => {
-      const { regParse, dfaParse } = wsFun;
+      const { regParse, getDfaJson } = wsFun;
       let str = regParse(regValue.value);
       regValue.dotArr = formatterNFAIntermediate(JSON.parse(str));
-      regValue.dfaJson = JSON.parse(dfaParse());
+      regValue.dfaJson = JSON.parse(getDfaJson());
       regValue.dfaSTT = [];
     };
 

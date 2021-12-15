@@ -9,6 +9,7 @@ target_sources(dfaAnalyzer
       ${READ_FILE_C}
   PUBLIC
       ${CMAKE_CURRENT_LIST_DIR}/dfa_parse.h
+      ${CMAKE_CURRENT_LIST_DIR}/dfa_Intepretor.h
   )
 
 target_link_libraries(dfaAnalyzer

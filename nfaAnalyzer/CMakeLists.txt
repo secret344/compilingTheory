@@ -17,6 +17,7 @@ target_link_libraries(nfaAnalyzer
   PUBLIC 
   readfile
   datastructure
+  dfaAnalyzer
   )
 
 target_include_directories(nfaAnalyzer

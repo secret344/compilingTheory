@@ -10,7 +10,7 @@ static void viewGroup();
 
 static BOOL addNewGroup = FALSE;
 static dfa_group_struct newGroup = NULL;
-static int **minDfa = NULL;
+int **minDfa = NULL;
 void destoryMinimizeDfa()
 {
     if (minDfa != NULL)

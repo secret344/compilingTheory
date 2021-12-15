@@ -136,7 +136,7 @@ char *setComplement(char *str)
     char s[129];
     int count = 0;
     // TODO 去掉ASCII码表首个字符 json格式化显示异常（未修复）
-    for (int i = 1; i < ASCII_COUNT; i++)
+    for (int i = 0; i < ASCII_COUNT; i++)
     {
         int is = findChar(i, str);
         if (!is)

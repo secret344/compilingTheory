@@ -19,27 +19,9 @@ int matchStr(char *str)
     return 0;
 }
 
-char *dfaParse()
+char *getDfaJson()
 {
-    cJSON *root = cJSON_CreateObject();
-    Stack *new = new_stack();
-    // printf("dfaParse \n");
-    while (stacksize(nfaSet))
-    {
-        NfaPair *node = spop(nfaSet);
-        char *name = node->endNode->name;
-        sPointPush(new, node);
-
-        cJSON *dfajson = initDfaParse(node);
-        cJSON_AddItemToObject(root, name, dfajson);
-    }
-    sdestory(nfaSet, NULL);
-    nfaSet = new;
-    // printf("dfaParse end \n");
-    printfM();
-    char *s = cJSON_Print(root);
-    cJSON_Delete(root);
-    return s;
+    return dfaJsonStr;
 }
 
 int main()
