@@ -3,8 +3,14 @@
 #include "dfa_group.h"
 #include "dfa_parse.h"
 
-extern int **minDfa;
-cJSON *MinimizeDFA();
-void destoryMinimizeDfa();
-
+typedef struct Dfa_Info_Set
+{
+    char *name;
+    int **minidfa;
+    SetRoot dfaGroupManager;
+    SetRoot dfaList;
+} Dfa_Info_Set;
+extern SetRoot dfainfo;
+cJSON *MinimizeDFA(char *name);
+void destoryDfaInfo();
 #endif

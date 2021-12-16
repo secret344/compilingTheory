@@ -1,9 +1,8 @@
 #include "dfa_parse.h"
-static cJSON *initDfaParse(NfaPair *nfaPair);
+static cJSON *initDfaParse(NfaPair *nfaPair, char *name);
 static cJSON *convertNfaToDfa();
 static void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table);
 static void destoryNull(void *x){};
-static void destoryDfaList();
 cJSON *dfaToArrayJson();
 
 static NfaPair *nfaMachine = NULL;
@@ -21,7 +20,7 @@ void dfaParse()
         cJSON_free(dfaJsonStr);
         dfaJsonStr = NULL;
     }
-
+    destoryDfaInfo();
     cJSON *root = cJSON_CreateObject();
     Stack *new = new_stack();
     // printf("dfaParse \n");
@@ -31,7 +30,7 @@ void dfaParse()
         char *name = node->endNode->name;
         sPointPush(new, node);
 
-        cJSON *dfajson = initDfaParse(node);
+        cJSON *dfajson = initDfaParse(node, name);
         cJSON_AddItemToObject(root, name, dfajson);
     }
     sdestory(nfaSet, NULL);
@@ -42,15 +41,11 @@ void dfaParse()
     cJSON_Delete(root);
 }
 
-cJSON *initDfaParse(NfaPair *nfaPair)
+cJSON *initDfaParse(NfaPair *nfaPair, char *name)
 {
-    // 生成dfa状态转移表结束 清理dfa节点
-    if (dfaList != NULL)
-        destoryDfaList();
     // 清理dfa复杂状态转移表
     if (dfaStateTransformTable != NULL)
         destoryDfaStateTransformTable(dfaStateTransformTable);
-    destoryMinimizeDfa();
 
     dfaList = NULL;
     dfaStateTransformTable = NULL;
@@ -60,7 +55,7 @@ cJSON *initDfaParse(NfaPair *nfaPair)
     resetStateNum();
     // 生成json
     cJSON *result = cJSON_CreateObject();
-    cJSON *dfaGroupJson = MinimizeDFA();
+    cJSON *dfaGroupJson = MinimizeDFA(name);
     cJSON *dfajson = dfaToArrayJson();
 
     cJSON_AddItemToObject(result, "minimizeDfa", dfaGroupJson);
@@ -160,9 +155,9 @@ void creatDfaStateTransformTable(int count, Stack *dfa_transfrom_table)
     dfaStateTransformTable = a;
 }
 
-void destoryDfaList()
+void destoryDfaList(SetRoot dl)
 {
-    My_Iterator *itor = new_Point_Set_iterator(dfaList);
+    My_Iterator *itor = new_Point_Set_iterator(dl);
     while (has_Set_iterator_next(itor))
     {
         Dfa *dfa = getp_Set_iterator_next(itor);
@@ -170,7 +165,7 @@ void destoryDfaList()
         my_free(dfa);
     }
     my_iterator_free(itor);
-    set_destory(dfaList, NULL);
+    set_destory(dl, NULL);
 }
 
 cJSON *dfaToArrayJson()
