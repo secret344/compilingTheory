@@ -92,6 +92,10 @@
         "optional": "c",
         "atomic": "c",
         "cstddef": "c",
-        "dfa_interface.h": "c"
+        "dfa_interface.h": "c",
+        "__functional_base_03": "c",
+        "memory_resource": "c",
+        "dfa_parse.h": "c",
+        "dfa_intepretor.h": "c"
     }
 }

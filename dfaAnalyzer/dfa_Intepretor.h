@@ -6,4 +6,6 @@
 #include "dfa_minimize.h"
 #include "dfa_group.h"
 
+char *initMatchDfa(char *s);
+
 #endif

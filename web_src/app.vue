@@ -41,6 +41,7 @@ export default {
       let str = regParse(regValue.value);
       regValue.dotArr = formatterNFAIntermediate(JSON.parse(str));
       regValue.dfaJson = JSON.parse(getDfaJson());
+      console.log(regValue.dfaJson);
       regValue.dfaSTT = [];
     };
 
@@ -62,7 +63,8 @@ export default {
 
     const onclickmatch = () => {
       const { matchStr } = wsFun;
-      matchStr(regValue.matchValue);
+      let s = matchStr(regValue.matchValue);
+      console.log("dfa结果", s);
     };
     return {
       onregcontent,

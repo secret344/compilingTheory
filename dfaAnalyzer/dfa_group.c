@@ -44,19 +44,31 @@ Dfa_Group_Struct *newDfaGroup(BOOL isAdd)
  */
 Dfa_Group_Struct *getContainingGroup(int dfaStateNum)
 {
-    return getContainingGroupForList(dfaStateNum, dfaGroupManager);
-}
-
-Dfa_Group_Struct *getContainingGroupForList(int dfaStateNum, SetRoot dg)
-{
     dfa_group_struct result = NULL;
-    My_Iterator *itor = new_Point_Set_iterator(dg);
+    My_Iterator *itor = new_Point_Set_iterator(dfaGroupManager);
     while (has_Set_iterator_next(itor))
     {
         Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
         if (groupContainsDfa(dfagroup->dfagroup, dfaStateNum))
         {
             // 存在该节点 返回分区
+            result = dfagroup;
+            break;
+        }
+    }
+    my_iterator_free(itor);
+    return result;
+}
+
+Dfa_Group_Struct *getContainingGroupForList(int group_num, SetRoot dg)
+{
+    dfa_group_struct result = NULL;
+    My_Iterator *itor = new_Point_Set_iterator(dg);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa_Group_Struct *dfagroup = getp_Set_iterator_next(itor);
+        if (dfagroup->group_num == group_num)
+        {
             result = dfagroup;
             break;
         }
