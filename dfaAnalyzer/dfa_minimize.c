@@ -7,22 +7,17 @@ static void creatMiniDfaTransTable();
 static void initMiniDfaTransTable();
 static cJSON *dfaGroupToArrayJson();
 static void viewGroup();
+static void saveDfaInfo(char *name);
 
 static BOOL addNewGroup = FALSE;
 static dfa_group_struct newGroup = NULL;
 int **minDfa = NULL;
-void destoryMinimizeDfa()
-{
-    if (minDfa != NULL)
-    {
-        destoryDfaStateTransformTable(minDfa);
-        minDfa = NULL;
-    }
-    resetGroup();
-}
+SetRoot dfainfo = NULL;
 
-cJSON *MinimizeDFA()
+cJSON *MinimizeDFA(char *name)
 {
+    minDfa = NULL;
+    resetGroup();
     minimize();
     // printf("生成结束,开始打印最小化的dfa节点状态表 : \n");
     // printDfaStateTransformTable(minDfa, dfaGroupManager->size);
@@ -33,6 +28,9 @@ cJSON *MinimizeDFA()
     cJSON *minDfaJson = stateTransformTableToJson(minDfa, ASCII_COUNT, dfaGroupManager->size);
     cJSON_AddItemToObject(result, "dfaGroup", dfaGroup);
     cJSON_AddItemToObject(result, "minDfa", minDfaJson);
+
+    // 存储本轮dfa信息 下轮开始释放
+    saveDfaInfo(name);
     return result;
 }
 
@@ -210,4 +208,45 @@ cJSON *dfaGroupToArrayJson()
     my_iterator_free(itor);
 
     return result;
+}
+
+void saveDfaInfo(char *name)
+{
+    if (dfainfo == NULL)
+    {
+        dfainfo = new_Set(Set_Struct);
+    }
+    Dfa_Info_Set *node = my_malloc(sizeof(Dfa_Info_Set));
+    node->name = name;
+    node->minidfa = minDfa;
+    node->dfaGroupManager = dfaGroupManager;
+    node->dfaList = dfaList;
+    // 插入
+    addp_set(dfainfo, node);
+}
+
+void destoryDfaInfo()
+{
+    if (dfainfo == NULL)
+    {
+        return;
+    }
+
+    My_Iterator *itor = new_Point_Set_iterator(dfainfo);
+    while (has_Set_iterator_next(itor))
+    {
+        Dfa_Info_Set *node = getp_Set_iterator_next(itor);
+        minDfa = node->minidfa;
+        dfaGroupManager = node->dfaGroupManager;
+        dfaList = node->dfaList;
+
+        destoryDfaStateTransformTable(minDfa);
+        destoryDfaList(dfaList);
+        set_destory(dfaGroupManager, (void (*)(void *))destorydfaGroupItem);
+
+        my_free(node);
+    }
+    my_iterator_free(itor);
+    set_destory(dfainfo, NULL);
+    dfainfo = NULL;
 }

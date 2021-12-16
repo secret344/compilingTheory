@@ -17,5 +17,5 @@ extern int **dfaStateTransformTable;
 extern char *dfaJsonStr;
 
 void dfaParse();
-
+void destoryDfaList(SetRoot dl);
 #endif

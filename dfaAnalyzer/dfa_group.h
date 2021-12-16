@@ -9,7 +9,7 @@
 
 #define DfaGroupSize(dfa) \
     \(dfa->dfagroup->size)
-    
+
 extern SetRoot dfaGroupManager;
 typedef struct Dfa_Group_Struct
 {
@@ -25,4 +25,5 @@ void resetGroup();
 void concatDfaGroup(SetRoot target, SetRoot source);
 void viewGroupSize(SetRoot dfagroup);
 cJSON *DfaGroupToCJson(Dfa_Group_Struct *dfagroup);
+void destorydfaGroupItem(Dfa_Group_Struct *dfagroup);
 #endif

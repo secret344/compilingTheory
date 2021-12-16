@@ -1,6 +1,5 @@
 #include "dfa_group.h"
 static BOOL groupContainsDfa(SetRoot group, int dfaStateNum);
-static void destorydfaGroupItem(Dfa_Group_Struct *dfagroup);
 
 static int GROUP_COUNT = 0;
 SetRoot dfaGroupManager = NULL;
@@ -9,7 +8,6 @@ void resetGroup()
     GROUP_COUNT = 0;
     if (dfaGroupManager != NULL)
     {
-        set_destory(dfaGroupManager, (void (*)(void *))destorydfaGroupItem);
         dfaGroupManager = NULL;
     }
 }
