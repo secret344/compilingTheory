@@ -6,7 +6,7 @@ function initWebassembly() {
         }
         let result = await Module();
         const regParse = result.cwrap("regParse", "string", ["string"]);
-        const matchStr = result.cwrap("matchStr", "number", ["string"]);
+        const matchStr = result.cwrap("matchStr", "string", ["string"]);
         const getDfaJson = result.cwrap("getDfaJson", "string");
         console.log("加载webassembly模块完成");
         obj = { regParse, matchStr, getDfaJson };

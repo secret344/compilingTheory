@@ -5,6 +5,7 @@
 
 typedef struct Dfa_Info_Set
 {
+    int first;
     char *name;
     int **minidfa;
     SetRoot dfaGroupManager;

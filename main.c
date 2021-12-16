@@ -3,6 +3,7 @@
 #include <time.h>
 #include "nfa_parse.h"
 #include "nfa_Intepretor.h"
+#include "dfa_Intepretor.h"
 #include "dfa_parse.h"
 #include "read_file.h"
 #include "utils.h"
@@ -13,10 +14,11 @@ char *regParse(char *str)
     return JsonStr;
 }
 
-int matchStr(char *str)
+char *matchStr(char *str)
 {
-    initMatchNfa(str);
-    return 0;
+    // initMatchNfa(str);
+    char *json = initMatchDfa(str);
+    return json;
 }
 
 char *getDfaJson()

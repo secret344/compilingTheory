@@ -69,6 +69,7 @@ void judgeBlock(char str)
         name[count] = '0';
         count = 0;
         nfapaif = NULL;
+        StateNum = 0;
         return;
     }
 

@@ -216,11 +216,14 @@ void saveDfaInfo(char *name)
     {
         dfainfo = new_Set(Set_Struct);
     }
+
     Dfa_Info_Set *node = my_malloc(sizeof(Dfa_Info_Set));
     node->name = name;
     node->minidfa = minDfa;
     node->dfaGroupManager = dfaGroupManager;
     node->dfaList = dfaList;
+    // 记录起始的dfa集序号
+    node->first = getContainingGroup(0)->group_num;
     // 插入
     addp_set(dfainfo, node);
 }

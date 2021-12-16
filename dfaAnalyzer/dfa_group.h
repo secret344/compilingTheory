@@ -26,5 +26,5 @@ void concatDfaGroup(SetRoot target, SetRoot source);
 void viewGroupSize(SetRoot dfagroup);
 cJSON *DfaGroupToCJson(Dfa_Group_Struct *dfagroup);
 void destorydfaGroupItem(Dfa_Group_Struct *dfagroup);
-Dfa_Group_Struct *getContainingGroupForList(int dfaStateNum, SetRoot dg);
+Dfa_Group_Struct *getContainingGroupForList(int group_num, SetRoot dg);
 #endif

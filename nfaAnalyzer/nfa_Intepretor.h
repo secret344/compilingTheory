@@ -4,9 +4,6 @@
 #include "lex_stack.h"
 #include "nfa_Interface.h"
 
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-#define IsExists(a, b, c) ((a) ? (b) : (c))
-
 typedef union
 {
     BOOL lastAccepted;
