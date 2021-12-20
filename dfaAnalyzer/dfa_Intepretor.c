@@ -25,7 +25,7 @@ char *initMatchDfa(char *s)
             // 进行匹配
             matchChar(s, node->first, node->minidfa, node->dfaGroupManager, mtt);
             // 按匹配位数多的来
-            if (CompareNumMAX(mtt[1].num, ResultMt[1].num) && (mtt[1].lastAccepted == TRUE))
+            if (CompareNumMAX(mtt[1].num, ResultMt[1].num) && (mtt[0].lastAccepted == TRUE))
             {
                 ResultMt[0].lastAccepted = mtt[1].lastAccepted;
                 ResultMt[1].num = mtt[1].num;
