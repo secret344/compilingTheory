@@ -8,6 +8,8 @@
 #include "read_file.h"
 #include "utils.h"
 #include "my_map.h"
+#include "read_str.h"
+
 char *regParse(char *str)
 {
     char *JsonStr = initParse(str, initReadChar);
@@ -29,5 +31,15 @@ char *getDfaJson()
 int main()
 {
     printf("加载webassembly模块 \n");
+    Read_Str *rs = newReadStr("./Makefile");
+    if (rs != NULL)
+    {
+        char c;
+        while (c != -1)
+        {
+            c = rs->advance(rs);
+            printf(" %d ", c);
+        }
+    }
     return 0;
 }
