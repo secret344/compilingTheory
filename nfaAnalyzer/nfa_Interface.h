@@ -1,6 +1,6 @@
 ﻿#ifndef _NFA_INTERFACE_
 #define _NFA_INTERFACE_
-#include "../datastructure/bool.h"
+#include "bool.h"
 #define ASCII_COUNT 128
 // 程序状态字
 enum PSW
