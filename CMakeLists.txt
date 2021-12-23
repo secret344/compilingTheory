@@ -10,6 +10,7 @@ add_subdirectory(nfaAnalyzer)
 add_subdirectory(dfaAnalyzer)
 add_subdirectory(datastructure)
 add_subdirectory(readfile)
+# add_subdirectory(grammarParser)
 
 set(ENV{STATES} "dev")
 
