@@ -11,8 +11,13 @@ add_subdirectory(dfaAnalyzer)
 add_subdirectory(datastructure)
 add_subdirectory(readfile)
 
-set_target_properties(lexical PROPERTIES LINK_FLAGS "-O2 -gsource-map --source-map-base  -fsanitize=address -s ALLOW_MEMORY_GROWTH -s EXIT_RUNTIME=1 -s NO_EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr','_getDfaJson'] -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stackSave','getValue']")
+set(ENV{STATES} "dev")
 
+if($ENV{STATES} STREQUAL "prod")
+  set_target_properties(lexical PROPERTIES LINK_FLAGS "-O2 -gsource-map --source-map-base  -fsanitize=address -s ALLOW_MEMORY_GROWTH -s EXIT_RUNTIME=1 -s NO_EXIT_RUNTIME=1 -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=['_main','_regParse','_matchStr','_getDfaJson'] -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','stackSave','getValue']")
+else()  
+  set_target_properties(lexical PROPERTIES LINK_FLAGS "-s EXIT_RUNTIME=1")
+endif()
 
 target_link_libraries(lexical
   PRIVATE
