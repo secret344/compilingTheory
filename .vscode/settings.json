@@ -96,6 +96,8 @@
         "__functional_base_03": "c",
         "memory_resource": "c",
         "dfa_parse.h": "c",
-        "dfa_intepretor.h": "c"
+        "dfa_intepretor.h": "c",
+        "read_str.h": "c",
+        "bool.h": "c"
     }
 }

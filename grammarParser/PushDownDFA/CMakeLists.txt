@@ -8,13 +8,14 @@ target_sources(pushdowndfa
   PRIVATE
       ${READ_FILE_C}
   PUBLIC
-      ${CMAKE_CURRENT_LIST_DIR}/x.h
+      ${CMAKE_CURRENT_LIST_DIR}/push_down_DFA.h
   )
 
 target_link_libraries(pushdowndfa
   PUBLIC 
   datastructure
   dfaAnalyzer
+  readfile
 )
 
 
