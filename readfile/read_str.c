@@ -19,13 +19,13 @@ Read_Str *newReadStr(const char *str)
 char str_advance(Read_Str *file)
 {
     if (file->isEnd == TRUE)
-        return -1;
+        return EOF;
     char c = file->buff[file->next];
     // 缓冲区到结尾
     if (c == '\0')
     {
         file->isEnd = TRUE;
-        return -1;
+        return EOF;
     }
 
     if (c == '\n')

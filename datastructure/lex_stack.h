@@ -30,4 +30,5 @@ void straversal(Stack *PStack);
 void sdestory(Stack *PStack, void (*fn)(void *));
 int stacksize(Stack *PStack);
 BOOL stackPointerInclude(Stack *PStack, void *val);
+void *speek(Stack *PStack);
 #endif

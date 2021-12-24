@@ -52,6 +52,15 @@ void *spop(Stack *PStack)
     PStack->base->data.n = PStack->base->data.n - 1;
     return _Destination;
 }
+// 查看栈顶 不释放
+void *speek(Stack *PStack)
+{
+    if (PStack->top == PStack->base)
+    {
+        return NULL;
+    };
+    return PStack->top->data.p;
+}
 
 void straversal(Stack *PStack)
 {
