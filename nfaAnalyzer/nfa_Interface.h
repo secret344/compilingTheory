@@ -1,6 +1,7 @@
 ﻿#ifndef _NFA_INTERFACE_
 #define _NFA_INTERFACE_
 #include "bool.h"
+#include "my_str.h"
 #define ASCII_COUNT 128
 // 程序状态字
 enum PSW
