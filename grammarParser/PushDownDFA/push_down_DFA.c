@@ -39,7 +39,7 @@ void recognizeParenthese()
         }
         historyChar(c);
         int column = getColumnForInputChar(c);
-        int topStackSymbol = speek(pushDownStack);
+        int topStackSymbol = (int)speek(pushDownStack);
         StateAction action = dfaTransformTable[topStackSymbol][column];
         takeAction(action);
         if (c == EOF)
