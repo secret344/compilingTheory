@@ -25,4 +25,5 @@ target_link_libraries(lexical
   nfaAnalyzer
   dfaAnalyzer
   pushdowndfa
+  pdacompiler
   )

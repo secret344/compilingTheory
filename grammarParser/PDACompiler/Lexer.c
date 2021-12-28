@@ -12,7 +12,12 @@ static BOOL isAlnum(char c)
     return FALSE;
 }
 
-LexerNum Lexer_advance(Read_Str *rs)
+LexerStr newLexerStr(char *str)
+{
+    return newReadStr(str);
+}
+
+LexerNum LexerAdvance(LexerStr rs)
 {
     LexerNum result;
     BOOL isAdvance = TRUE;
@@ -39,6 +44,9 @@ LexerNum Lexer_advance(Read_Str *rs)
     case '\t':
     case ' ':
         result = LEXER_WHITE_SPACE;
+        break;
+    case EOF:
+        result = LEXER_EOI;
         break;
     default:
         if (isAlnum(current) == FALSE)
@@ -71,10 +79,34 @@ LexerNum Lexer_advance(Read_Str *rs)
     lookAhead = result;
     if (isAdvance == TRUE)
         current = rs->advance(rs);
+    printf("yytext %s %d \n", yytext, result);
     return result;
 }
 
-BOOL Lexer_match(LexerNum type)
+BOOL LexerMatch(LexerNum type)
 {
     return type == lookAhead;
+}
+
+char *LexerToken(LexerNum type)
+{
+    switch (lookAhead)
+    {
+    case LEXER_EOI:
+        return "EOI";
+    case LEXER_PLUS:
+        return "PLUS";
+    case LEXER_TIMES:
+        return "TIMES";
+    case LEXER_NUM_OR_ID:
+        return "NUM_OR_ID";
+    case LEXER_SEMI:
+        return "SEMI";
+    case LEXER_LP:
+        return "LP";
+    case LEXER_RP:
+        return "RP";
+    default:
+        return "default";
+    }
 }

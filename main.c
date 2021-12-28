@@ -9,7 +9,7 @@
 #include "utils.h"
 #include "my_map.h"
 #include "read_str.h"
-#include "push_down_DFA.h"
+#include "pda_parse.h"
 
 char *regParse(char *str)
 {
@@ -32,7 +32,6 @@ char *getDfaJson()
 int main()
 {
     printf("加载webassembly模块  \n");
-
-    initPushDownDfa();
+    PDA_compiler_init();
     return 0;
 }

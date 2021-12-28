@@ -3,6 +3,8 @@
 #include "read_str.h"
 #include "my_str.h"
 
+typedef struct Read_Str_Instance *LexerStr;
+
 typedef enum
 {
     LEXER_EOI = 0,
@@ -16,4 +18,8 @@ typedef enum
     LEXER_UNKNOWN_SYMBOL = 8,
 } LexerNum;
 
+LexerStr newLexerStr(char *str);
+char *LexerToken(LexerNum type);
+BOOL LexerMatch(LexerNum type);
+LexerNum LexerAdvance(LexerStr rs);
 #endif
