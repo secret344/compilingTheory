@@ -9,6 +9,7 @@
         "*.wxml": "wxml",
         "*.vue": "vue",
         "*.dart": "dart",
+        "*.docx": "javascript",
         "nfa_intepretor.h": "c",
         "random": "c",
         "valarray": "c",
@@ -98,6 +99,7 @@
         "dfa_parse.h": "c",
         "dfa_intepretor.h": "c",
         "read_str.h": "c",
-        "bool.h": "c"
+        "bool.h": "c",
+        "lexer.h": "c"
     }
 }

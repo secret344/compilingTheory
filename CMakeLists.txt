@@ -26,4 +26,5 @@ target_link_libraries(lexical
   dfaAnalyzer
   pushdowndfa
   pdacompiler
+  compilerPdaAttribute
   )
