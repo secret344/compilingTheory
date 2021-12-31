@@ -136,3 +136,36 @@ BOOL stackPointerInclude(Stack *PStack, void *val)
     }
     return bool;
 }
+
+static void *stack_get_next(Stack *PStack, stack_iter_inner iter_inner)
+{
+    stack_iter_inner p = iter_inner;
+    void *n = p->item->data.p;
+    p->item = p->item->PStackNext;
+    return n;
+}
+
+static BOOL stack_has_next(Stack *PStack, stack_iter_inner iter_inner)
+{
+    if (iter_inner->item == PStack->base)
+    {
+        return FALSE;
+    };
+    return TRUE;
+}
+/**
+ * @brief 只能返回指针 也就是data.p
+ * 具体信息查看源码
+ * 个人使用，未做优化，未做调整。
+ * @param PStack 
+ * @return My_Iterator* 
+ */
+My_Iterator *new_stack_iterator(Stack *PStack)
+{
+    stack_iter_inner p = NULL;
+    p = my_malloc(sizeof(p));
+    if (!p)
+        return NULL;
+    p->item = PStack->top;
+    return my_iterator_new(PStack, p, (GET_NEXT_HOOK_FUNC)stack_get_next, (HAS_NEXT_HOOK_FUNC)stack_has_next);
+}
