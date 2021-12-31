@@ -9,7 +9,7 @@ void PDA_compiler_init()
 {
     lexer = newLexerStr("1123+2asd;");
     pdaStack = new_stack();
-    sPointPush(pdaStack, STMT);
+    sIntPush(pdaStack, STMT);
     pdaParse();
     printf("PdaParser accept input string");
 }
@@ -35,31 +35,31 @@ void pdaParse()
             else
             {
                 spop(pdaStack);
-                sPointPush(pdaStack, STMT);
-                sPointPush(pdaStack, SEMI);
-                sPointPush(pdaStack, EXPR);
+                sIntPush(pdaStack, STMT);
+                sIntPush(pdaStack, SEMI);
+                sIntPush(pdaStack, EXPR);
             }
             break;
             // expr -> term expr’
         case EXPR:
             spop(pdaStack);
-            sPointPush(pdaStack, EXPR_PRIME);
-            sPointPush(pdaStack, TERM);
+            sIntPush(pdaStack, EXPR_PRIME);
+            sIntPush(pdaStack, TERM);
             break;
             // term -> factor term’
         case TERM:
             spop(pdaStack);
-            sPointPush(pdaStack, TERM_PRIME);
-            sPointPush(pdaStack, FACTOR);
+            sIntPush(pdaStack, TERM_PRIME);
+            sIntPush(pdaStack, FACTOR);
             break;
             // expr’ -> + term expr’ |  ε
         case EXPR_PRIME:
             spop(pdaStack);
             if (LexerMatch(LEXER_PLUS))
             {
-                sPointPush(pdaStack, EXPR_PRIME);
-                sPointPush(pdaStack, TERM);
-                sPointPush(pdaStack, PLUS);
+                sIntPush(pdaStack, EXPR_PRIME);
+                sIntPush(pdaStack, TERM);
+                sIntPush(pdaStack, PLUS);
             }
             break;
             // term’ -> * factor term’ |ε
@@ -67,9 +67,9 @@ void pdaParse()
             spop(pdaStack);
             if (LexerMatch(LEXER_TIMES))
             {
-                sPointPush(pdaStack, TERM_PRIME);
-                sPointPush(pdaStack, FACTOR);
-                sPointPush(pdaStack, MULTIPLE);
+                sIntPush(pdaStack, TERM_PRIME);
+                sIntPush(pdaStack, FACTOR);
+                sIntPush(pdaStack, MULTIPLE);
             }
             break;
             // factor -> number_or_id | (expr)
@@ -77,13 +77,13 @@ void pdaParse()
             spop(pdaStack);
             if (LexerMatch(LEXER_NUM_OR_ID))
             {
-                sPointPush(pdaStack, NUM_OR_ID);
+                sIntPush(pdaStack, NUM_OR_ID);
             }
             else if (LexerMatch(LEXER_LP))
             {
-                sPointPush(pdaStack, RIGHT_PARENT);
-                sPointPush(pdaStack, EXPR);
-                sPointPush(pdaStack, LEFT_PARENT);
+                sIntPush(pdaStack, RIGHT_PARENT);
+                sIntPush(pdaStack, EXPR);
+                sIntPush(pdaStack, LEFT_PARENT);
             }
             else
                 parseError();

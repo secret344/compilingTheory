@@ -35,6 +35,15 @@ void sPointPush(Stack *PStack, void *val)
     PStack->base->data.n = PStack->base->data.n + 1;
 }
 
+void sIntPush(Stack *PStack, int val)
+{
+    StackNode *p = (StackNode *)my_malloc(sizeof(StackNode));
+    p->data.p = val;
+    p->PStackNext = PStack->top;
+    PStack->top = p;
+    PStack->base->data.n = PStack->base->data.n + 1;
+}
+
 void *spop(Stack *PStack)
 {
     if (PStack->top == PStack->base)
