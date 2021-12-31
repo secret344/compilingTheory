@@ -20,7 +20,7 @@ void initPushDownDfa()
     pushDownStack = new_stack();
     input = newReadStr("(()(()))");
     initTransformTable();
-    sPointPush(pushDownStack, STATE_0);
+    sIntPush(pushDownStack, STATE_0);
     recognizeParenthese();
     printf("匹配结果 %d \n", lastAccept);
 }
@@ -72,7 +72,7 @@ void takeAction(StateAction action)
     {
     case PUSH_1:
         printf("take action by push state 1\n");
-        sPointPush(pushDownStack, STATE_1);
+        sIntPush(pushDownStack, STATE_1);
         break;
     case POP:
         printf("take action by pop state from stack\n");

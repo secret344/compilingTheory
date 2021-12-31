@@ -2,6 +2,7 @@
 #define _ATTRIBUTED_PARSER_
 #include "Lexer.h"
 #include "lex_stack.h"
+#include "my_symbol.h"
 
 typedef enum
 {

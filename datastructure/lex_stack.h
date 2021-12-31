@@ -31,6 +31,7 @@ Stack *new_stack();
 
 void spush(Stack *PStack, char *val);
 void sPointPush(Stack *PStack, void *val);
+void sIntPush(Stack *PStack, int val);
 void *spop(Stack *PStack);
 void straversal(Stack *PStack);
 void sdestory(Stack *PStack, void (*fn)(void *));
