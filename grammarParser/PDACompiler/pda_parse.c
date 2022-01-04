@@ -9,7 +9,7 @@ void PDA_compiler_init()
 {
     lexer = newLexerStr("1123+2asd;");
     pdaStack = new_stack();
-    sIntPush(pdaStack, STMT);
+    sIntPush(pdaStack, Gra_STMT);
     pdaParse();
     printf("PdaParser accept input string");
 }
@@ -29,96 +29,96 @@ void pdaParse()
         switch (action)
         {
             // stmt -> ε | expr;stmt
-        case STMT:
+        case Gra_STMT:
             if (LexerMatch(LEXER_EOI))
                 spop(pdaStack);
             else
             {
                 spop(pdaStack);
-                sIntPush(pdaStack, STMT);
-                sIntPush(pdaStack, SEMI);
-                sIntPush(pdaStack, EXPR);
+                sIntPush(pdaStack, Gra_STMT);
+                sIntPush(pdaStack, Gra_SEMI);
+                sIntPush(pdaStack, Gra_EXPR);
             }
             break;
             // expr -> term expr’
-        case EXPR:
+        case Gra_EXPR:
             spop(pdaStack);
-            sIntPush(pdaStack, EXPR_PRIME);
-            sIntPush(pdaStack, TERM);
+            sIntPush(pdaStack, Gra_EXPR_PRIME);
+            sIntPush(pdaStack, Gra_TERM);
             break;
             // term -> factor term’
-        case TERM:
+        case Gra_TERM:
             spop(pdaStack);
-            sIntPush(pdaStack, TERM_PRIME);
-            sIntPush(pdaStack, FACTOR);
+            sIntPush(pdaStack, Gra_TERM_PRIME);
+            sIntPush(pdaStack, Gra_FACTOR);
             break;
             // expr’ -> + term expr’ |  ε
-        case EXPR_PRIME:
+        case Gra_EXPR_PRIME:
             spop(pdaStack);
             if (LexerMatch(LEXER_PLUS))
             {
-                sIntPush(pdaStack, EXPR_PRIME);
-                sIntPush(pdaStack, TERM);
-                sIntPush(pdaStack, PLUS);
+                sIntPush(pdaStack, Gra_EXPR_PRIME);
+                sIntPush(pdaStack, Gra_TERM);
+                sIntPush(pdaStack, Gra_PLUS);
             }
             break;
             // term’ -> * factor term’ |ε
-        case TERM_PRIME:
+        case Gra_TERM_PRIME:
             spop(pdaStack);
             if (LexerMatch(LEXER_TIMES))
             {
-                sIntPush(pdaStack, TERM_PRIME);
-                sIntPush(pdaStack, FACTOR);
-                sIntPush(pdaStack, MULTIPLE);
+                sIntPush(pdaStack, Gra_TERM_PRIME);
+                sIntPush(pdaStack, Gra_FACTOR);
+                sIntPush(pdaStack, Gra_MULTIPLE);
             }
             break;
             // factor -> number_or_id | (expr)
-        case FACTOR:
+        case Gra_FACTOR:
             spop(pdaStack);
             if (LexerMatch(LEXER_NUM_OR_ID))
             {
-                sIntPush(pdaStack, NUM_OR_ID);
+                sIntPush(pdaStack, Gra_NUM_OR_ID);
             }
             else if (LexerMatch(LEXER_LP))
             {
-                sIntPush(pdaStack, RIGHT_PARENT);
-                sIntPush(pdaStack, EXPR);
-                sIntPush(pdaStack, LEFT_PARENT);
+                sIntPush(pdaStack, Gra_RIGHT_PARENT);
+                sIntPush(pdaStack, Gra_EXPR);
+                sIntPush(pdaStack, Gra_LEFT_PARENT);
             }
             else
                 parseError();
             break;
-        case PLUS:
+        case Gra_PLUS:
             spop(pdaStack);
             if (LexerMatch(LEXER_PLUS) == FALSE)
                 parseError();
             LexerAdvance(lexer);
             break;
-        case NUM_OR_ID:
+        case Gra_NUM_OR_ID:
             spop(pdaStack);
             if (LexerMatch(LEXER_NUM_OR_ID) == FALSE)
                 parseError();
             LexerAdvance(lexer);
             break;
-        case MULTIPLE:
+        case Gra_MULTIPLE:
             spop(pdaStack);
             if (LexerMatch(LEXER_TIMES) == FALSE)
                 parseError();
             LexerAdvance(lexer);
             break;
-        case LEFT_PARENT:
+        case Gra_LEFT_PARENT:
             spop(pdaStack);
             if (LexerMatch(LEXER_LP) == FALSE)
                 parseError();
             LexerAdvance(lexer);
             break;
-        case RIGHT_PARENT:
+        case Gra_RIGHT_PARENT:
             spop(pdaStack);
             if (LexerMatch(LEXER_RP) == FALSE)
                 parseError();
             LexerAdvance(lexer);
             break;
-        case SEMI:
+        case Gra_SEMI:
             spop(pdaStack);
             if (LexerMatch(LEXER_SEMI) == FALSE)
                 parseError();

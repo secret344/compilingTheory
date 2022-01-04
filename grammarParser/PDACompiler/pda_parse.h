@@ -4,18 +4,18 @@
 #include "Lexer.h"
 typedef enum
 {
-    STMT,
-    EXPR,
-    EXPR_PRIME,
-    TERM,
-    TERM_PRIME,
-    FACTOR,
-    NUM_OR_ID,
-    PLUS,
-    SEMI,
-    MULTIPLE,
-    LEFT_PARENT,
-    RIGHT_PARENT,
+    Gra_STMT,
+    Gra_EXPR,
+    Gra_EXPR_PRIME,
+    Gra_TERM,
+    Gra_TERM_PRIME,
+    Gra_FACTOR,
+    Gra_NUM_OR_ID,
+    Gra_PLUS,
+    Gra_SEMI,
+    Gra_MULTIPLE,
+    Gra_LEFT_PARENT,
+    Gra_RIGHT_PARENT,
 } Grammar;
 
 void PDA_compiler_init();

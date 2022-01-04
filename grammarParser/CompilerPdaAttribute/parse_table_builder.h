@@ -3,21 +3,7 @@
 #include "Lexer.h"
 #include "lex_stack.h"
 #include "my_symbol.h"
+#include "my_map.h"
 
-typedef enum
-{
-    STMT,
-    EXPR,
-    EXPR_PRIME,
-    TERM,
-    TERM_PRIME,
-    FACTOR,
-    NUM_OR_ID,
-    PLUS,
-    SEMI,
-    MULTIPLE,
-    LEFT_PARENT,
-    RIGHT_PARENT,
-} AttrGrammar;
-
+void initProductions();
 #endif

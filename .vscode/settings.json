@@ -101,6 +101,7 @@
         "read_str.h": "c",
         "bool.h": "c",
         "lexer.h": "c",
-        "parse_table_builder.h": "c"
+        "parse_table_builder.h": "c",
+        "my_symbol.h": "c"
     }
 }
