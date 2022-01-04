@@ -17,13 +17,13 @@ static void *get_node(MapRoot root, Rbkey key);
  * @param type 
  * @return MapRoot 
  */
-MapRoot new_map(MapType type)
+MapRoot newMap(MapType type)
 {
     MapRoot root = rb_create((RBKeyType)type);
     return root;
 }
 
-My_Iterator *new_Map_iterator(MapRoot root)
+My_Iterator *newMapIterator(MapRoot root)
 {
     return new_rb_iterator(root);
 }
@@ -32,14 +32,14 @@ My_Iterator *new_Map_iterator(MapRoot root)
  * @param k 
  * @param root 
  */
-void removem_number_map(MapRoot root, int k)
+void MapNumRemove(MapRoot root, int k)
 {
     Rbkey key;
     key.n = k;
     rb_delect_node(root, key);
 }
 
-void removem_string_map(MapRoot root, char *k)
+void MapStrRemove(MapRoot root, char *k)
 {
     Rbkey key;
     key.p = k;
@@ -52,7 +52,7 @@ void removem_string_map(MapRoot root, char *k)
  * @param value 
  * @param root 
  */
-void setm_number_node(MapRoot root, int k, void *value)
+void MapPutNumNode(MapRoot root, int k, void *value)
 {
     Rbkey key;
     RBKeyType key_type = root->key_type;
@@ -66,7 +66,7 @@ void setm_number_node(MapRoot root, int k, void *value)
  * @param value 
  * @param root 
  */
-void setm_string_node(MapRoot root, char *k, void *value)
+void MapPutStrNode(MapRoot root, char *k, void *value)
 {
     Rbkey key;
     key.p = k;
@@ -80,14 +80,14 @@ void setm_string_node(MapRoot root, char *k, void *value)
  * @param k 
  * @return void* 
  */
-void *getm_number_node(MapRoot root, int k)
+void *MapGetNumNode(MapRoot root, int k)
 {
     Rbkey key;
     key.n = k;
     return get_node(root, key);
 }
 
-void *getm_string_node(MapRoot root, char *k)
+void *MapGetStrNode(MapRoot root, char *k)
 {
     Rbkey key;
     key.p = k;
@@ -102,49 +102,4 @@ void *get_node(MapRoot root, Rbkey key)
         return NULL;
     }
     return node->value;
-}
-
-void traversal_map(MapRoot root)
-{
-    MapType type = (MapType)root->key_type;
-    s_traversal_map(type, root->node);
-}
-
-void printf_map_key(MapType type, RbNodeP node)
-{
-    if (type == Map_Number)
-    {
-        printf("节点key %d ", node->key.n);
-    }
-    else
-    {
-        printf("节点我的 %s ", node->key.p);
-    }
-}
-
-void s_traversal_map(MapType type, RbNodeP node)
-{
-    if (!node->parent)
-    {
-        printf("根");
-        printf_map_key(type, node);
-        printf("颜色%d \n", node->isRed);
-    }
-    else
-    {
-        printf("父");
-        printf_map_key(type, node->parent);
-        printf("我的");
-        printf_map_key(type, node);
-        printf("颜色%d \n", node->isRed);
-    }
-
-    if (node->left)
-    {
-        s_traversal_map(type, node->left);
-    }
-    if (node->right)
-    {
-        s_traversal_map(type, node->right);
-    }
 }

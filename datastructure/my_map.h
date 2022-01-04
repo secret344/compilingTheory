@@ -12,13 +12,12 @@ typedef enum MapType
 
 typedef struct RbRoot *MapRoot;
 
-MapRoot new_map(MapType type);
-void removem_number_map(MapRoot root, int k);
-void removem_string_map(MapRoot root, char *k);
-void setm_number_node(MapRoot root, int k, void *value);
-void setm_string_node(MapRoot root, char *k, void *value);
-void traversal_map(MapRoot root);
-void *getm_number_node(MapRoot root, int k);
-void *getm_string_node(MapRoot root, char *k);
-My_Iterator *new_Map_iterator(MapRoot root);
+MapRoot newMap(MapType type);
+void MapNumRemove(MapRoot root, int k);
+void MapStrRemove(MapRoot root, char *k);
+void MapPutNumNode(MapRoot root, int k, void *value);
+void MapPutStrNode(MapRoot root, char *k, void *value);
+void *MapGetNumNode(MapRoot root, int k);
+void *MapGetStrNode(MapRoot root, char *k);
+My_Iterator *newMapIterator(MapRoot root);
 #endif
