@@ -15,11 +15,19 @@ My_Iterator *my_iterator_new(void *iter_instance, void *iter_inner, GET_NEXT_HOO
 
 void *get_itor_next(my_iterator itor)
 {
+    if (itor == NULL)
+    {
+        return NULL;
+    }
     return itor->_get_next(itor->iter_instance, itor->iter_inner);
 }
 
 int has_itor_next(my_iterator itor)
 {
+    if (itor == NULL)
+    {
+        return FALSE;
+    }
     return itor->_has_next(itor->iter_instance, itor->iter_inner);
 }
 

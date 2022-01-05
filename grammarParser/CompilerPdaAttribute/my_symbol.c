@@ -12,4 +12,6 @@ MySymbol *newSymbol(SymbolDefine value, BOOL nullable, Stack *productions)
     {
         sIntPush(symbol->firstSet, (int)value);
     }
+    return symbol;
 }
+

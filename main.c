@@ -34,5 +34,19 @@ int main()
 {
     printf("加载webassembly模块  \n");
     initProductions();
+    // FIRST(stmt) = { SEMI , LEFT_PAREN, NUMBER }
+    // FIRST(expr) = { LEFT_PAREN, NUMBER }
+    // FIRST(expr’) = {PLUS}.
+    // FIRST(term) = { LEFT_PAREN, NUMBER }
+    // FIRST(term’) = {TIMES}.
+    // FIRST(factor) = {LEFT_PAREN, NUMBER}.
+    // follow
+    // STMT{  }
+    // EXPR{ SEMI RIGHT_PARENT  }
+    // EXPR_PRIME{ SEMI RIGHT_PARENT  }
+    // TERM{ PLUS SEMI RIGHT_PARENT  }
+    // TERM_PRIME{ PLUS SEMI RIGHT_PARENT  }
+    // FACTOR{ TIMES PLUS SEMI RIGHT_PARENT  }
+
     return 0;
 }

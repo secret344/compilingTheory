@@ -39,5 +39,6 @@ int stacksize(Stack *PStack);
 BOOL stackPointerInclude(Stack *PStack, void *val);
 void *speek(Stack *PStack);
 
-My_Iterator *new_stack_iterator(Stack *PStack);
+My_Iterator *newStackIterator(Stack *PStack);
+BOOL StackContainsAll(Stack *source, Stack *target);
 #endif

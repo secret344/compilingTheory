@@ -169,12 +169,38 @@ static BOOL stack_has_next(Stack *PStack, stack_iter_inner iter_inner)
  * @param PStack 
  * @return My_Iterator* 
  */
-My_Iterator *new_stack_iterator(Stack *PStack)
+My_Iterator *newStackIterator(Stack *PStack)
 {
+    if (PStack == NULL)
+    {
+        return NULL;
+    }
+
     stack_iter_inner p = NULL;
     p = my_malloc(sizeof(p));
     if (!p)
         return NULL;
     p->item = PStack->top;
     return my_iterator_new(PStack, p, (GET_NEXT_HOOK_FUNC)stack_get_next, (HAS_NEXT_HOOK_FUNC)stack_has_next);
+}
+/**
+ * @brief 判断集合source是否包含集合target全部数据
+ * 若target = NULL 返回 TRUE
+ * @param source 
+ * @param target 
+ * @return BOOL 
+ */
+BOOL StackContainsAll(Stack *source, Stack *target)
+{
+    My_Iterator *itor = newStackIterator(target);
+    while (has_itor_next(itor))
+    {
+        void *p = get_itor_next(itor);
+        if (stackPointerInclude(source, p) == FALSE)
+        {
+            return FALSE;
+        }
+    }
+    my_iterator_free(itor);
+    return TRUE;
 }
