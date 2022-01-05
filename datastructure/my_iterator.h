@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "memory_management.h"
+#include "bool.h"
 
 typedef void *(*GET_NEXT_HOOK_FUNC)(void *iter_instance, void *iter_inner);
 typedef int (*HAS_NEXT_HOOK_FUNC)(void *iter_instance, void *iter_inner);
