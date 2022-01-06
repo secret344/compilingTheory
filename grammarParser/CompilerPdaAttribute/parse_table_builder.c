@@ -231,8 +231,8 @@ void addSymbolFollowSet(MySymbol *symbol)
             MySymbol *curSymbol = MapGetNumNode(symbolMap, *(rightSize + pos));
             if (isSymbolTerminals(curSymbol->value) == FALSE)
                 addSetToFollowSet(curSymbol, symbol->followSet);
-            // 若不为 nullable 且为终结符 跳出循环
-            if (isSymbolTerminals(curSymbol->value) == TRUE && curSymbol->isNullable == FALSE)
+            // 若不为 nullable 终结符 跳出循环
+            if (isSymbolTerminals(curSymbol->value) == TRUE || curSymbol->isNullable == FALSE)
                 break;
             pos--;
         }
