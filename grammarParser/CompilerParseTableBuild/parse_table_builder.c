@@ -294,3 +294,28 @@ void printFollowSet(MySymbol *symbol)
     printf("}\n");
     my_iterator_free(itorFollowSet);
 }
+// select集合
+void runSelectionSet()
+{
+    My_Iterator *itor = newStackIterator(symbolArray);
+    while (has_itor_next(itor))
+    {
+        MySymbol *symbol = get_itor_next(itor);
+        addSymbolSelectionSet(symbol);
+    }
+    my_iterator_free(itor);
+}
+
+void addSymbolSelectionSet(MySymbol *symbol)
+{
+    if (isSymbolTerminals(symbol) == TRUE)
+        return;
+    Stack *curProductions = symbol->productions;
+    My_Iterator *itorProduction = newStackIterator(curProductions);
+    while (has_itor_next(itorProduction))
+    {
+        int *rightSize = get_itor_next(itorProduction);
+    }
+
+    my_iterator_free(itorProduction);
+}

@@ -2,4 +2,4 @@
 
 add_subdirectory(PushDownDFA)
 add_subdirectory(PDACompiler)
-add_subdirectory(CompilerPdaAttribute)
+add_subdirectory(CompilerParseTableBuild)
