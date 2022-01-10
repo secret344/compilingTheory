@@ -10,6 +10,11 @@ static void addSymbolFollowSet(MySymbol *symbol);
 static void addSetToFollowSet(MySymbol *symbolBeAdd, Stack *set);
 static void printFollowSet(MySymbol *symbol);
 
+static void runSelectionSet();
+static void addSymbolSelectionSet(MySymbol *symbol);
+static void addSetToSelectionSet(Stack *selectionSet, Stack *set);
+static void printSelectionSet(MySymbol *symbol);
+
 static void parseError();
 static Stack *symbolArray = NULL;
 static MapRoot symbolMap = NULL;
@@ -42,12 +47,14 @@ void initProductions()
     // expr -> term expr’ | ε
     productions = new_stack();
     sPointPush(productions, (int[3]){TERM, EXPR_PRIME, GRAMMAR_END});
+    sPointPush(productions, (int[1]){GRAMMAR_END});
     MySymbol *expr = newSymbol(EXPR, TRUE, productions);
     MapPutNumNode(symbolMap, EXPR, expr);
     sPointPush(symbolArray, expr);
     // expr’ -> PLUS term expr’ |ε
     productions = new_stack();
     sPointPush(productions, (int[4]){PLUS, TERM, EXPR_PRIME, GRAMMAR_END});
+    sPointPush(productions, (int[1]){GRAMMAR_END});
     MySymbol *expr_prime = newSymbol(EXPR_PRIME, TRUE, productions);
     MapPutNumNode(symbolMap, EXPR_PRIME, expr_prime);
     sPointPush(symbolArray, expr_prime);
@@ -60,6 +67,7 @@ void initProductions()
     // term’ -> TIMES factor term’ |ε
     productions = new_stack();
     sPointPush(productions, (int[4]){TIMES, FACTOR, TERM_PRIME, GRAMMAR_END});
+    sPointPush(productions, (int[1]){GRAMMAR_END});
     MySymbol *term_prime = newSymbol(TERM_PRIME, TRUE, productions);
     MapPutNumNode(symbolMap, TERM_PRIME, term_prime);
     sPointPush(symbolArray, term_prime);
@@ -98,6 +106,7 @@ void initProductions()
     //
     runFirstSets();
     runFollowSets();
+    runSelectionSet();
 }
 
 void runFirstSets()
@@ -304,6 +313,15 @@ void runSelectionSet()
         addSymbolSelectionSet(symbol);
     }
     my_iterator_free(itor);
+
+    My_Iterator *itor1 = newStackIterator(symbolArray);
+    printf("\nrunSelectionSet ----------------------------------\n");
+    while (has_itor_next(itor1))
+    {
+        MySymbol *symbol = get_itor_next(itor1);
+        printSelectionSet(symbol);
+    }
+    my_iterator_free(itor1);
 }
 
 void addSymbolSelectionSet(MySymbol *symbol)
@@ -312,10 +330,77 @@ void addSymbolSelectionSet(MySymbol *symbol)
         return;
     Stack *curProductions = symbol->productions;
     My_Iterator *itorProduction = newStackIterator(curProductions);
+    BOOL isNullableProduction = TRUE;
     while (has_itor_next(itorProduction))
     {
         int *rightSize = get_itor_next(itorProduction);
-    }
+        Stack *selection = new_stack();
+        int offset = 0;
+        while (*(rightSize + offset) != GRAMMAR_END)
+        {
+            MySymbol *next = MapGetNumNode(symbolMap, *(rightSize + offset));
+            if (next->isNullable == FALSE)
+            {
+                isNullableProduction = FALSE;
+                addSetToSelectionSet(selection, next->firstSet);
+                break;
+            }
 
+            addSetToSelectionSet(selection, next->firstSet);
+            offset++;
+        }
+
+        if (isNullableProduction == TRUE)
+            addSetToSelectionSet(selection, symbol->followSet);
+
+        sPointPush(symbol->selectionSet, selection);
+        isNullableProduction = TRUE;
+    }
     my_iterator_free(itorProduction);
+}
+
+void addSetToSelectionSet(Stack *selectionSet, Stack *set)
+{
+    My_Iterator *itor = newStackIterator(set);
+    while (has_itor_next(itor))
+    {
+        SymbolDefine symbol = get_itor_next(itor);
+        if (stackPointerInclude(selectionSet, symbol) == FALSE)
+            sIntPush(selectionSet, symbol);
+    }
+    my_iterator_free(itor);
+}
+
+void printSelectionSet(MySymbol *symbol)
+{
+    if (isSymbolTerminals(symbol->value))
+    {
+        return;
+    }
+    Stack *selectionSet = symbol->selectionSet;
+    printf("%s selectionSet: {", getSymbolStr(symbol->value));
+    My_Iterator *itorSelectionSet = newStackIterator(selectionSet);
+    while (has_itor_next(itorSelectionSet))
+    {
+        Stack *selection = get_itor_next(itorSelectionSet);
+        My_Iterator *selectionItem = newStackIterator(selection);
+        while (has_itor_next(selectionItem))
+        {
+            SymbolDefine sign = get_itor_next(selectionItem);
+            printf(" %s ", getSymbolStr(sign));
+        }
+        my_iterator_free(selectionItem);
+        printf(" ; ");
+    }
+    printf("}\n");
+    my_iterator_free(itorSelectionSet);
+}
+
+// buildParseTable
+void buildParseTable()
+{
+}
+
+void initializeParseTable()
+{
 }
