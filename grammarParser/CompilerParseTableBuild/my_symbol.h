@@ -11,6 +11,7 @@ typedef struct MySymbol
     Stack *firstSet;
     Stack *followSet;
     Stack *productions;
+    Stack *selectionSet;
 } MySymbol;
 MySymbol *newSymbol(SymbolDefine value, BOOL nullable, Stack *productions);
 #endif
