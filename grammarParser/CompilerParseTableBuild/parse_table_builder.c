@@ -15,6 +15,14 @@ static void addSymbolSelectionSet(MySymbol *symbol);
 static void addSetToSelectionSet(Stack *selectionSet, Stack *set);
 static void printSelectionSet(MySymbol *symbol);
 
+static void buildParseTable();
+static void initializeParseTable();
+static void setParseTable();
+static void printfParseTable();
+
+static int **parseTable = NULL;
+static int productionCount = 0;
+
 static void parseError();
 static Stack *symbolArray = NULL;
 static MapRoot symbolMap = NULL;
@@ -107,6 +115,7 @@ void initProductions()
     runFirstSets();
     runFollowSets();
     runSelectionSet();
+    buildParseTable();
 }
 
 void runFirstSets()
@@ -399,8 +408,64 @@ void printSelectionSet(MySymbol *symbol)
 // buildParseTable
 void buildParseTable()
 {
+    initializeParseTable();
+    setParseTable();
+    printfParseTable();
 }
 
 void initializeParseTable()
 {
+    parseTable = (int **)my_malloc(sizeof(int *) * NO_TERMINAL_MAXRANGE);
+    for (size_t i = 0; i < NO_TERMINAL_MAXRANGE; i++)
+    {
+        parseTable[i] = (int *)my_malloc(TERMINAL_MAX_RANGE * sizeof(int));
+        for (size_t j = 0; j < TERMINAL_MAX_RANGE; j++)
+            parseTable[i][j] = GRAMMAR_END;
+    }
+}
+
+void setParseTable()
+{
+    Stack *reverSymbolArray = StackReversal(symbolArray);
+    My_Iterator *itor = newStackIterator(reverSymbolArray);
+    while (has_itor_next(itor))
+    {
+        MySymbol *symbol = get_itor_next(itor);
+        if (isSymbolTerminals(symbol->value) == TRUE)
+            continue;
+        My_Iterator *selectionSetItor = newStackIterator(symbol->selectionSet);
+        while (has_itor_next(selectionSetItor))
+        {
+            Stack *selection = get_itor_next(selectionSetItor);
+            My_Iterator *selectionItor = newStackIterator(selection);
+            while (has_itor_next(selectionItor))
+            {
+                SymbolDefine sign = get_itor_next(selectionItor);
+                // if (sign > TERMINAL_MAX_RANGE)
+                //     sign = sign;
+                parseTable[symbol->value - NO_TERMINAL_VALUE_BASE][sign] = productionCount;
+            }
+            productionCount++;
+            my_iterator_free(selectionItor);
+        }
+
+        my_iterator_free(selectionSetItor);
+    }
+
+    my_iterator_free(itor);
+
+    sdestory(reverSymbolArray, StackDestoryEmpty);
+}
+
+void printfParseTable()
+{
+    printf("\nprintfParsetTable:\n");
+    for (int i = 0; i < NO_TERMINAL_MAXRANGE; i++)
+    {
+        for (int j = 0; j < TERMINAL_MAX_RANGE; j++)
+        {
+            printf("  %d  ", parseTable[i][j]);
+        }
+        printf("\n");
+    }
 }

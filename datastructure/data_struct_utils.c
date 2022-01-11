@@ -31,3 +31,5 @@ BOOL string_compare_gt(char *a, char *b)
 
     return COMPARE_EQ;
 }
+
+void StackDestoryEmpty(void *x) {}
