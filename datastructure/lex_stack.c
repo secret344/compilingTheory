@@ -204,3 +204,22 @@ BOOL StackContainsAll(Stack *source, Stack *target)
     my_iterator_free(itor);
     return TRUE;
 }
+/**
+ * @brief 栈反转
+ * 返回一个反转的栈
+ * 
+ * @param point 
+ * @return Stack* 
+ */
+Stack *StackReversal(Stack *point)
+{
+    Stack *newStack = new_stack();
+    My_Iterator *itor = newStackIterator(point);
+    while (has_itor_next(itor))
+    {
+        void *p = get_itor_next(itor);
+        sPointPush(newStack, p);
+    }
+    my_iterator_free(itor);
+    return newStack;
+}

@@ -4,6 +4,7 @@
 #include "bool.h"
 #include "memory_management.h"
 #include "my_iterator.h"
+#include "data_struct_utils.h"
 typedef union StackData
 {
     int n;
@@ -41,4 +42,5 @@ void *speek(Stack *PStack);
 
 My_Iterator *newStackIterator(Stack *PStack);
 BOOL StackContainsAll(Stack *source, Stack *target);
+Stack *StackReversal(Stack *point);
 #endif
