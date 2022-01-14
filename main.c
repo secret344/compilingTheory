@@ -11,6 +11,7 @@
 #include "read_str.h"
 #include "pda_parse.h"
 #include "parse_table_builder.h"
+#include "LRcompiler.h"
 
 char *regParse(char *str)
 {
@@ -33,14 +34,17 @@ char *getDfaJson()
 int main()
 {
     printf("加载webassembly模块  \n");
-    initProductions();
+    LRinitParser();
+    // LL parser
+    
+    // initProductions();
     // stmt -> expr SEMI
     // expr -> term expr’ | ε
     // expr’ -> PLUS term expr’ |ε
     // term -> factor term’
     // term’ -> TIMES factor term’ |ε
     // factor -> LEFT_PAREN expr RIGHT_PAREN | NUMBER
-    
+
     // FIRST(stmt) = { SEMI , LEFT_PAREN, NUMBER }
     // FIRST(expr) = { LEFT_PAREN, NUMBER }
     // FIRST(expr’) = {PLUS}.

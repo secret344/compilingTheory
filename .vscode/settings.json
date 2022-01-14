@@ -102,6 +102,8 @@
         "bool.h": "c",
         "lexer.h": "c",
         "parse_table_builder.h": "c",
-        "my_symbol.h": "c"
+        "my_symbol.h": "c",
+        "lrcompiler.h": "c",
+        "my_arraylist.h": "c"
     }
 }
