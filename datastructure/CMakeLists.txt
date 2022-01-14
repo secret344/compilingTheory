@@ -17,6 +17,7 @@ target_sources(datastructure
       ${CMAKE_CURRENT_LIST_DIR}/my_iterator.h
       ${CMAKE_CURRENT_LIST_DIR}/my_set.h
       ${CMAKE_CURRENT_LIST_DIR}/my_str.h
+      ${CMAKE_CURRENT_LIST_DIR}/my_ArrayList.h
   )
   
 target_link_libraries(datastructure
