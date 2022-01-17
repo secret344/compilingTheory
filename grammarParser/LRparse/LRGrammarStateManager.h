@@ -1,0 +1,4 @@
+#ifndef _LR_GRAMMAR_STATE_MANAGER_
+#define _LR_GRAMMAR_STATE_MANAGER_
+
+#endif

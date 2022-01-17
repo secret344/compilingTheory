@@ -451,9 +451,7 @@ void setParseTable()
 
         my_iterator_free(selectionSetItor);
     }
-
     my_iterator_free(itor);
-
     sdestory(reverSymbolArray, StackDestoryEmpty);
 }
 
