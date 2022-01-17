@@ -2,5 +2,6 @@
 
 void LRinitParser()
 {
-    printf("LRinitParser");
+    LRinitProductions();
+    printAllProductions();
 }

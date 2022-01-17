@@ -104,6 +104,9 @@
         "parse_table_builder.h": "c",
         "my_symbol.h": "c",
         "lrcompiler.h": "c",
-        "my_arraylist.h": "c"
+        "my_arraylist.h": "c",
+        "symbol_define.h": "c",
+        "ios": "c",
+        "lrproduction.h": "c"
     }
 }

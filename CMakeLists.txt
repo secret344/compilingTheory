@@ -27,5 +27,5 @@ target_link_libraries(lexical
   pushdowndfa
   pdacompiler
   Compilerparsetablebuild
-  LRparse
+  lrparse
   )

@@ -34,7 +34,7 @@ BOOL ArrayListPush(My_ArrayList *array, MyArrayListNode *node)
         array->data[array->size++] = node;
         return TRUE;
     }
-    printf("数组容量扩展异常");
+    printf("\n 数组容量扩展异常 \n");
     return FALSE;
 }
 /**
@@ -101,10 +101,47 @@ void ArrayListDestroy(My_ArrayList *array)
     my_free(array);
 }
 
-void ArrayListPrune(My_ArrayList *array)
+int ArrayListFindNode(My_ArrayList *array, void *target)
 {
     if (array == NULL)
         return -1;
+    for (size_t i = 0; i < array->size; i++)
+    {
+        void *ele = ArrayListGetFormPos(array, i);
+        if (ele != NULL && ele == target)
+            return i;
+    }
+    return -1;
+}
+
+BOOL ArrayListEquals(My_ArrayList *array, My_ArrayList *refArray)
+{
+    if (array == NULL || refArray == NULL || array->size != refArray->size)
+        return FALSE;
+    for (size_t i = 0; i < refArray->size; i++)
+    {
+        int eq = ArrayListFindNode(array, ArrayListGetFormPos(refArray, i));
+        if (eq < 0)
+            return FALSE;
+    }
+    return TRUE;
+}
+
+BOOL ArrayListContains(My_ArrayList *array, My_ArrayList *refArray)
+{
+    if (array == NULL || refArray == NULL)
+        return FALSE;
+    for (size_t i = 0; i < refArray->size; i++)
+    {
+        int eq = ArrayListFindNode(array, ArrayListGetFormPos(refArray, i));
+        if (eq < 0)
+            return FALSE;
+    }
+    return TRUE;
+}
+
+void ArrayListPrune(My_ArrayList *array)
+{
     int mod = array->size % 10;
     int div = (int)(array->size / 10);
     if (mod > 0)
@@ -113,7 +150,7 @@ void ArrayListPrune(My_ArrayList *array)
     // 重新分配内存
     if (new != NULL)
     {
-        array = new;
+        array->data = new;
         array->capacity = div * DEFAULT_CAPACITY;
     }
 }
@@ -135,11 +172,11 @@ void grow(My_ArrayList *array)
     }
     else
     {
-        void *new = realloc(array->data, newBase);
+        void *new = realloc(array->data, sizeof(int *) * newBase);
         // 重新分配内存
         if (new != NULL)
         {
-            array = new;
+            array->data = new;
             array->capacity = newBase;
         }
     }

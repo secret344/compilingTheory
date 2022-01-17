@@ -22,7 +22,7 @@ MapRoot newMap(MapType type)
     MapRoot root = rb_create((RBKeyType)type);
     return root;
 }
-
+// TODO MAPIterator
 My_Iterator *newMapIterator(MapRoot root)
 {
     return new_rb_iterator(root);
