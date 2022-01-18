@@ -107,6 +107,7 @@
         "my_arraylist.h": "c",
         "symbol_define.h": "c",
         "ios": "c",
-        "lrproduction.h": "c"
+        "lrproduction.h": "c",
+        "lrgrammarstatemanager.h": "c"
     }
 }

@@ -55,8 +55,10 @@ void addProduction(LRProduction *production)
     if (productionList == NULL)
     {
         productionList = ArrayListCreate();
+        productionList->equals = productionEquals;
         MapPutNumNode(productionMap, production->left, productionList);
     }
+    // 需要修改
     if (ArrayListFindNode(productionList, production) < 0)
         ArrayListPush(productionList, production);
 }
@@ -76,4 +78,9 @@ void printAllProductions()
         }
     }
     my_iterator_free(itor);
+}
+
+My_ArrayList *getProduction(SymbolDefine left)
+{
+    return MapGetNumNode(productionMap, left);
 }

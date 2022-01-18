@@ -6,4 +6,5 @@
 
 void LRinitProductions();
 void printAllProductions();
+My_ArrayList *getProduction(SymbolDefine left);
 #endif

@@ -5,6 +5,7 @@
 #include "bool.h"
 #include "LRproduction.h"
 #include "LRproductionManager.h"
+#include "LRGrammarStateManager.h"
 
 void LRinitParser();
 
