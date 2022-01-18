@@ -1,6 +1,7 @@
 #include "my_ArrayList.h"
 static void grow(My_ArrayList *array);
 static void ArrayListPrune(My_ArrayList *array);
+static BOOL defEquals(void *a, void *b);
 
 /**
  * @brief 
@@ -13,6 +14,7 @@ My_ArrayList *ArrayListCreate()
     array->size = 0;
     array->capacity = 0;
     array->data = NULL;
+    array->equals = defEquals;
     grow(array);
     return array;
 }
@@ -101,6 +103,11 @@ void ArrayListDestroy(My_ArrayList *array)
     my_free(array);
 }
 
+BOOL defEquals(void *a, void *b)
+{
+    return a == b ? TRUE : FALSE;
+}
+
 int ArrayListFindNode(My_ArrayList *array, void *target)
 {
     if (array == NULL)
@@ -108,7 +115,7 @@ int ArrayListFindNode(My_ArrayList *array, void *target)
     for (size_t i = 0; i < array->size; i++)
     {
         void *ele = ArrayListGetFormPos(array, i);
-        if (ele != NULL && ele == target)
+        if (ele != NULL && array->equals(ele, target) == TRUE)
             return i;
     }
     return -1;
@@ -120,6 +127,7 @@ BOOL ArrayListEquals(My_ArrayList *array, My_ArrayList *refArray)
         return FALSE;
     for (size_t i = 0; i < refArray->size; i++)
     {
+        // 需要统计数量 TODO
         int eq = ArrayListFindNode(array, ArrayListGetFormPos(refArray, i));
         if (eq < 0)
             return FALSE;
@@ -138,6 +146,17 @@ BOOL ArrayListContains(My_ArrayList *array, My_ArrayList *refArray)
             return FALSE;
     }
     return TRUE;
+}
+
+void ArrayListAddAll(My_ArrayList *target, My_ArrayList *source)
+{
+    if (target == NULL)
+        return;
+    for (size_t i = 0; i < source->size; i++)
+    {
+        void *ele = ArrayListGetFormPos(source, i);
+        ArrayListPush(target, ele);
+    }
 }
 
 void ArrayListPrune(My_ArrayList *array)
