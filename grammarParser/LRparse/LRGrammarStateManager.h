@@ -4,4 +4,5 @@
 #include "my_ArrayList.h"
 #include "LRproductionManager.h"
 
+void LRBuildTransitionStateMachine();
 #endif
