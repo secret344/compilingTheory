@@ -22,7 +22,7 @@ SetRoot new_Set(SetType type)
  * @param root 
  * @param handle 
  */
-void set_destory(RbRoot *root, void (*handle)(void *))
+void set_destory(SetRoot root, void (*handle)(void *))
 {
     SetType type = root->key_type;
     if (type == Set_Number)

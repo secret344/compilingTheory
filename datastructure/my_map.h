@@ -20,4 +20,5 @@ void MapPutStrNode(MapRoot root, char *k, void *value);
 void *MapGetNumNode(MapRoot root, int k);
 void *MapGetStrNode(MapRoot root, char *k);
 My_Iterator *newMapIterator(MapRoot root);
+void map_destory(MapRoot root, void (*handle)(void *));
 #endif

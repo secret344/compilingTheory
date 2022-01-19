@@ -55,7 +55,7 @@ void addProduction(LRProduction *production)
     if (productionList == NULL)
     {
         productionList = ArrayListCreate();
-        productionList->equals = productionEquals;
+        productionList->equals = (ArrayListDefEquals)productionEquals;
         MapPutNumNode(productionMap, production->left, productionList);
     }
     // 需要修改

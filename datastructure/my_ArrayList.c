@@ -127,9 +127,7 @@ BOOL ArrayListEquals(My_ArrayList *array, My_ArrayList *refArray)
         return FALSE;
     for (size_t i = 0; i < refArray->size; i++)
     {
-        // 需要统计数量 TODO
-        int eq = ArrayListFindNode(array, ArrayListGetFormPos(refArray, i));
-        if (eq < 0)
+        if (array->equals(ArrayListGetFormPos(array, i), ArrayListGetFormPos(refArray, i)) == FALSE)
             return FALSE;
     }
     return TRUE;

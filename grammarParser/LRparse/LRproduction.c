@@ -29,7 +29,7 @@ BOOL productionEquals(LRProduction *production, LRProduction *refProduction)
 
 int productionGetDotSymbol(LRProduction *production)
 {
-    if (production->dotPos >= production->right)
+    if (production->dotPos >= production->right->size)
         return UNKNOWN_SYMBOL;
     return ArrayListGetFormPos(production->right, production->dotPos);
 }

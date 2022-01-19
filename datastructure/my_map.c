@@ -104,3 +104,21 @@ void *get_node(MapRoot root, Rbkey key)
     }
     return node->value;
 }
+
+/**
+ * @brief 清除map
+ * 
+ * @param root 
+ * @param handle 
+ */
+void map_destory(MapRoot root, void (*handle)(void *))
+{
+    MapType type = root->key_type;
+    if (type == Map_Number)
+    {
+        // 数字类型不需要清除value
+        rb_destory(root, NULL);
+        return;
+    }
+    rb_destory(root, (void (*)(RbNodeP))handle);
+}
