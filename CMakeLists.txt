@@ -28,4 +28,5 @@ target_link_libraries(lexical
   pdacompiler
   Compilerparsetablebuild
   lrparse
+  lr1parse
   )
