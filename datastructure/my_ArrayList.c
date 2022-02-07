@@ -107,7 +107,13 @@ BOOL defEquals(void *a, void *b)
 {
     return a == b ? TRUE : FALSE;
 }
-
+/**
+ * @brief 查找node 返回下标 不存在为-1
+ * 
+ * @param array 
+ * @param target 
+ * @return int 
+ */
 int ArrayListFindNode(My_ArrayList *array, void *target)
 {
     if (array == NULL)
