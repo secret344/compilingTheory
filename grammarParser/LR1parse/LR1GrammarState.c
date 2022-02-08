@@ -3,7 +3,7 @@
 #include "my_map.h"
 #include "LR1production.h"
 #include "LR1productionManager.h"
-static void LR1makeClouser(LR1GrammarState *state);
+static void LR1makeClosure(LR1GrammarState *state);
 
 typedef struct LR1GrammarState
 {
@@ -52,10 +52,10 @@ void LR1createTransition(LR1GrammarState *state)
     state->transitionDone == TRUE;
     printf("\n====make transition=====\n");
     // 进行闭包处理 找到所有节点
-    LR1makeClouser(state);
+    LR1makeClosure(state);
 }
 
-void LR1makeClouser(LR1GrammarState *state)
+void LR1makeClosure(LR1GrammarState *state)
 {
     Stack *prductionStack = new_stack();
     // 创建产生式栈 方便进行闭包操作
@@ -67,8 +67,10 @@ void LR1makeClouser(LR1GrammarState *state)
         // 获取当前dot指向的的符号
         SymbolDefine symbol = LR1productionGetDotSymbol(production);
         // 通过符号以及初始化产生式生成的productionMap 获取当前符号为非终结符的 productionList
-        // 终结符获取结果为 NULL
+        // 终结符 获取结果为 NULL
         My_ArrayList *closures = LR1getProduction(symbol);
+
+
         for (size_t i = 0; closures != NULL && i < closures->size; i++)
         {
             LR1Production *p = ArrayListGetFormPos(closures, i);

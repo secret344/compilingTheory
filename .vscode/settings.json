@@ -109,6 +109,7 @@
         "ios": "c",
         "lrproduction.h": "c",
         "lrgrammarstatemanager.h": "c",
-        "lr1production.h": "c"
+        "lr1production.h": "c",
+        "lr1firstsetbuilder.h": "c"
     }
 }
