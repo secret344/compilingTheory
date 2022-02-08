@@ -37,6 +37,34 @@ LR1Production *LR1productionCloneSelf(LR1Production *production)
 
     return newProduction;
 }
+/**
+ * @brief 求firstSet与C的并集 
+ * 求展望符集合
+ * @param production 
+ * @return My_ArrayList* 
+ */
+My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production)
+{
+    My_ArrayList *result = ArrayListCreate();
+    ArrayListAddAll(result, production->lookAhead);
+    for (size_t i = production->dotPos + 1; i < production->right->size; i++)
+    {
+        SymbolDefine sign = ArrayListGetFormPos(production->right, i);
+        My_ArrayList *firstSet = LR1getFirstSet(sign);
+
+        for (size_t i = 0; i < firstSet->size; i++)
+        {
+            SymbolDefine sign = ArrayListGetFormPos(firstSet, i);
+            if (ArrayListFindNode(result, sign) < 0)
+                ArrayListPush(result, sign);
+        }
+
+        // 非nullable 终止循环
+        if (LR1isNullable(sign) == FALSE)
+            break;
+    }
+    return result;
+}
 
 /**
  * @brief 获取当前 . 所在的文法符号

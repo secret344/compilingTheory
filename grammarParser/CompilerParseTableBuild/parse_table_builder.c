@@ -153,7 +153,7 @@ void addSymbolFirstSet(MySymbol *symbol)
             runFirstSetPass = TRUE;
             sIntPush(symbol->firstSet, *rightSize);
         }
-        else
+        else if (isSymbolTerminals(*rightSize) == FALSE)
         {
             // 字符为非终结符
             unsigned int offset = 0;
@@ -172,9 +172,7 @@ void addSymbolFirstSet(MySymbol *symbol)
                     {
                         SymbolDefine sign = get_itor_next(itorCurSymbol);
                         if (stackPointerInclude(symbol->firstSet, sign) == FALSE)
-                        {
                             sIntPush(symbol->firstSet, sign);
-                        }
                     }
                     my_iterator_free(itorCurSymbol);
                 }

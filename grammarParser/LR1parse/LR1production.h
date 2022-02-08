@@ -4,6 +4,7 @@
 #include "lex_stack.h"
 #include "symbol_define.h"
 #include "my_ArrayList.h"
+#include "LR1FirstSetBuilder.h"
 
 typedef struct LR1Production
 {
@@ -19,4 +20,5 @@ LR1Production *LR1productionCloneSelf(LR1Production *production);
 BOOL LR1productionEquals(LR1Production *production, LR1Production *refProduction);
 int LR1productionGetDotSymbol(LR1Production *production);
 void LR1productionPrint(LR1Production *production);
+My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production);
 #endif
