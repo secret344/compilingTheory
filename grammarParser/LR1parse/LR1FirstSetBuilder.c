@@ -1,7 +1,6 @@
 #include "LR1FirstSetBuilder.h"
 
 static void LR1SymbolAddFirstSet(MySymbol *symbol);
-static BOOL isSymbolTerminals(SymbolDefine symbol);
 
 static MapRoot symbolMap = NULL;
 static My_ArrayList *symbolList = NULL;
@@ -50,7 +49,7 @@ void LR1SymbolAddFirstSet(MySymbol *symbol)
                 while (has_itor_next(itor))
                 {
                     SymbolDefine curSymbolSign = get_itor_next(itor);
-                    if (stackPointerInclude(symbol->firstSet, curSymbolSign) == FALSE)
+                    if (stackPointerInclude(symbol->firstSet, (void *)curSymbolSign) == FALSE)
                     {
                         runFirstSetPass = TRUE;
                         sIntPush(symbol->firstSet, curSymbolSign);

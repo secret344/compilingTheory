@@ -117,7 +117,9 @@ void addProduction(LR1Production *production)
 {
     if (productionMap == NULL)
         productionMap = newMap(Map_Number);
+
     My_ArrayList *productionList = MapGetNumNode(productionMap, production->left);
+
     if (productionList == NULL)
     {
         productionList = ArrayListCreate();
@@ -125,7 +127,8 @@ void addProduction(LR1Production *production)
         productionList->equals = (ArrayListDefEquals)LR1productionEquals;
         MapPutNumNode(productionMap, production->left, productionList);
     }
-    if (ArrayListFindNode(productionList, production) == FALSE)
+
+    if (ArrayListFindNode(productionList, production) < 0)
         ArrayListPush(productionList, production);
 }
 
@@ -137,5 +140,6 @@ void addProduction(LR1Production *production)
  */
 My_ArrayList *LR1getProduction(SymbolDefine left)
 {
+    My_ArrayList *x = MapGetNumNode(productionMap, left);
     return MapGetNumNode(productionMap, left);
 }

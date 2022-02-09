@@ -87,6 +87,9 @@ MyArrayListNode *ArrayListDelete(My_ArrayList *array, int pos)
         array->data[i - 1] = array->data[i];
     }
     array->size--;
+    // 当多余空间大于 2 * DEFAULT_CAPACITY 时，进行修剪
+    if (array->capacity - array->size >= 2 * DEFAULT_CAPACITY)
+        ArrayListPrune(array);
     return result;
 }
 /**
@@ -169,6 +172,9 @@ void ArrayListPrune(My_ArrayList *array)
     int div = (int)(array->size / 10);
     if (mod > 0)
         div += 1;
+    // 最少为1
+    if (div == 0)
+        div = 1;
     void *new = realloc(array->data, div * DEFAULT_CAPACITY);
     // 重新分配内存
     if (new != NULL)

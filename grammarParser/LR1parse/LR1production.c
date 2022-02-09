@@ -1,5 +1,7 @@
 #include "LR1production.h"
 static BOOL productionEquals(LR1Production *production, LR1Production *refProduction);
+static int lookAheadSetComparing(LR1Production *production, LR1Production *refProduction);
+
 LR1Production *LR1productionCreate(int left, int dot, My_ArrayList *right)
 {
     LR1Production *production = my_malloc(sizeof(LR1Production));
@@ -13,14 +15,15 @@ LR1Production *LR1productionCreate(int left, int dot, My_ArrayList *right)
     return production;
 }
 /**
- * @brief 获取前进一位的产生式
+ * @brief 获取 前进 一位的产生式
  * 
  * @param production 
  * @return LR1Production* 
  */
-LR1Production *LR1productionDotForward(LR1Production *production)
+LR1Production *LR1productionNextDotForward(LR1Production *production)
 {
     LR1Production *newProduction = LR1productionCreate(production->left, production->dotPos + 1, production->right);
+    ArrayListPop(newProduction->lookAhead);
     // 设置展望符
     for (size_t i = 0; i < production->lookAhead->size; i++)
         ArrayListPush(newProduction->lookAhead, ArrayListGetFormPos(production->lookAhead, i));
@@ -31,6 +34,8 @@ LR1Production *LR1productionDotForward(LR1Production *production)
 LR1Production *LR1productionCloneSelf(LR1Production *production)
 {
     LR1Production *newProduction = LR1productionCreate(production->left, production->dotPos, production->right);
+    // 去掉默认地 EOI
+    ArrayListPop(newProduction->lookAhead);
     // 设置展望符
     for (size_t i = 0; i < production->lookAhead->size; i++)
         ArrayListPush(newProduction->lookAhead, ArrayListGetFormPos(production->lookAhead, i));
@@ -72,7 +77,7 @@ My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production)
  * @param production 
  * @return int 
  */
-int productionGetDotSymbol(LR1Production *production)
+SymbolDefine LR1productionGetDotSymbol(LR1Production *production)
 {
     if (production->dotPos >= production->right->size)
         return UNKNOWN_SYMBOL;
@@ -88,7 +93,21 @@ int productionGetDotSymbol(LR1Production *production)
  */
 BOOL LR1productionEquals(LR1Production *production, LR1Production *refProduction)
 {
-    if (productionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) == TRUE)
+    if (productionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) == COMPARE_EQ)
+        return TRUE;
+    return FALSE;
+}
+
+/**
+ * @brief 判断 production 是否被 refProduction  覆盖(LookAhead集合)
+ * 
+ * @param production 
+ * @param refProduction 
+ * @return BOOL 
+ */
+BOOL LR1productionCoverUp(LR1Production *production, LR1Production *refProduction)
+{
+    if (productionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) == 1)
         return TRUE;
     return FALSE;
 }
@@ -104,7 +123,7 @@ BOOL productionEquals(LR1Production *production, LR1Production *refProduction)
     return TRUE;
 }
 /**
- * @brief 对比展望符  大于1 小于-1 等于0 不等-1 （暂定）
+ * @brief 对比展望符  大于1 不等/小于-1 等于COMPARE_EQ(0) （暂定）
  * 
  * @param production 
  * @param refProduction 
@@ -117,7 +136,7 @@ int lookAheadSetComparing(LR1Production *production, LR1Production *refProductio
     if (production->lookAhead->size < refProduction->lookAhead->size)
         return -1;
     if (ArrayListEquals(production->lookAhead, refProduction->lookAhead))
-        return 0;
+        return COMPARE_EQ;
     else
         return -1;
 }

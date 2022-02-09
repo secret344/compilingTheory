@@ -110,6 +110,9 @@
         "lrproduction.h": "c",
         "lrgrammarstatemanager.h": "c",
         "lr1production.h": "c",
-        "lr1firstsetbuilder.h": "c"
+        "lr1firstsetbuilder.h": "c",
+        "lr1compiler.h": "c",
+        "lr1productionmanager.h": "c",
+        "lr1grammarstatemanager.h": "c"
     }
 }
