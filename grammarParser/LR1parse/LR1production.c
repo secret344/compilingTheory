@@ -135,7 +135,7 @@ int lookAheadSetComparing(LR1Production *production, LR1Production *refProductio
         return 1;
     if (production->lookAhead->size < refProduction->lookAhead->size)
         return -1;
-    if (ArrayListEquals(production->lookAhead, refProduction->lookAhead))
+    if (ArrayListEquals(production->lookAhead, refProduction->lookAhead) == TRUE)
         return COMPARE_EQ;
     else
         return -1;
