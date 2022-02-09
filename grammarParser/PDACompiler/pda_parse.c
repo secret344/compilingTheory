@@ -4,7 +4,7 @@ static void parseError();
 
 static Stack *pdaStack = NULL;
 static LexerStr lexer = NULL;
-
+// push down automata
 void PDA_compiler_init()
 {
     lexer = newLexerStr("1123+2asd;");

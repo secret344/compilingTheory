@@ -4,6 +4,7 @@
 #include "my_ArrayList.h"
 #include "bool.h"
 #include "LR1productionManager.h"
+#include "LR1GrammarStateManager.h"
 
 void LR1initParser();
 

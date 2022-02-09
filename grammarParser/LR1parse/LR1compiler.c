@@ -3,4 +3,5 @@
 void LR1initParser()
 {
     LR1initProductions();
+    LR1BuildTransitionStateMachine();
 }
