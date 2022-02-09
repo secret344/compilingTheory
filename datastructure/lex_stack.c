@@ -86,7 +86,7 @@ void straversal(Stack *PStack)
     while (PStack->top != PStack->base)
     {
         StackNode *p = PStack->top;
-        printf("%s ", p->data.p);
+        printf("%d ", p->data.n);
         PStack->top = p->PStackNext;
     }
     printf("\n");
@@ -204,10 +204,10 @@ BOOL StackContainsAll(Stack *source, Stack *target)
     my_iterator_free(itor);
     return TRUE;
 }
+
 /**
  * @brief 栈反转
- * 返回一个反转的栈
- * TODO 标记需要修改
+ * 返回一个翻转后新的栈 不会影响旧的栈
  * @param point 
  * @return Stack* 
  */
@@ -222,4 +222,31 @@ Stack *StackReversal(Stack *point)
     }
     my_iterator_free(itor);
     return newStack;
+}
+
+static StackNode *reversalStack(Stack *point, StackNode *node)
+{
+    if (node->PStackNext == point->base)
+    {
+        point->top = node;
+        return node;
+    }
+    StackNode *tail = reversalStack(point, node->PStackNext);
+    tail->PStackNext = node;
+    node->PStackNext = point->base;
+    return node;
+}
+
+/**
+ * @brief 栈反转
+ * 修改当前传入的栈
+ * @param point 
+ * @return Stack* 
+ */
+Stack *StackReversalO(Stack *point)
+{
+    if (point == NULL)
+        return NULL;
+    reversalStack(point, point->top);
+    return point;
 }
