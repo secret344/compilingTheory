@@ -43,4 +43,5 @@ void *speek(Stack *PStack);
 My_Iterator *newStackIterator(Stack *PStack);
 BOOL StackContainsAll(Stack *source, Stack *target);
 Stack *StackReversal(Stack *point);
+Stack *StackReversalO(Stack *point);
 #endif
