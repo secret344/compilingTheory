@@ -24,7 +24,7 @@ MyArrayListNode *ArrayListGetFormPos(My_ArrayList *array, int pos);
 MyArrayListNode *ArrayListDelete(My_ArrayList *array, int pos);
 void ArrayListDestroy(My_ArrayList *array);
 void ArrayListAddAll(My_ArrayList *target, My_ArrayList *source);
-
+void ArrayListPrintNumberOrPoint(My_ArrayList *arr);
 // eq
 int ArrayListFindNode(My_ArrayList *array, void *target);
 BOOL ArrayListEquals(My_ArrayList *array, My_ArrayList *refArray);

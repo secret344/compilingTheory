@@ -4,9 +4,9 @@ static void ArrayListPrune(My_ArrayList *array);
 static BOOL defEquals(void *a, void *b);
 
 /**
- * @brief 
+ * @brief
  * 数据连续推荐使用，分散且有隔断建议使用map
- * @return My_ArrayList* 
+ * @return My_ArrayList*
  */
 My_ArrayList *ArrayListCreate()
 {
@@ -20,10 +20,10 @@ My_ArrayList *ArrayListCreate()
 }
 /**
  * @brief 数组push元素
- * 
- * @param array 
- * @param node 
- * @return BOOL 
+ *
+ * @param array
+ * @param node
+ * @return BOOL
  */
 BOOL ArrayListPush(My_ArrayList *array, MyArrayListNode *node)
 {
@@ -41,9 +41,9 @@ BOOL ArrayListPush(My_ArrayList *array, MyArrayListNode *node)
 }
 /**
  * @brief 数组取出最后一位元素
- * 
- * @param array 
- * @return MyArrayListNode* 
+ *
+ * @param array
+ * @return MyArrayListNode*
  */
 MyArrayListNode *ArrayListPop(My_ArrayList *array)
 {
@@ -58,10 +58,10 @@ MyArrayListNode *ArrayListPop(My_ArrayList *array)
 }
 /**
  * @brief 依据下标取出元素
- * 
- * @param array 
- * @param pos 
- * @return MyArrayListNode* 
+ *
+ * @param array
+ * @param pos
+ * @return MyArrayListNode*
  */
 MyArrayListNode *ArrayListGetFormPos(My_ArrayList *array, int pos)
 {
@@ -72,19 +72,25 @@ MyArrayListNode *ArrayListGetFormPos(My_ArrayList *array, int pos)
 }
 /**
  * @brief 依据下标删除元素
- * 
- * @param array 
- * @param pos 
- * @return MyArrayListNode* 
+ *
+ * @param array
+ * @param pos
+ * @return MyArrayListNode*
  */
 MyArrayListNode *ArrayListDelete(My_ArrayList *array, int pos)
 {
     if (array == NULL || pos < 0 || array->size <= pos)
         return NULL;
     MyArrayListNode *result = array->data[pos];
-    for (size_t i = pos + 1; i < array->size; i++)
+    int index = pos + 1;
+    if (index >= array->size)
+        array->data[pos] = NULL;
+    else
     {
-        array->data[i - 1] = array->data[i];
+        for (size_t i = index; i < array->size; i++)
+        {
+            array->data[i - 1] = array->data[i];
+        }
     }
     array->size--;
     // 当多余空间大于 2 * DEFAULT_CAPACITY 时，进行修剪
@@ -94,8 +100,8 @@ MyArrayListNode *ArrayListDelete(My_ArrayList *array, int pos)
 }
 /**
  * @brief 释放数组空间，不会对已经添加进入的数组元素操作
- * 
- * @param array 
+ *
+ * @param array
  */
 void ArrayListDestroy(My_ArrayList *array)
 {
@@ -112,10 +118,10 @@ BOOL defEquals(void *a, void *b)
 }
 /**
  * @brief 查找node 返回下标 不存在为-1
- * 
- * @param array 
- * @param target 
- * @return int 
+ *
+ * @param array
+ * @param target
+ * @return int
  */
 int ArrayListFindNode(My_ArrayList *array, void *target)
 {
@@ -124,7 +130,7 @@ int ArrayListFindNode(My_ArrayList *array, void *target)
     for (size_t i = 0; i < array->size; i++)
     {
         void *ele = ArrayListGetFormPos(array, i);
-        if (ele != NULL && array->equals(ele, target) == TRUE)
+        if (array->equals(ele, target) == TRUE)
             return i;
     }
     return -1;
@@ -185,9 +191,9 @@ void ArrayListPrune(My_ArrayList *array)
 }
 
 /**
- * @brief 
+ * @brief
  * 扩充失败数组容量不会发生变化
- * @param array 
+ * @param array
  * @param capacity 所要扩大的大小
  */
 void grow(My_ArrayList *array)
@@ -209,4 +215,14 @@ void grow(My_ArrayList *array)
             array->capacity = newBase;
         }
     }
+}
+
+void ArrayListPrintNumberOrPoint(My_ArrayList *arr)
+{
+    printf("数组打印开始: \n");
+    for (size_t i = 0; i < arr->size; i++)
+    {
+        printf(" %d ", ArrayListGetFormPos(arr, i));
+    }
+    printf("\n");
 }

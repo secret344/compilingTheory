@@ -22,6 +22,7 @@ static void LR1MakeTransition(LR1GrammarState *state);
 static LR1GrammarState *LR1MakeNextGrammarState(My_ArrayList *productionList);
 static void LR1extendFollowTransition(MapRoot transition);
 
+static void LR1GrammarStatePrint(LR1GrammarState *grammarState);
 static My_ArrayList *stateList = NULL;
 // 语法节点计数器(做id用)
 static int stateNumCount = 0;
@@ -36,7 +37,7 @@ LR1GrammarState *LR1newGrammarState(My_ArrayList *productionList)
     state->closureSet = ArrayListCreate();
     state->closureSet->equals = (ArrayListDefEquals)LR1productionEquals;
     // 默认闭包
-    ArrayListAddAll(state->closureSet, productionList);
+    ArrayListAddAll(state->closureSet, state->productionList);
 
     state->partitions = newMap(Map_Number);
     state->transitions = newMap(Map_Number);
@@ -49,7 +50,7 @@ LR1GrammarState *LR1getGrammarState(My_ArrayList *productionList)
     for (size_t i = 0; i < stateList->size; i++)
     {
         LR1GrammarState *cur = ArrayListGetFormPos(stateList, i);
-        if (ArrayListEquals(productionList, cur->productionList))
+        if (ArrayListEquals(productionList, cur->productionList) == TRUE)
             index = i;
     }
     if (index < 0)
@@ -69,6 +70,7 @@ void LR1createTransition(LR1GrammarState *state)
         return;
     state->transitionDone = TRUE;
     printf("\n====make transition=====\n");
+    LR1GrammarStatePrint(state);
     // 进行闭包处理 找到所有节点
     LR1makeClosure(state);
     // 进行分割语法节点
@@ -89,47 +91,41 @@ void LR1makeClosure(LR1GrammarState *state)
         LR1Production *production = spop(prductionStack);
         // 获取当前dot指向的的符号
         SymbolDefine symbol = LR1productionGetDotSymbol(production);
+        // printf("LR1makeClosure %s \n", getSymbolStr(symbol));
         // 终结符跳出本次循环
-        if (isSymbolTerminals(symbol) == TRUE)
+        if (LR1isSymbolTerminals(symbol) == TRUE)
             continue;
         // 通过符号以及初始化产生式生成的productionMap 获取当前符号为非终结符的 productionList
         // 终结符 获取结果为 NULL
         My_ArrayList *closures = LR1getProduction(symbol);
         My_ArrayList *LookAhead = LR1ProductionFirstMergetC(production);
+
         for (size_t i = 0; closures != NULL && i < closures->size; i++)
         {
             LR1Production *p = ArrayListGetFormPos(closures, i);
             LR1Production *newP = LR1productionCloneSelf(p);
-            newP->lookAhead = LookAhead;
+            LR1AddProductionLookAhead(newP, LookAhead);
 
             if (ArrayListFindNode(state->closureSet, newP) < 0)
             {
-                ArrayListPush(state->closureSet, p);
-                sPointPush(prductionStack, p);
+                ArrayListPush(state->closureSet, newP);
+                sPointPush(prductionStack, newP);
                 LR1removeRedundantProduction(state, newP);
             }
         }
+        ArrayListDestroy(LookAhead);
     }
 }
 
 void LR1removeRedundantProduction(LR1GrammarState *state, LR1Production *p)
 {
-    My_ArrayList *delectSign = ArrayListCreate();
-    // 标记删除
-    for (size_t i = 0; i < state->closureSet->size; i++)
+    int length = state->closureSet->size - 1;
+    while (length >= 0)
     {
-        if (LR1productionCoverUp(ArrayListGetFormPos(state->closureSet, i), p) == TRUE)
-            ArrayListPush(delectSign, i);
+        if (LR1productionCoverUp(p, ArrayListGetFormPos(state->closureSet, length)) == TRUE)
+            ArrayListDelete(state->closureSet, length);
+        length--;
     }
-    // 进行删除
-    for (size_t i = 0; i < delectSign->size; i++)
-    {
-        int index = ArrayListGetFormPos(delectSign, i);
-        ArrayListDelete(state->closureSet, index);
-    }
-
-    // 释放临时数组
-    ArrayListDestroy(delectSign);
 }
 // 分割闭包 生成新的语法节点
 void LR1partition(LR1GrammarState *state)
@@ -147,13 +143,13 @@ void LR1partition(LR1GrammarState *state)
         {
             productionList = ArrayListCreate();
             productionList->equals = (ArrayListDefEquals)LR1productionEquals;
-            ArrayListPush(productionList, production);
             MapPutNumNode(state->partitions, symbol, productionList);
         }
         if (ArrayListFindNode(productionList, production) < 0)
             ArrayListPush(productionList, production);
     }
 }
+// GOTO
 // 对分割好的节点集合 生成新的语法节点 记录转移路径 并进行下一次的处理
 void LR1MakeTransition(LR1GrammarState *state)
 {
@@ -193,7 +189,17 @@ void LR1extendFollowTransition(MapRoot transition)
     while (has_itor_next(itor))
     {
         RbNodeP node = get_itor_next(itor);
-        LR1createTransition(node->value);
+        LR1createTransition((LR1GrammarState *)node->value);
     }
     my_iterator_free(itor);
+}
+
+void LR1GrammarStatePrint(LR1GrammarState *grammarState)
+{
+    printf("State Number: %d ", grammarState->stateNum);
+    for (size_t i = 0; i < grammarState->productionList->size; i++)
+    {
+        LR1productionPrint(ArrayListGetFormPos(grammarState->productionList, i));
+    }
+    printf("\n");
 }
