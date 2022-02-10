@@ -27,6 +27,8 @@ char *getSymbolStr(SymbolDefine symbol)
         return "TERM";
     case TERM_PRIME:
         return "TERM_PRIME";
+    case EOI:
+        return "EOI";
     default:
         return "UNKNOWN SYMBOL";
     }

@@ -10,4 +10,5 @@ void LR1BuildTransitionStateMachine()
     // 当存在已经创建过的语法节点时 也就是stateList已经缓存过的节点 返回已经存在的
     LR1GrammarState *state = LR1getGrammarState(LR1getProduction(STMT));
     LR1createTransition(state);
+    printf("\n 全部节点数量 %d \n", stateNumCount - 1);
 }
