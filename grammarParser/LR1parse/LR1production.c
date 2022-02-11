@@ -1,5 +1,4 @@
 #include "LR1production.h"
-static BOOL productionEquals(LR1Production *production, LR1Production *refProduction);
 static int lookAheadSetComparing(LR1Production *production, LR1Production *refProduction);
 
 LR1Production *LR1productionCreate(int left, int dot, My_ArrayList *right)
@@ -23,14 +22,14 @@ LR1Production *LR1productionCreate(int left, int dot, My_ArrayList *right)
 LR1Production *LR1productionNextDotForward(LR1Production *production)
 {
     LR1Production *newProduction = LR1productionCreate(production->left, production->dotPos + 1, production->right);
-    LR1AddProductionLookAhead(newProduction, production->lookAhead);
+    LR1ReplaceProductionLookAhead(newProduction, production->lookAhead);
     return newProduction;
 }
 
 LR1Production *LR1productionCloneSelf(LR1Production *production)
 {
     LR1Production *newProduction = LR1productionCreate(production->left, production->dotPos, production->right);
-    LR1AddProductionLookAhead(newProduction, production->lookAhead);
+    LR1ReplaceProductionLookAhead(newProduction, production->lookAhead);
     return newProduction;
 }
 
@@ -53,7 +52,7 @@ My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production)
     // 移入 β
     for (size_t i = production->dotPos + 1; i < production->right->size; i++)
         ArrayListPush(sequela, ArrayListGetFormPos(production->right, i));
-    ArrayListAddAll(sequela, production->lookAhead); // 移入 a 因为 集合a 必然为终结符集合 
+    ArrayListAddAll(sequela, production->lookAhead); // 移入 a 因为 集合a 必然为终结符集合
 
     for (size_t i = 0; i < sequela->size; i++)
     {
@@ -75,14 +74,12 @@ My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production)
     return result;
 }
 
-void LR1AddProductionLookAhead(LR1Production *production, My_ArrayList *array)
+void LR1ReplaceProductionLookAhead(LR1Production *production, My_ArrayList *array)
 {
+    ArrayListDestroy(production->lookAhead);
+    production->lookAhead = ArrayListCreate();
     for (size_t i = 0; i < array->size; i++)
-    {
-        SymbolDefine symbol = ArrayListGetFormPos(array, i);
-        if (ArrayListFindNode(production->lookAhead, symbol) < 0)
-            ArrayListPush(production->lookAhead, symbol);
-    }
+        ArrayListPush(production->lookAhead, ArrayListGetFormPos(array, i));
 }
 
 /**
@@ -107,7 +104,7 @@ SymbolDefine LR1productionGetDotSymbol(LR1Production *production)
  */
 BOOL LR1productionEquals(LR1Production *production, LR1Production *refProduction)
 {
-    if (productionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) == COMPARE_EQ)
+    if (LR1PartialproductionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) == COMPARE_EQ)
         return TRUE;
     return FALSE;
 }
@@ -121,12 +118,12 @@ BOOL LR1productionEquals(LR1Production *production, LR1Production *refProduction
  */
 BOOL LR1productionCoverUp(LR1Production *production, LR1Production *refProduction)
 {
-    if (productionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) > 0)
+    if (LR1PartialproductionEquals(production, refProduction) == TRUE && lookAheadSetComparing(production, refProduction) > 0)
         return TRUE;
     return FALSE;
 }
 
-BOOL productionEquals(LR1Production *production, LR1Production *refProduction)
+BOOL LR1PartialproductionEquals(LR1Production *production, LR1Production *refProduction)
 {
     if (production->left != refProduction->left)
         return FALSE;

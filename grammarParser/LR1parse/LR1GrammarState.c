@@ -22,6 +22,7 @@ static void LR1MakeTransition(LR1GrammarState *state);
 static LR1GrammarState *LR1MakeNextGrammarState(My_ArrayList *productionList);
 static void LR1extendFollowTransition(MapRoot transition);
 
+static BOOL LR1CheckProductionListEquals(My_ArrayList *productionList, My_ArrayList *refproductionList, BOOL isPartial);
 static void LR1GrammarStatePrint(LR1GrammarState *grammarState);
 static My_ArrayList *stateList = NULL;
 // 语法节点计数器(做id用)
@@ -50,7 +51,7 @@ LR1GrammarState *LR1getGrammarState(My_ArrayList *productionList)
     for (size_t i = 0; i < stateList->size; i++)
     {
         LR1GrammarState *cur = ArrayListGetFormPos(stateList, i);
-        if (ArrayListEquals(productionList, cur->productionList) == TRUE)
+        if (LR1CheckProductionListEquals(productionList, cur->productionList, FALSE) == TRUE)
             index = i;
     }
     if (index < 0)
@@ -104,8 +105,7 @@ void LR1makeClosure(LR1GrammarState *state)
         {
             LR1Production *p = ArrayListGetFormPos(closures, i);
             LR1Production *newP = LR1productionCloneSelf(p);
-            LR1AddProductionLookAhead(newP, LookAhead);
-
+            LR1ReplaceProductionLookAhead(newP, LookAhead);
             if (ArrayListFindNode(state->closureSet, newP) < 0)
             {
                 ArrayListPush(state->closureSet, newP);
@@ -202,4 +202,28 @@ void LR1GrammarStatePrint(LR1GrammarState *grammarState)
         LR1productionPrint(ArrayListGetFormPos(grammarState->productionList, i));
     }
     printf("\n");
+}
+
+BOOL LR1CheckProductionListEquals(My_ArrayList *productionList, My_ArrayList *refproductionList, BOOL isPartial)
+{
+    if (productionList->size != refproductionList->size)
+        return FALSE;
+    for (size_t i = 0; i < productionList->size; i++)
+    {
+        if (isPartial == FALSE)
+        {
+            if (ArrayListFindNode(refproductionList, ArrayListGetFormPos(productionList, i)) < 0)
+                return FALSE;
+        }
+        else
+        {
+            // 只对比产生式  不对比 lookAhead 集合
+            refproductionList->equals = (ArrayListDefEquals)LR1PartialproductionEquals;
+            BOOL is = ArrayListFindNode(refproductionList, ArrayListGetFormPos(productionList, i));
+            refproductionList->equals = (ArrayListDefEquals)LR1productionEquals;
+            if (is == FALSE)
+                return FALSE;
+        }
+    }
+    return TRUE;
 }

@@ -7,15 +7,37 @@ static My_ArrayList *LR1SymbolList = NULL;
 static void printFirstSet(MySymbol *symbol);
 static void printAllFirstSet();
 static BOOL LR1runFirstSetPass = TRUE;
-//  STMT : {  LEFT_PARENT  NUM_OR_ID  }
-//  EXPR : {  NUM_OR_ID  LEFT_PARENT  }
-//  TERM : {  LEFT_PARENT  NUM_OR_ID  }
-//  FACTOR : {  NUM_OR_ID  LEFT_PARENT  }
-//  PLUS : {  PLUS  }
-//  TIMES : {  TIMES  }
-//  LEFT_PARENT : {  LEFT_PARENT  }
-//  RIGHT_PARENT : {  RIGHT_PARENT  }
-//  NUM_OR_ID : {  NUM_OR_ID  }
+//  STMT : {  LEFT_PARENT  NUM_OR_ID  } 
+//  EXPR : {  NUM_OR_ID  LEFT_PARENT  } 
+//  TERM : {  LEFT_PARENT  NUM_OR_ID  } 
+//  FACTOR : {  NUM_OR_ID  LEFT_PARENT  } 
+//  EOI : {  EOI  } 
+//  PLUS : {  PLUS  } 
+//  TIMES : {  TIMES  } 
+//  LEFT_PARENT : {  LEFT_PARENT  } 
+//  RIGHT_PARENT : {  RIGHT_PARENT  } 
+//  NUM_OR_ID : {  NUM_OR_ID  } 
+
+// STMT{ LEFT_PARENT NUM_OR_ID  }
+// ============
+// EXPR{ LEFT_PARENT NUM_OR_ID  }
+// ============
+// TERM{ LEFT_PARENT NUM_OR_ID  }
+// ============
+// FACTOR{ LEFT_PARENT NUM_OR_ID  }
+// ============
+// EOI{ EOI  }
+// ============
+// PLUS{ PLUS  }
+// ============
+// TIMES{ TIMES  }
+// ============
+// LEFT_PARENT{ LEFT_PARENT  }
+// ============
+// RIGHT_PARENT{ RIGHT_PARENT  }
+// ============
+// NUM_OR_ID{ NUM_OR_ID  }
+
 // 初始化计算first集合所需要的产生式数据结构
 void LR1runFirstSets(MapRoot symbolMap, My_ArrayList *symbolList)
 {

@@ -23,5 +23,6 @@ SymbolDefine LR1productionGetDotSymbol(LR1Production *production);
 void LR1productionPrint(LR1Production *production);
 My_ArrayList *LR1ProductionFirstMergetC(LR1Production *production);
 BOOL LR1productionCoverUp(LR1Production *production, LR1Production *refProduction);
-void LR1AddProductionLookAhead(LR1Production *production, My_ArrayList *array);
+void LR1ReplaceProductionLookAhead(LR1Production *production, My_ArrayList *array);
+BOOL LR1PartialproductionEquals(LR1Production *production, LR1Production *refProduction);
 #endif
