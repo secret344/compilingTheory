@@ -23,6 +23,7 @@ char *regParse(char *str)
 char *matchStr(char *str)
 {
     // initMatchNfa(str);
+    
     char *json = initMatchDfa(str);
     return json;
 }
