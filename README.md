@@ -1,14 +1,15 @@
 # compilingTheory
 
+-   暂不进行代码生成，解释器实现。
+
 ## 项目状态
 
 -   已经可以生成最小化的 DFA 状态转移表
+-   实现LR（1）分析法，未实现LALR分析法。
 
 ## 下一步
 
--   语法分析预热((lll ￢ ω ￢))
--   完善 NFA 警告
--   完善 NFA DFA
+-   合并同心项集，实现LALR 构建跳转表
 
 ## 目前使用方式：
 
@@ -27,16 +28,3 @@
 
 -   [CJSON](https://github.com/DaveGamble/cJSON)
 
-## 目前效果图(时间)
-
--   图 1 ( id:a|b|c )
-
-    [<img height="600" width="800" src="./example_image/nfa_dfa_dot.PNG"/>](./example_image/nfa_dfa_dot.PNG)
-
--   图 2
-
-    [<img height="600" width="800" src="./example_image/1.PNG"/>](./example_image/1.PNG)
-
--   图 3
-
-    [<img height="600" width="800" src="./example_image/2.PNG"/>](./example_image/2.PNG)
